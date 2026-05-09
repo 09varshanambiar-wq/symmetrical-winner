@@ -1,0 +1,73 @@
+@import "tailwindcss";
+
+@theme {
+  --color-primary: #1856FF;
+  --color-secondary: #3A344E;
+  --color-success: #07CA6B;
+  --color-warning: #E89558;
+  --color-danger: #EA2143;
+  --color-surface: #FFFFFF;
+  --color-text: #141414;
+  
+  --font-display: "Plus Jakarta Sans", system-ui, sans-serif;
+  --font-body: "Plus Jakarta Sans", system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", monospace;
+}
+
+@layer base {
+  body {
+    @apply bg-[#F8FAFF] text-text font-body antialiased;
+    margin: 0;
+    padding: 0;
+    background-image: 
+      radial-gradient(at 0% 0%, hsla(225, 100%, 95%, 1) 0, transparent 50%),
+      radial-gradient(at 100% 0%, hsla(225, 100%, 90%, 1) 0, transparent 50%),
+      radial-gradient(at 100% 100%, hsla(225, 100%, 95%, 1) 0, transparent 50%),
+      radial-gradient(at 0% 100%, hsla(225, 100%, 90%, 1) 0, transparent 50%);
+    background-attachment: fixed;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-display font-semibold tracking-tight;
+  }
+}
+
+@layer components {
+  .glass-card {
+    @apply bg-white/40 backdrop-blur-xl border border-white/40 shadow-[0_8px_32px_0_rgba(24,86,255,0.08)];
+  }
+
+  .glass-nav {
+    @apply bg-white/10 backdrop-blur-lg border-b border-white/20;
+  }
+
+  .liquid-button {
+    @apply px-6 py-3 bg-primary text-white font-semibold rounded-full shadow-lg shadow-primary/20 hover:shadow-primary/40 hover:scale-105 transition-all duration-300;
+  }
+
+  .section-label {
+    @apply text-[10px] font-bold tracking-[0.2em] uppercase text-primary mb-4 block;
+  }
+}
+
+/* Animations */
+@keyframes float {
+  0% { transform: translateY(0px); }
+  50% { transform: translateY(-10px); }
+  100% { transform: translateY(0px); }
+}
+
+.animate-float {
+  animation: float 6s ease-in-out infinite;
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+}
+::-webkit-scrollbar-track {
+  @apply bg-transparent;
+}
+::-webkit-scrollbar-thumb {
+  @apply bg-primary/20 rounded-full hover:bg-primary/40;
+}

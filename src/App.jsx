@@ -1,9 +1,16 @@
-import React from 'react';
-import { motion } from 'framer-motion';
+import React, { useEffect } from 'react';
+import { motion, useScroll, useTransform } from 'framer-motion';
 import { ArrowUpRight, Globe, Layers, Zap, Sparkles, MoveRight, Heart, Wind, Mail, MessageSquare, Plus } from 'lucide-react';
 
 const Glow = ({ className }) => (
-  <div className={`absolute rounded-full blur-[120px] opacity-20 animate-pulse ${className}`} />
+  <motion.div 
+    animate={{ 
+      scale: [1, 1.2, 1],
+      opacity: [0.15, 0.25, 0.15]
+    }}
+    transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
+    className={`absolute rounded-full blur-[120px] ${className}`} 
+  />
 );
 
 const Navigation = () => (
@@ -19,35 +26,88 @@ const Navigation = () => (
       <a href="#contact" className="hover:text-primary transition-colors">Contact</a>
     </div>
     <button className="text-[10px] font-bold uppercase tracking-widest px-4 py-2 bg-primary/10 text-primary rounded-lg hover:bg-primary hover:text-white transition-all">
-      Connect
+      Grab a coffee
     </button>
   </nav>
 );
 
-const Hero = () => (
-  <section className="relative min-h-[70vh] flex items-center pt-20 px-6 overflow-hidden">
-    <Glow className="top-20 left-10 w-96 h-96 bg-primary" />
-    <div className="max-w-7xl mx-auto z-10 text-center">
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 1 }}
-      >
-        <span className="section-label mx-auto bg-primary/10 px-4 py-1.5 rounded-full inline-block mb-10">
-          Systems Strategist & Futures Designer
-        </span>
-        <h1 className="text-7xl md:text-9xl font-bold leading-none mb-10 text-secondary tracking-tight">
-          "Dance <br /> 
-          with <span className="text-primary italic font-light">Complexity</span>."
-        </h1>
-        <p className="text-lg md:text-xl text-text/60 leading-relaxed mb-12 max-w-2xl mx-auto italic">
-          Listening to the rhythms of human behavior and systemic feedback to 
-          find harmony within the digital and physical spaces we share.
-        </p>
-      </motion.div>
-    </div>
-  </section>
-);
+const Hero = () => {
+  useEffect(() => {
+    try {
+      if (window.$ && window.$('.ripple-container').ripples) {
+        // Initialize ripples with interactive: false to prevent click ripples
+        window.$('.ripple-container').ripples({
+          resolution: 512,
+          dropRadius: 40,
+          perturbance: 0.08,
+          interactive: false,
+          crossOrigin: ''
+        });
+
+        // Add custom mousemove handler to trigger ripples only on hover
+        window.$('.ripple-container').on('mousemove', function(e) {
+          var $el = window.$(this);
+          var x = e.pageX - $el.offset().left;
+          var y = e.pageY - $el.offset().top;
+          $el.ripples('drop', x, y, 40, 0.08);
+        });
+      }
+    } catch (e) {
+      console.error("Ripple effect failed to initialize:", e);
+    }
+
+    return () => {
+      try {
+        if (window.$ && window.$('.ripple-container').ripples) {
+          window.$('.ripple-container').off('mousemove');
+          window.$('.ripple-container').ripples('destroy');
+        }
+      } catch (e) {}
+    };
+  }, []);
+
+  return (
+    <section 
+      className="relative min-h-screen flex items-center pt-20 px-6 overflow-hidden ripple-container"
+      style={{ backgroundImage: 'radial-gradient(circle at center, #ffffff 0%, #F8FAFF 100%)' }}
+    >
+      <Glow className="top-20 left-10 w-[500px] h-[500px] bg-primary" />
+      <Glow className="bottom-20 right-10 w-[600px] h-[600px] bg-warning/30" />
+      
+      <div className="max-w-7xl mx-auto z-10 text-center pointer-events-none">
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 1.2, ease: "easeOut" }}
+          className="pointer-events-auto"
+        >
+          <span className="section-label mx-auto bg-primary/10 px-4 py-1.5 rounded-full inline-block mb-10 text-primary">
+            Systems Strategist & Futures Designer
+          </span>
+          <h1 className="text-7xl md:text-9xl font-bold leading-[0.9] mb-10 text-secondary tracking-tighter">
+            "Dance <br /> 
+            with <span className="text-primary italic font-light">Complexity</span>."
+          </h1>
+          <p className="text-lg md:text-2xl text-text/50 leading-relaxed mb-12 max-w-2xl mx-auto italic font-light">
+            Listening to the rhythms of human behavior and systemic feedback to 
+            find harmony within the digital and physical spaces we share.
+          </p>
+          
+          <div className="flex justify-center gap-6">
+            <a href="#work" className="liquid-button">View the Inquiry</a>
+            <button className="px-8 py-3 glass-card rounded-full font-semibold text-sm hover:bg-white/60 transition-all">
+              The Philosophy
+            </button>
+          </div>
+        </motion.div>
+      </div>
+      
+      {/* Background Glass Shapes */}
+      <div className="absolute top-1/4 right-1/4 w-96 h-96 border border-primary/5 rounded-full animate-float opacity-30 pointer-events-none" />
+      <div className="absolute bottom-1/4 left-1/4 w-64 h-64 border border-secondary/5 rounded-full animate-float opacity-20 pointer-events-none" style={{ animationDelay: '-3s' }} />
+    </section>
+  );
+};
 
 const ProjectCard = ({ number, title, category, description, intent }) => (
   <motion.div 
@@ -74,39 +134,46 @@ const ProjectCard = ({ number, title, category, description, intent }) => (
   </motion.div>
 );
 
-const Work = () => (
-  <section id="work" className="py-20 px-6">
-    <div className="max-w-7xl mx-auto">
-      <div className="mb-16">
-        <span className="section-label">01. Selected Inquiry</span>
-        <h2 className="text-5xl font-bold text-secondary tracking-tight">The Works.</h2>
+const Work = () => {
+  const projects = [
+    { number: "01", title: "Intelligent Policy Platform", category: "Product", description: "Creating a cohesive digital environment for the Department of Health Australia to navigate complex policy landscapes.", intent: "To untangle the threads of public health policy." },
+    { number: "02", title: "Signals", category: "Thesis", description: "A living material library that bridges the gap between biological intelligence and information systems.", intent: "To archive the intelligence of the living world." },
+    { number: "03", title: "NUA", category: "Organisational Design", description: "A comprehensive design audit and organizational study for a pioneering fem-care startup.", intent: "To harmonize organizational intent with human care." },
+    { number: "04", title: "JouleBug", category: "Shared Wisdom", description: "How might we nudge individual behavior toward collective care? A study in behavioral feedback and environmental agency.", intent: "To listen to the rhythm of our daily choices." },
+    { number: "05", title: "Choice Paradox", category: "Digital Empathy", description: "Reframing digital choice as a space for quiet, intentional interaction.", intent: "To design for learning and rest." }
+  ];
+
+  return (
+    <section id="work" className="relative z-10 py-32 px-6">
+      <div className="max-w-[1600px] mx-auto">
+        <motion.div 
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          className="mb-20 text-center"
+        >
+          <span className="section-label inline-block mb-4">01. Selected Inquiry</span>
+          <h2 className="text-6xl md:text-8xl font-bold text-secondary/10 tracking-tighter leading-none">The Works.</h2>
+        </motion.div>
+        
+        <div className="grid md:grid-cols-5 gap-4">
+          {projects.map((project, index) => (
+            <motion.div
+              key={index}
+              initial={{ opacity: 0, y: 50 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: index * 0.1, duration: 0.8 }}
+              className="h-[600px]"
+            >
+              <ProjectCard {...project} />
+            </motion.div>
+          ))}
+        </div>
       </div>
-      <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-        <ProjectCard 
-          number="01"
-          title="JouleBug"
-          category="Shared Wisdom"
-          description="How might we nudge individual behavior toward collective care? A study in behavioral feedback and environmental agency."
-          intent="To listen to the rhythm of our daily choices."
-        />
-        <ProjectCard 
-          number="02"
-          title="Choice Paradox"
-          category="Digital Empathy"
-          description="Reframing digital choice as a space for quiet, intentional interaction."
-          intent="To design for learning and rest."
-        />
-        <ProjectCard 
-          number="03"
-          title="ISeeU"
-          category="Public Presence"
-          description="A gentle exploration of gaze and surveillance in public spaces."
-          intent="To remind us of the human heart within systems."
-        />
-      </div>
-    </div>
-  </section>
-);
+    </section>
+  );
+};
 
 const SystemBreaker = () => (
   <section className="relative h-[600px] overflow-hidden bg-white/30 border-y border-white/20">

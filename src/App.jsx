@@ -109,38 +109,69 @@ const Hero = () => {
   );
 };
 
-const ProjectCard = ({ number, title, category, description, intent }) => (
-  <motion.div 
-    whileHover={{ y: -10 }}
-    className="glass-card p-10 rounded-[32px] group cursor-pointer h-full flex flex-col"
-  >
-    <div className="flex justify-between items-start mb-8">
-      <div className="w-12 h-12 glass-card rounded-xl flex items-center justify-center group-hover:bg-primary transition-all duration-500">
-        <span className="font-mono text-sm group-hover:text-white">{number}</span>
+const ProjectCard = ({ number, title, category, description, intent, image, link }) => {
+  const CardContent = (
+    <motion.div 
+      whileHover={{ y: -10 }}
+      className="glass-card p-10 rounded-[32px] group cursor-pointer h-full flex flex-col"
+    >
+      <div className="flex justify-between items-start mb-8">
+        <div className="w-12 h-12 glass-card rounded-xl flex items-center justify-center group-hover:bg-primary transition-all duration-500">
+          <span className="font-mono text-sm group-hover:text-white">{number}</span>
+        </div>
+        <span className="text-[9px] font-black uppercase tracking-[0.2em] text-primary/60">{category}</span>
       </div>
-      <span className="text-[9px] font-black uppercase tracking-[0.2em] text-primary/60">{category}</span>
-    </div>
-    <h3 className="text-2xl font-bold mb-4 group-hover:text-primary transition-colors tracking-tight">{title}</h3>
-    <p className="text-sm text-text/50 leading-relaxed mb-6 flex-grow">
-      {description}
-    </p>
-    <div className="pt-4 border-t border-primary/5">
-      <p className="text-[10px] font-black uppercase tracking-widest opacity-30 mb-2">The Intention</p>
-      <p className="text-xs italic text-text/60 leading-relaxed">{intent}</p>
-    </div>
-    <div className="mt-8 flex items-center text-[10px] font-bold uppercase tracking-widest gap-2 opacity-0 group-hover:opacity-100 group-hover:translate-x-2 transition-all duration-500">
-      Join the Inquiry <ArrowUpRight size={14} className="text-primary" />
-    </div>
-  </motion.div>
-);
+      
+      <h3 className="text-2xl font-bold mb-4 group-hover:text-primary transition-colors tracking-tight">{title}</h3>
+      
+      {/* Image Container */}
+      <div className="relative w-full h-48 mb-8 rounded-2xl overflow-hidden bg-white/20 border border-white/40 shadow-inner group-hover:shadow-lg transition-all duration-500">
+        {image ? (
+          <img 
+            src={image} 
+            alt={title} 
+            className="w-full h-full object-cover opacity-80 group-hover:opacity-100 group-hover:scale-110 transition-all duration-700 ease-out" 
+          />
+        ) : (
+          <div className="w-full h-full bg-gradient-to-br from-primary/5 to-secondary/5 flex items-center justify-center">
+            <Sparkles className="text-primary/20 animate-pulse" size={32} />
+          </div>
+        )}
+        <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+      </div>
+
+      <p className="text-sm text-text/50 leading-relaxed mb-6 flex-grow">
+        {description}
+      </p>
+      <div className="pt-4 border-t border-primary/5">
+        <p className="text-[10px] font-black uppercase tracking-widest opacity-30 mb-2">The Intention</p>
+        <p className="text-xs italic text-text/60 leading-relaxed">{intent}</p>
+      </div>
+      <div className="mt-8 flex items-center text-[10px] font-bold uppercase tracking-widest gap-2 opacity-0 group-hover:opacity-100 group-hover:translate-x-2 transition-all duration-500">
+        Join the Inquiry <ArrowUpRight size={14} className="text-primary" />
+      </div>
+    </motion.div>
+  );
+
+  if (link) {
+    return (
+      <a href={link} className="block h-full no-underline">
+        {CardContent}
+      </a>
+    );
+  }
+
+  return CardContent;
+};
 
 const Work = () => {
   const projects = [
-    { number: "01", title: "Intelligent Policy Platform", category: "Product", description: "Creating a cohesive digital environment for the Department of Health Australia to navigate complex policy landscapes.", intent: "To untangle the threads of public health policy." },
-    { number: "02", title: "Signals", category: "Thesis", description: "A living material library that bridges the gap between biological intelligence and information systems.", intent: "To archive the intelligence of the living world." },
-    { number: "03", title: "NUA", category: "Organisational Design", description: "A comprehensive design audit and organizational study for a pioneering fem-care startup.", intent: "To harmonize organizational intent with human care." },
-    { number: "04", title: "JouleBug", category: "Shared Wisdom", description: "How might we nudge individual behavior toward collective care? A study in behavioral feedback and environmental agency.", intent: "To listen to the rhythm of our daily choices." },
-    { number: "05", title: "Choice Paradox", category: "Digital Empathy", description: "Reframing digital choice as a space for quiet, intentional interaction.", intent: "To design for learning and rest." }
+    { number: "01", title: "Intelligent Policy Platform", category: "Product", description: "Creating a cohesive digital environment for the Department of Health Australia to navigate complex policy landscapes.", intent: "To untangle the threads of public health policy.", image: "/work-1.png", link: "/projects/intelligent-policy-platform.html" },
+    { number: "02", title: "Signals", category: "Thesis", description: "A living material library that bridges the gap between biological intelligence and information systems.", intent: "To archive the intelligence of the living world.", image: "/work-2.png" },
+    { number: "03", title: "Absolute", category: "Founder's Office", description: "Serving as a Design Strategist within the Founder's Office to bridge the gap between vision and execution.", intent: "To architect the future of strategic design.", image: "/work-3.png" },
+    { number: "04", title: "NUA", category: "Organisational Design", description: "A comprehensive design audit and organizational study for a pioneering fem-care startup.", intent: "To harmonize organizational intent with human care.", image: "/work-4.png" },
+    { number: "05", title: "JouleBug", category: "Shared Wisdom", description: "How might we nudge individual behavior toward collective care? A study in behavioral feedback and environmental agency.", intent: "To listen to the rhythm of our daily choices.", image: "/work-5.png", link: "/projects/joulebug.html" },
+    { number: "06", title: "Choice Paradox", category: "Digital Empathy", description: "Reframing digital choice as a space for quiet, intentional interaction.", intent: "To design for learning and rest.", image: "/work-6.png" }
   ];
 
   return (
@@ -156,7 +187,7 @@ const Work = () => {
           <h2 className="text-6xl md:text-8xl font-bold text-secondary/10 tracking-tighter leading-none">The Works.</h2>
         </motion.div>
         
-        <div className="grid md:grid-cols-5 gap-4">
+        <div className="grid md:grid-cols-3 gap-8">
           {projects.map((project, index) => (
             <motion.div
               key={index}

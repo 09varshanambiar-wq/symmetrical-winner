@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>JouleBug — Case Study</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Manrope:wght@300;400;500;600;700&family=Space+Mono&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg:        #fcfcfd;
+  --surface:   #ffffff;
+  --surface-t: rgba(255,255,255,0.72);
+  --ink:       #1a1d2e;
+  --ink-2:     #3d4166;
+  --ink-3:     #7b80aa;
+  --ink-4:     #a8adc9;
+  --blue:      #2563eb;
+  --teal:      #14b8a6;
+  --green:     #10b981;
+  --border:    rgba(37,99,235,0.08);
+  --serif:     'Instrument Serif', Georgia, serif;
+  --sans:      'Manrope', system-ui, sans-serif;
+  --mono:      'Space Mono', monospace;
+  --max:       1080px;
+  --pad:       4.5rem;
+}
+
+html { scroll-behavior: smooth; }
+body {
+  font-family: var(--sans);
+  background: var(--bg);
+  color: var(--ink);
+  line-height: 1.72;
+  -webkit-font-smoothing: antialiased;
+  background-image: 
+    radial-gradient(circle at 0% 0%, rgba(20, 184, 166, 0.05) 0%, transparent 50%),
+    radial-gradient(circle at 100% 100%, rgba(37, 99, 235, 0.05) 0%, transparent 50%);
+}
+
+/* ── HEADER ── */
+.main-header {
+  position: fixed; top: 24px; left: 50%; transform: translateX(-50%);
+  width: 90%; max-width: 1080px; height: 56px; z-index: 300;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0 32px;
+  background: rgba(255, 255, 255, 0.4);
+  backdrop-filter: blur(20px) saturate(180%);
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  border-radius: 20px;
+  box-shadow: 0 10px 40px rgba(31, 38, 135, 0.1);
+}
+.header-logo {
+  font-family: var(--sans); font-weight: 800; font-size: 18px;
+  display: flex; align-items: center; gap: 10px; color: var(--ink);
+  text-decoration: none;
+}
+.logo-dot { width: 8px; height: 8px; background: var(--teal); border-radius: 50%; }
+.header-links { display: flex; gap: 32px; list-style: none; }
+.header-links a {
+  font-size: 10px; font-weight: 700; text-transform: uppercase;
+  letter-spacing: 0.15em; color: var(--ink-3); text-decoration: none;
+}
+.header-cta {
+  font-size: 10px; font-weight: 700; text-transform: uppercase;
+  padding: 10px 20px; background: rgba(20, 184, 166, 0.1); color: var(--teal);
+  border-radius: 12px; border: none;
+}
+
+/* ── PROJECT NAV ── */
+.project-nav {
+  position: fixed; top: 50%; right: 2rem; transform: translateY(-50%);
+  z-index: 250; display: flex; flex-direction: column; gap: 1.5rem;
+  align-items: flex-end;
+}
+.project-nav-item { display: flex; align-items: center; gap: 1rem; text-decoration: none; }
+.project-nav-label {
+  font-family: var(--mono); font-size: 9px; text-transform: uppercase;
+  letter-spacing: 0.15em; color: var(--ink-4); opacity: 0; transform: translateX(10px);
+  transition: all 0.4s;
+}
+.project-nav-item:hover .project-nav-label { opacity: 1; transform: translateX(0); }
+.project-nav-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--ink-4); transition: all 0.3s; }
+.project-nav-item:hover .project-nav-dot { background: var(--teal); transform: scale(1.5); }
+
+/* ── LAYOUT ── */
+.wrap { max-width: var(--max); margin: 0 auto; padding: 0 var(--pad); }
+section { padding: 8rem 0; border-top: 1px solid var(--border); }
+.eyebrow {
+  display: inline-flex; align-items: center; gap: 0.6rem;
+  font-family: var(--mono); font-size: 10px; letter-spacing: 0.14em;
+  text-transform: uppercase; color: var(--teal);
+  background: white; border: 1px solid var(--border);
+  padding: 6px 14px; border-radius: 20px; margin-bottom: 2rem;
+}
+h2 { font-family: var(--serif); font-size: 3rem; line-height: 1.1; margin-bottom: 1.5rem; }
+h2 em { font-style: italic; color: var(--teal); font-weight: 400; }
+
+/* ── HERO ── */
+.hero { min-height: 100vh; display: flex; align-items: center; padding-top: 80px; }
+.hero-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; }
+.hero-title { font-size: 4.5rem; font-weight: 700; line-height: 1; letter-spacing: -0.04em; margin-bottom: 2rem; }
+.hero-meta { margin-top: 3rem; display: flex; flex-direction: column; gap: 1rem; }
+.meta-item { display: flex; gap: 2rem; border-bottom: 1px solid var(--border); padding-bottom: 0.5rem; }
+.meta-k { font-family: var(--mono); font-size: 10px; text-transform: uppercase; color: var(--ink-4); width: 80px; }
+.meta-v { font-size: 14px; font-weight: 500; color: var(--ink-2); }
+
+/* ── CARDS ── */
+.grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2rem; }
+.glass-card {
+  background: white; border: 1px solid var(--border); padding: 2.5rem;
+  border-radius: 32px; box-shadow: 0 4px 24px rgba(0,0,0,0.02);
+}
+
+/* ── EMOTIONS ── */
+.emotions-strip {
+  display: flex; gap: 1rem; overflow-x: auto; padding: 2rem 0;
+  scrollbar-width: none;
+}
+.emotion-card {
+  min-width: 200px; padding: 1.5rem; background: white; border: 1px solid var(--border);
+  border-radius: 20px; text-align: center;
+}
+.emotion-name { font-family: var(--mono); font-size: 10px; text-transform: uppercase; color: var(--ink-4); }
+
+/* ── INSIGHT BLOCK ── */
+.insight-block {
+  background: var(--ink); color: white; padding: 5rem; border-radius: 40px;
+  text-align: center; margin-top: 4rem; position: relative; overflow: hidden;
+}
+.insight-block::before {
+  content: ""; position: absolute; inset: 0;
+  background: radial-gradient(circle at 50% 50%, rgba(20, 184, 166, 0.1) 0%, transparent 70%);
+}
+.insight-quote { font-family: var(--serif); font-size: 2.5rem; font-style: italic; margin-bottom: 1rem; }
+.insight-label { font-family: var(--mono); font-size: 10px; text-transform: uppercase; letter-spacing: 0.2em; color: var(--teal); }
+
+/* ── LENSES OF INQUIRY ── */
+.lenses-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 2rem; margin-top: 4rem; }
+.lens-circle {
+  position: relative; width: 100%; aspect-ratio: 1;
+  background: radial-gradient(circle at 30% 30%, #fde68a 0%, transparent 70%);
+  border-radius: 50%; padding: 2rem; display: flex; flex-direction: column; justify-content: center;
+  transition: transform 0.3s;
+}
+.lens-circle:hover { transform: scale(1.05); }
+.lens-title { font-family: var(--serif); font-size: 1.5rem; color: var(--teal); margin-bottom: 1rem; }
+.lens-list { list-style: none; font-size: 11px; color: var(--ink-3); line-height: 1.8; }
+
+/* ── BEAM VIZ ── */
+.beam-container {
+  position: relative; height: 400px; margin: 4rem 0;
+  display: flex; align-items: center; justify-content: center;
+}
+.eye-icon { width: 40px; height: 40px; background: var(--ink); border-radius: 50%; z-index: 10; position: absolute; left: 0; }
+.beam {
+  position: absolute; left: 20px; width: 80%; height: 60px;
+  background: linear-gradient(90deg, rgba(20, 184, 166, 0.4) 0%, transparent 100%);
+  clip-path: polygon(0% 50%, 100% 0%, 100% 100%);
+  transform-origin: left center;
+}
+.viz-node {
+  position: absolute; width: 24px; height: 24px; border-radius: 50%;
+  background: var(--ink-4); opacity: 0.4; filter: blur(2px);
+}
+.viz-node.active { background: #fde68a; opacity: 1; filter: none; width: 32px; height: 32px; box-shadow: 0 0 20px rgba(253, 230, 138, 0.5); }
+.viz-label { position: absolute; font-size: 10px; color: var(--ink-3); white-space: nowrap; }
+
+/* ── MECHANISMS CLOUD ── */
+.mechanisms-cloud {
+  display: grid; grid-template-columns: repeat(4, 1fr); gap: 0.5rem 2rem;
+  font-size: 10px; color: var(--teal); opacity: 0.8; margin-top: 3rem;
+}
+
+/* ── HINDSIGHT CARDS ── */
+.hindsight-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; margin-top: 3rem; }
+.hindsight-card {
+  background: rgba(0,0,0,0.03); border: 1px solid var(--border); padding: 2rem; border-radius: 24px;
+  text-align: center;
+}
+.hindsight-card h4 { font-size: 12px; text-transform: uppercase; margin-bottom: 1rem; color: var(--ink); }
+.hindsight-card p { font-size: 12px; color: var(--ink-3); }
+
+/* ── FOOTER ── */
+.more-works {
+  padding: 8rem 0; background: linear-gradient(135deg, #0c1222 0%, #111827 100%);
+  color: white; position: relative;
+}
+.mw-grid { display: flex; gap: 2rem; margin-top: 3rem; }
+.mw-card {
+  flex: 1; padding: 2rem; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 24px; text-decoration: none; color: white; transition: 0.3s;
+}
+.mw-card:hover { transform: translateY(-10px); background: rgba(255,255,255,0.06); }
+
+</style>
+</head>
+<body>
+
+<header class="main-header">
+  <a href="/index.html" class="header-logo">
+    <div class="logo-dot"></div>
+    Varsha Nambiar
+  </a>
+  <nav>
+    <ul class="header-links">
+      <li><a href="/index.html#work">Works</a></li>
+      <li><a href="/index.html#about">About</a></li>
+      <li><a href="/index.html#contact">Contact</a></li>
+    </ul>
+  </nav>
+  <button class="header-cta">Grab a coffee</button>
+</header>
+
+<aside class="project-nav">
+  <a href="#context" class="project-nav-item"><span class="project-nav-label">Context</span><div class="project-nav-dot"></div></a>
+  <a href="#mental-models" class="project-nav-item"><span class="project-nav-label">Mental Models</span><div class="project-nav-dot"></div></a>
+  <a href="#phenomena" class="project-nav-item"><span class="project-nav-label">Phenomena</span><div class="project-nav-dot"></div></a>
+  <a href="#learnings" class="project-nav-item"><span class="project-nav-label">Learnings</span><div class="project-nav-dot"></div></a>
+</aside>
+
+<main>
+  <section class="hero">
+    <div class="wrap">
+      <div class="hero-grid">
+        <div>
+          <div class="eyebrow">Project Case Study · 2022</div>
+          <h1 class="hero-title">Virtual Social Behaviour in <em>JouleBug</em></h1>
+          <p class="lead">A deep dive into the behavioural deviances in carbon footprint tracking applications, exploring how social mechanics can sometimes lead to an "illusion of contribution."</p>
+          <div class="hero-meta">
+            <div class="meta-item"><span class="meta-k">Role</span><span class="meta-v">Lead Design Researcher (Academic)</span></div>
+            <div class="meta-item"><span class="meta-k">Company</span><span class="meta-v">JouleBug by Carimus</span></div>
+            <div class="meta-item"><span class="meta-k">Focus</span><span class="meta-v">Behavioral Science · Sustainability · Social Design</span></div>
+          </div>
+        </div>
+        <div style="display: flex; align-items: center; justify-content: center;">
+          <div class="glass-card" style="width: 100%; height: 300px; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center;">
+            <div style="font-size: 4rem; margin-bottom: 1rem;">👁️</div>
+            <p class="font-mono text-[10px] uppercase tracking-widest text-teal">Look Here!</p>
+            <p class="text-sm text-ink-3 mt-4">Climate Change is <br><strong>everyone's business</strong></p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="context">
+    <div class="wrap">
+      <div style="max-width: 800px;">
+        <div class="eyebrow">01 — The Context</div>
+        <h2>A relook through the lens of <em>Climate Change</em></h2>
+        <p class="lead" style="font-family: var(--serif); font-size: 1.8rem; color: var(--teal); margin-bottom: 2rem;">"Sustainability is everyone's business."</p>
+        <p>Sustainability is increasingly becoming a crucial focus for businesses as both policy and consumer opinion increasingly favor environmental protection. As the threat of climate change looms, more consumers are trying to make both small and large lifestyle changes in order to reduce their personal impact on the environment and are turning to brands that help this process along.</p>
+        <div style="margin-top: 2rem; font-family: var(--mono); font-size: 11px; color: var(--ink-4);">
+          Guided by: Harshit Sinha and Guruprasad.S
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="lenses" style="background: white;">
+    <div class="wrap">
+      <div class="eyebrow">02 — Methodology</div>
+      <h2>Lenses of <em>Inquiry</em></h2>
+      <p style="max-width: 600px;">To understand global trends and decode social deviances, we employed a four-fold framework of investigation.</p>
+      
+      <div class="lenses-grid">
+        <div class="lens-circle">
+          <div class="lens-title">Hindsight</div>
+          <ul class="lens-list">
+            <li>Secondary investigation</li>
+            <li>Expert discussion</li>
+            <li>Players and parameters</li>
+          </ul>
+        </div>
+        <div class="lens-circle" style="background: radial-gradient(circle at 30% 30%, #bae6fd 0%, transparent 70%);">
+          <div class="lens-title">Insight</div>
+          <ul class="lens-list">
+            <li>Deviances at play</li>
+            <li>Medium for mind</li>
+            <li>The Phenomena</li>
+            <li>All at once</li>
+          </ul>
+        </div>
+        <div class="lens-circle" style="background: radial-gradient(circle at 30% 30%, #fecaca 0%, transparent 70%);">
+          <div class="lens-title">Foresight</div>
+          <ul class="lens-list">
+            <li>How Might We</li>
+            <li>Fogg's Behavior Model</li>
+            <li>The player and the play</li>
+            <li>The Conscious Rewind</li>
+          </ul>
+        </div>
+        <div class="lens-circle" style="background: radial-gradient(circle at 30% 30%, #a7f3d0 0%, transparent 70%);">
+          <div class="lens-title">Mindsight</div>
+          <ul class="lens-list">
+            <li>Limitations and Learnings</li>
+            <li>The pursuit</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="mental-models" style="background: #f8fafc;">
+    <div class="wrap">
+      <div class="eyebrow">03 — Mental Models</div>
+      <h2>Who is the <em>because?</em></h2>
+      <p style="color: var(--ink-3); font-size: 12px; margin-bottom: 2rem;">Source: IPCC Report, 2022</p>
+      
+      <div class="hindsight-grid">
+        <div class="hindsight-card">
+          <h4>Greening personal lives<br>BELIEVERS</h4>
+          <p>People who believe individual action/behavior play an important role in mitigating climate change.</p>
+        </div>
+        <div class="hindsight-card">
+          <h4>Greening personal lives<br>NON-BELIEVERS</h4>
+          <p>People who think it is a hoax propagated by fossil fuel companies to divert attention.</p>
+        </div>
+        <div class="hindsight-card">
+          <h4>Collective action<br>BELIEVERS</h4>
+          <p>People who think that collective action matters most.</p>
+        </div>
+      </div>
+
+      <div style="margin-top: 6rem;">
+        <p class="font-mono text-[10px] uppercase text-teal">Mechanisms at Play</p>
+        <p class="text-sm mt-2">Small actions that form the baseline of perceived individual impact.</p>
+        <div class="mechanisms-cloud">
+          <div>Planting more trees</div><div>Eat less meat</div><div>Use less fertilisers</div><div>Use less shower</div>
+          <div>Make craft with all chips packets</div><div>Carpooling</div><div>Stay close to office</div><div>Use a cycle for short journeys</div>
+          <div>Carry water bottle every time</div><div>Using solar panels</div><div>Rechargeable Batteries</div><div>Delete email trash</div>
+          <div>Carry jute bags</div><div>Switching to LED bulbs</div><div>Email instead of Snail Mail</div><div>Reuse packaging cartons</div>
+          <div>Reusable cutlery</div><div>Using less plastic bags</div><div>Buy used furniture</div><div>Planting more trees</div>
+          <div>Consume meat once a week</div><div>Use tote/jute bags</div><div>Work at home</div><div>Buy local food</div>
+          <div>Switch off engine at signals</div><div>Full loads of washing</div><div>Rent eco-friendly car</div><div>Fast fashion vs Long-lasting</div>
+          <div>Paper for gift wrappers</div><div>Rid of excess weight in car</div><div>Cremate instead of burial</div><div>E-pass instead of printing</div>
+          <div>Support environment laws</div><div>5 star energy products</div><div>Donate clothes</div><div>Eat Mail kofta</div>
+          <div>Use mechanical pencils</div><div>Use recycled paper</div><div>Commute less</div><div>Making compost</div>
+          <div>Stop using crackers</div><div>Don't let water run</div><div>Inflate tires</div><div>Buying sustainable products</div>
+          <div>Use Fans instead of AC</div><div>Print less</div><div>Ordering veg burgers</div><div>Plastic toothbrush</div>
+          <div>Computer Off Overnight</div><div>Unplug electronics</div><div>Spread via twitter</div><div>Read digital books</div>
+        </div>
+        <p class="text-[10px] mt-4 italic color-ink-4">...and many more. The misleading propagation of which leads to a macro phenomenon.</p>
+      </div>
+
+      <div class="grid-3" style="margin-top: 6rem;">
+        <div class="glass-card">
+          <p class="font-mono text-[10px] uppercase text-teal mb-4">Journey</p>
+          <ul style="list-style: none; font-size: 13px; color: var(--ink-2); display: flex; flex-direction: column; gap: 0.8rem;">
+            <li>→ Attempts to offer value</li>
+            <li>→ Trust building screens</li>
+            <li>→ Curated daily chores</li>
+            <li>→ Real-time validation</li>
+            <li>→ Competitive Arena</li>
+          </ul>
+        </div>
+        <div class="glass-card" style="border-top: 4px solid #ef4444;">
+          <p class="font-mono text-[10px] uppercase text-red-500 mb-4" style="color: #ef4444;">Vulnerabilities</p>
+          <ul style="list-style: none; font-size: 13px; color: var(--ink-2); display: flex; flex-direction: column; gap: 0.8rem;">
+            <li>• The Regret Test</li>
+            <li>• Choice Paradox</li>
+            <li>• Lack of Reciprocity</li>
+            <li>• Red Herring Fallacy</li>
+            <li>• Social Proof Bias</li>
+          </ul>
+        </div>
+        <div class="glass-card" style="border-top: 4px solid var(--teal);">
+          <p class="font-mono text-[10px] uppercase text-teal mb-4">Deviances</p>
+          <ul style="list-style: none; font-size: 13px; color: var(--ink-2); display: flex; flex-direction: column; gap: 0.8rem;">
+            <li>• Mundane Visuals</li>
+            <li>• Timing of "The Ask"</li>
+            <li>• Over-gamification</li>
+            <li>• Instant</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="phenomena">
+    <div class="wrap">
+      <div class="eyebrow">04 — Phenomena</div>
+      <h2>The Eco-chamber <em>Effect</em></h2>
+      
+      <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 2rem; margin-top: 3rem;">
+        <p class="text-xs italic text-ink-3">"Public misperception of climate risks is delaying urgent adaptation planning."</p>
+        <p class="text-xs italic text-ink-3">"Efforts to maintain status quo by actors in power in face of social inertia."</p>
+        <p class="text-xs italic text-ink-3">"Tech platforms appear to be amplifying or exacerbating the spread of such content."</p>
+      </div>
+
+      <div style="margin-top: 4rem; text-align: center;">
+        <img src="/Joulebug.png" alt="Eco-chamber Effect Visualization" style="width: 100%; max-width: 1000px; border-radius: 40px; box-shadow: 0 20px 80px rgba(0,0,0,0.05);">
+      </div>
+    </div>
+  </section>
+
+  <section id="learnings">
+    <div class="wrap">
+      <div class="eyebrow">04 — Key Learnings</div>
+      <h2>Moving beyond <em>mechanics</em></h2>
+      
+      <div class="grid-3" style="margin-top: 4rem;">
+        <div>
+          <p class="font-mono text-[9px] uppercase text-teal mb-4">01. Awareness</p>
+          <p class="text-sm text-ink-3">Conformity arises with lack of awareness of self. The platform must first anchor the user in their own data before social comparison begins.</p>
+        </div>
+        <div>
+          <p class="font-mono text-[9px] uppercase text-teal mb-4">02. Cognitive Load</p>
+          <p class="text-sm text-ink-3">Conversion of physical activities to virtual demands high cognitive effort, leading to higher bounce rates if the purpose isn't transparent.</p>
+        </div>
+        <div>
+          <p class="font-mono text-[9px] uppercase text-teal mb-4">03. Purpose</p>
+          <p class="text-sm text-ink-3">A platform working to create social or behavioural impact needs to move beyond game mechanics to establish a strong, shared purpose.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="more-works">
+    <div class="wrap">
+      <div class="eyebrow" style="background: rgba(255,255,255,0.05); color: rgba(255,255,255,0.5); border-color: rgba(255,255,255,0.1);">Keep Exploring</div>
+      <h2 style="color: white;">The <em>next</em> inquiry</h2>
+      
+      <div class="mw-grid">
+        <a href="/projects/intelligent-policy-platform.html" class="mw-card">
+          <p class="font-mono text-[10px] opacity-40">01</p>
+          <p class="font-bold mt-2">Intelligent Policy Platform</p>
+          <p class="text-[10px] text-teal uppercase mt-4">Design Strategy · AI</p>
+        </a>
+        <a href="#" class="mw-card">
+          <p class="font-mono text-[10px] opacity-40">03</p>
+          <p class="font-bold mt-2">Signals</p>
+          <p class="text-[10px] text-teal uppercase mt-4">Thesis · Bio-Intelligence</p>
+        </a>
+        <a href="#" class="mw-card">
+          <p class="font-mono text-[10px] opacity-40">04</p>
+          <p class="font-bold mt-2">Absolute</p>
+          <p class="text-[10px] text-teal uppercase mt-4">Design Strategy</p>
+        </a>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer style="padding: 4rem 0; border-top: 1px solid var(--border);">
+  <div class="wrap" style="display: flex; justify-content: space-between; align-items: center; color: var(--ink-4); font-size: 11px; font-family: var(--mono);">
+    <div>JouleBug · Behavioural Research Case Study</div>
+    <div>Varsha Nambiar · 2022</div>
+  </div>
+</footer>
+
+</body>
+</html>

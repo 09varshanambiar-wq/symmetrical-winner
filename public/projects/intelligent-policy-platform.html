@@ -1,0 +1,819 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DHDA IHL — Case Study</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Manrope:wght@300;400;500;600;700&family=Space+Mono&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  /* ── palette from reference ── */
+  --bg:        #eef0fb;          /* lavender page bg */
+  --bg-2:      #e8eaf8;
+  --bg-3:      #dcdff5;
+  --surface:   #ffffff;
+  --surface-t: rgba(255,255,255,0.72);
+  --ink:       #1a1d2e;          /* deep navy */
+  --ink-2:     #3d4166;
+  --ink-3:     #7b80aa;
+  --ink-4:     #a8adc9;
+  --blue:      #2563eb;          /* electric blue CTA */
+  --blue-2:    #1d4ed8;
+  --blue-light:#dbeafe;
+  --blue-mid:  #93c5fd;
+  --teal:      #0ea5e9;
+  --teal-light:#e0f2fe;
+  --amber:     #d97706;
+  --amber-light:#fef3c7;
+  --border:    rgba(37,99,235,0.1);
+  --border-2:  rgba(37,99,235,0.18);
+  --serif:     'Instrument Serif', Georgia, serif;
+  --sans:      'Manrope', system-ui, sans-serif;
+  --mono:      'Space Mono', monospace;
+  --max:       1080px;
+  --pad:       4.5rem;
+  --radius:    14px;
+}
+
+html { scroll-behavior: smooth; }
+body {
+  font-family: var(--sans);
+  background: var(--bg);
+  color: var(--ink);
+  font-size: 16px;
+  line-height: 1.72;
+  -webkit-font-smoothing: antialiased;
+  /* mesh gradient like the reference */
+  background-image:
+    radial-gradient(ellipse 70% 50% at 10% 10%, rgba(200,210,255,0.55) 0%, transparent 60%),
+    radial-gradient(ellipse 60% 40% at 90% 80%, rgba(230,225,255,0.45) 0%, transparent 55%),
+    radial-gradient(ellipse 80% 80% at 50% 50%, rgba(238,240,251,1) 0%, transparent 100%);
+  background-attachment: fixed;
+}
+
+/* ── NAV ── */
+/* ── MAIN HEADER (from App.jsx) ── */
+.main-header {
+  position: fixed; top: 24px; left: 50%; transform: translateX(-50%);
+  width: 90%; max-width: 1080px; height: 56px; z-index: 300;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0 32px;
+  background: rgba(255, 255, 255, 0.4);
+  backdrop-filter: blur(20px) saturate(180%);
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  border-radius: 20px;
+  box-shadow: 0 10px 40px rgba(31, 38, 135, 0.1);
+}
+.header-logo {
+  font-family: var(--sans); font-weight: 800; font-size: 18px;
+  display: flex; align-items: center; gap: 10px; color: var(--ink);
+  text-decoration: none;
+}
+.logo-dot { width: 8px; height: 8px; background: var(--blue); border-radius: 50%; animation: pulse 2s infinite; }
+@keyframes pulse { 0% { opacity: 1; transform: scale(1); } 50% { opacity: 0.5; transform: scale(1.2); } 100% { opacity: 1; transform: scale(1); } }
+.header-links { display: flex; gap: 32px; list-style: none; }
+.header-links a {
+  font-size: 10px; font-weight: 700; text-transform: uppercase;
+  letter-spacing: 0.15em; color: var(--ink-3); text-decoration: none;
+  transition: color 0.3s;
+}
+.header-links a:hover { color: var(--blue); }
+.header-cta {
+  font-size: 10px; font-weight: 700; text-transform: uppercase;
+  letter-spacing: 0.1em; padding: 10px 20px;
+  background: rgba(37, 99, 235, 0.1); color: var(--blue);
+  border-radius: 12px; border: none; cursor: pointer;
+  transition: all 0.3s;
+}
+.header-cta:hover { background: var(--blue); color: white; }
+
+/* ── VERTICAL PROJECT NAV (on the right) ── */
+.project-nav {
+  position: fixed; top: 50%; right: 2rem; transform: translateY(-50%);
+  z-index: 250; display: flex; flex-direction: column; gap: 1.5rem;
+  align-items: flex-end;
+}
+.project-nav-item {
+  display: flex; align-items: center; gap: 1rem;
+  text-decoration: none; group: hover;
+}
+.project-nav-label {
+  font-family: var(--mono); font-size: 9px; text-transform: uppercase;
+  letter-spacing: 0.15em; color: var(--ink-4);
+  opacity: 0; transform: translateX(10px);
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.project-nav-item:hover .project-nav-label { opacity: 1; transform: translateX(0); }
+.project-nav-dot {
+  width: 6px; height: 6px; border-radius: 50%;
+  background: var(--ink-4); transition: all 0.3s;
+  border: 1px solid transparent;
+}
+.project-nav-item:hover .project-nav-dot {
+  background: var(--blue); transform: scale(1.5);
+  box-shadow: 0 0 10px rgba(37, 99, 235, 0.4);
+}
+@media (max-width: 1024px) { .project-nav { display: none; } }
+
+/* ── LAYOUT ── */
+.wrap { max-width: var(--max); margin: 0 auto; padding: 0 var(--pad); }
+section { padding: 6rem 0; border-top: 0.5px solid var(--border-2); }
+
+.eyebrow {
+  display: inline-flex; align-items: center; gap: 0.6rem;
+  font-family: var(--mono); font-size: 10px; letter-spacing: 0.14em;
+  text-transform: uppercase; color: var(--ink-3);
+  background: var(--surface-t); border: 0.5px solid var(--border-2);
+  padding: 5px 12px; border-radius: 20px; margin-bottom: 1.25rem;
+  backdrop-filter: blur(8px);
+}
+.eyebrow-dot { width: 5px; height: 5px; border-radius: 50%; background: var(--blue); }
+
+h2 {
+  font-family: var(--serif);
+  font-size: clamp(1.9rem, 3.2vw, 2.75rem);
+  line-height: 1.1; letter-spacing: -0.02em; color: var(--ink);
+  margin-bottom: 1rem;
+}
+h2 em { font-style: italic; color: var(--blue); }
+.lead { font-size: 1.05rem; color: var(--ink-2); line-height: 1.7; max-width: 580px; font-weight: 400; }
+.two-col { display: grid; grid-template-columns: 2fr 3fr; gap: 5rem; align-items: start; }
+
+/* glass card */
+.glass {
+  background: var(--surface-t);
+  border: 0.5px solid rgba(255,255,255,0.8);
+  border-radius: var(--radius);
+  backdrop-filter: blur(12px);
+  box-shadow: 0 2px 24px rgba(37,99,235,0.06), 0 1px 4px rgba(37,99,235,0.04);
+}
+
+/* ── HERO ── */
+.hero {
+  min-height: 100vh; padding-top: 54px;
+  display: flex; flex-direction: column;
+}
+.hero-body {
+  flex: 1; display: grid; grid-template-columns: 1fr 1fr;
+  max-width: var(--max); margin: 0 auto; padding: 0 var(--pad);
+  align-items: center;
+}
+.hero-l { padding: 5rem 4.5rem 5rem 0; border-right: 0.5px solid var(--border-2); }
+.hero-r { padding: 5rem 0 5rem 4.5rem; }
+
+.hero-pill {
+  display: inline-flex; align-items: center; gap: 0.6rem;
+  font-family: var(--mono); font-size: 10px; letter-spacing: 0.14em;
+  text-transform: uppercase; color: var(--blue);
+  background: var(--surface-t); border: 0.5px solid var(--border-2);
+  padding: 6px 14px; border-radius: 20px; margin-bottom: 2rem;
+  backdrop-filter: blur(10px);
+}
+.hero-pill-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--blue); }
+
+h1 {
+  font-family: var(--sans);
+  font-size: clamp(2.4rem, 5vw, 3.8rem);
+  line-height: 1.06; font-weight: 700;
+  letter-spacing: -0.03em; color: var(--ink);
+  margin-bottom: 1.75rem;
+}
+h1 em {
+  font-family: var(--serif); font-style: italic;
+  color: var(--blue); font-weight: 400;
+}
+.hero-desc { font-size: 1rem; color: var(--ink-2); max-width: 400px; line-height: 1.7; font-weight: 400; }
+.hero-meta { margin-top: 2.5rem; padding-top: 2rem; border-top: 0.5px solid var(--border-2); display: flex; flex-direction: column; gap: 0.7rem; }
+.meta-row { display: flex; gap: 1.5rem; align-items: baseline; }
+.meta-k { font-family: var(--mono); font-size: 9px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--ink-4); min-width: 64px; }
+.meta-v { font-size: 13px; color: var(--ink-2); font-weight: 500; }
+
+/* stat grid */
+.stat-grid {
+  display: grid; grid-template-columns: 1fr 1fr;
+  gap: 1px; background: var(--border-2);
+  border: 0.5px solid var(--border-2); border-radius: var(--radius);
+  overflow: hidden; margin-bottom: 1.5rem;
+}
+.stat-cell {
+  background: var(--surface-t); padding: 1.4rem 1.5rem;
+  backdrop-filter: blur(10px);
+}
+.stat-n { font-family: var(--sans); font-size: 2rem; font-weight: 700; line-height: 1; color: var(--blue); margin-bottom: 4px; }
+.stat-lbl { font-size: 12px; color: var(--ink-3); line-height: 1.4; font-weight: 400; }
+
+.skills { display: flex; flex-wrap: wrap; gap: 0.4rem; }
+.skill {
+  font-family: var(--mono); font-size: 10px; letter-spacing: 0.03em;
+  padding: 4px 10px; border-radius: 20px;
+  border: 0.5px solid var(--border-2);
+}
+.skill.a { background: var(--blue-light); color: var(--blue-2); border-color: rgba(37,99,235,0.2); }
+.skill.t { background: var(--teal-light); color: #0369a1; border-color: rgba(14,165,233,0.2); }
+.skill.b { background: var(--surface-t); color: var(--ink-3); backdrop-filter: blur(6px); }
+
+/* hero bottom bar */
+.hero-bar {
+  border-top: 0.5px solid var(--border-2);
+  padding: 1.5rem var(--pad);
+  max-width: var(--max); margin: 0 auto;
+  display: flex; gap: 3rem; flex-wrap: wrap;
+}
+.hb-item { display: flex; flex-direction: column; gap: 3px; }
+.hb-k { font-family: var(--mono); font-size: 9px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-4); }
+.hb-v { font-size: 12px; color: var(--ink-2); font-weight: 500; }
+
+/* ── BRIEF ── */
+.brief-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 1.25rem; margin-top: 3rem; }
+.brief-card {
+  padding: 1.75rem;
+  background: var(--surface-t); border: 0.5px solid rgba(255,255,255,0.8);
+  border-radius: var(--radius); backdrop-filter: blur(12px);
+  box-shadow: 0 2px 20px rgba(37,99,235,0.05);
+  position: relative; overflow: hidden;
+}
+.brief-card::after { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px; border-radius: var(--radius) var(--radius) 0 0; }
+.brief-card.c1::after { background: var(--blue); }
+.brief-card.c2::after { background: var(--teal); }
+.brief-card.c3::after { background: var(--amber); }
+.brief-title { font-family: var(--serif); font-size: 1.1rem; margin-bottom: 0.75rem; color: var(--ink); }
+.brief-body { font-size: 14px; color: var(--ink-2); line-height: 1.6; font-weight: 400; }
+
+/* design question block */
+.dq-wrap {
+  margin-top: 2.5rem; padding: 2.75rem 3rem;
+  background: var(--blue); border-radius: var(--radius);
+  box-shadow: 0 8px 40px rgba(37,99,235,0.25);
+}
+.dq-lbl { font-family: var(--mono); font-size: 10px; letter-spacing: 0.16em; text-transform: uppercase; color: rgba(255,255,255,0.5); margin-bottom: 1.25rem; }
+.dq-text { font-family: var(--serif); font-size: clamp(1.2rem, 2.2vw, 1.7rem); line-height: 1.35; font-style: italic; color: #ffffff; }
+.dq-constraints {
+  margin-top: 2rem; padding-top: 2rem;
+  border-top: 0.5px solid rgba(255,255,255,0.15);
+  display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;
+}
+.dq-c { display: flex; gap: 0.9rem; align-items: flex-start; }
+.dq-dot { width: 5px; height: 5px; border-radius: 50%; background: rgba(255,255,255,0.5); margin-top: 7px; flex-shrink: 0; }
+.dq-ct { font-size: 13px; color: rgba(255,255,255,0.7); line-height: 1.55; font-weight: 400; }
+.dq-ct strong { color: rgba(255,255,255,0.95); font-weight: 500; }
+
+/* ── ROLE ── */
+.role-items { display: flex; flex-direction: column; gap: 1.75rem; }
+.role-item { display: flex; gap: 1.5rem; align-items: flex-start; }
+.role-arr { font-family: var(--mono); font-size: 11px; color: var(--blue); padding-top: 3px; min-width: 18px; }
+.role-name { font-weight: 600; font-size: 14px; color: var(--ink); margin-bottom: 3px; }
+.role-body { font-size: 14px; color: var(--ink-2); line-height: 1.6; font-weight: 400; }
+
+.vibe-box {
+  background: var(--ink); border-radius: var(--radius);
+  padding: 2rem; margin-top: 2.5rem;
+  box-shadow: 0 8px 40px rgba(26,29,46,0.2);
+}
+.vibe-lbl { font-family: var(--mono); font-size: 9px; letter-spacing: 0.14em; text-transform: uppercase; color: rgba(255,255,255,0.3); margin-bottom: 1rem; }
+.vibe-body { font-size: 14px; color: rgba(255,255,255,0.55); line-height: 1.65; font-weight: 400; }
+.vibe-body strong { color: rgba(255,255,255,0.9); font-weight: 500; }
+.vibe-body .code { font-family: var(--mono); color: #93c5fd; font-size: 12px; }
+
+/* ── PROCESS ── */
+.process-table { margin-top: 3.5rem; overflow: hidden; border-radius: var(--radius); border: 0.5px solid var(--border-2); }
+.phase {
+  display: grid; grid-template-columns: 175px 1fr;
+  border-bottom: 0.5px solid var(--border-2);
+}
+.phase:last-child { border-bottom: none; }
+.phase-lbl {
+  padding: 2rem 1.75rem;
+  border-right: 0.5px solid var(--border-2);
+  background: var(--surface-t); backdrop-filter: blur(10px);
+}
+.phase-num { font-family: var(--mono); font-size: 9px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-4); margin-bottom: 4px; }
+.phase-name { font-family: var(--serif); font-size: 1rem; color: var(--ink); line-height: 1.25; }
+.phase-body { padding: 2rem; background: rgba(255,255,255,0.5); backdrop-filter: blur(6px); }
+.phase-methods { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-bottom: 1rem; }
+.phase-tag {
+  font-size: 11px; font-family: var(--mono); padding: 3px 9px;
+  border-radius: 20px; border: 0.5px solid var(--border-2);
+  color: var(--ink-3); background: var(--surface-t);
+}
+.phase-text { font-size: 14px; color: var(--ink-2); line-height: 1.62; font-weight: 400; }
+.phase-insight {
+  margin-top: 1rem; padding: 0.9rem 1.2rem;
+  background: var(--blue-light); border-left: 2px solid var(--blue);
+  border-radius: 0 8px 8px 0;
+  font-size: 13px; color: var(--blue-2); line-height: 1.55; font-style: italic; font-weight: 400;
+}
+
+/* ── ARCHITECTURE ── */
+.arch-strip {
+  display: grid; grid-template-columns: repeat(4,1fr);
+  gap: 1px; background: var(--border-2);
+  border: 0.5px solid var(--border-2); border-radius: var(--radius);
+  overflow: hidden; margin-top: 3rem;
+}
+.arch-col { background: rgba(255,255,255,0.55); backdrop-filter: blur(6px); }
+.arch-head { padding: 0.85rem 1rem; border-bottom: 0.5px solid var(--border-2); font-family: var(--mono); font-size: 9px; letter-spacing: 0.1em; text-transform: uppercase; }
+.arch-head.s1 { background: var(--blue-light); color: var(--blue-2); }
+.arch-head.s2 { background: var(--teal-light); color: #0369a1; }
+.arch-head.s3 { background: var(--amber-light); color: var(--amber); }
+.arch-head.s4 { background: var(--bg-3); color: var(--ink-3); }
+.arch-body { padding: 1rem; }
+.arch-row { font-size: 12px; color: var(--ink-2); line-height: 1.4; padding: 4px 0; border-bottom: 0.5px solid var(--border); font-weight: 400; }
+.arch-row:last-child { border-bottom: none; }
+.arch-phase { font-family: var(--mono); font-size: 9px; color: var(--ink-4); margin-top: 8px; }
+
+/* ── FEATURES ── */
+.feat-section { margin-top: 3.5rem; display: flex; flex-direction: column; gap: 2.5rem; }
+.feat-group-hd { display: flex; align-items: center; gap: 1rem; margin-bottom: 1.25rem; }
+.feat-badge { font-family: var(--mono); font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; padding: 4px 12px; border-radius: 20px; white-space: nowrap; }
+.feat-badge.p12 { background: var(--blue-light); color: var(--blue-2); border: 0.5px solid rgba(37,99,235,0.2); }
+.feat-badge.p3  { background: var(--teal-light); color: #0369a1; border: 0.5px solid rgba(14,165,233,0.2); }
+.feat-badge.pa  { background: var(--bg-3); color: var(--ink-3); border: 0.5px solid var(--border-2); }
+.feat-rule { flex: 1; height: 0.5px; background: var(--border-2); }
+.feat-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+.feat-card {
+  padding: 1.4rem; border-radius: 10px;
+  background: var(--surface-t); border: 0.5px solid rgba(255,255,255,0.8);
+  backdrop-filter: blur(12px); box-shadow: 0 2px 16px rgba(37,99,235,0.04);
+}
+.feat-cat { font-family: var(--mono); font-size: 9px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--ink-4); margin-bottom: 5px; }
+.feat-name { font-weight: 600; font-size: 14px; color: var(--ink); margin-bottom: 4px; }
+.feat-desc { font-size: 13px; color: var(--ink-2); line-height: 1.55; font-weight: 400; }
+
+/* ── INSIGHTS ── */
+.pull-quote {
+  margin: 2.5rem 0; padding: 2.5rem 3rem;
+  background: var(--blue); border-radius: var(--radius);
+  box-shadow: 0 8px 40px rgba(37,99,235,0.25);
+}
+.pull-quote p { font-family: var(--serif); font-size: clamp(1.15rem, 2vw, 1.65rem); line-height: 1.38; font-style: italic; color: #ffffff; }
+
+.insight-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 1.25rem; margin-top: 3rem; }
+.insight-card {
+  padding: 1.75rem; border-radius: var(--radius);
+  background: var(--surface-t); border: 0.5px solid rgba(255,255,255,0.8);
+  backdrop-filter: blur(12px); box-shadow: 0 2px 20px rgba(37,99,235,0.05);
+  position: relative; overflow: hidden;
+}
+.insight-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px; }
+.insight-card.i1::before { background: var(--blue); }
+.insight-card.i2::before { background: var(--teal); }
+.insight-card.i3::before { background: var(--amber); }
+.insight-card.i4::before { background: #7c3aed; }
+.insight-card.i5::before { background: var(--blue); }
+.insight-card.i6::before { background: var(--teal); }
+.ins-n { font-family: var(--serif); font-size: 1.6rem; line-height: 1; color: var(--bg-3); margin-bottom: 0.75rem; user-select: none; }
+.ins-title { font-weight: 600; font-size: 14px; color: var(--ink); margin-bottom: 0.5rem; }
+.ins-body { font-size: 13px; color: var(--ink-2); line-height: 1.6; font-weight: 400; }
+
+/* ── LEARNINGS ── */
+.lo-split { display: grid; grid-template-columns: 3fr 2fr; gap: 4rem; margin-top: 3rem; align-items: start; }
+.learning-item { display: flex; gap: 1.25rem; align-items: flex-start; padding-bottom: 1.5rem; margin-bottom: 1.5rem; border-bottom: 0.5px solid var(--border-2); }
+.learning-item:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
+.l-n { font-family: var(--serif); font-size: 1.5rem; line-height: 1; color: var(--bg-3); min-width: 28px; padding-top: 2px; }
+.l-title { font-weight: 600; font-size: 14px; color: var(--ink); margin-bottom: 3px; }
+.l-body { font-size: 13px; color: var(--ink-2); line-height: 1.58; font-weight: 400; }
+
+.outcome-panel { position: sticky; top: 74px; }
+.o-stats { display: grid; grid-template-columns: 1fr 1fr; gap: 1px; background: var(--border-2); border: 0.5px solid var(--border-2); border-radius: var(--radius); overflow: hidden; margin-bottom: 1.25rem; }
+.o-stat { background: var(--surface-t); padding: 1.25rem; backdrop-filter: blur(10px); }
+.o-n { font-family: var(--sans); font-size: 1.9rem; font-weight: 700; color: var(--blue); line-height: 1; margin-bottom: 3px; }
+.o-lbl { font-size: 12px; color: var(--ink-3); line-height: 1.35; font-weight: 400; }
+.what-next { padding: 1.5rem; background: var(--surface-t); border: 0.5px solid rgba(255,255,255,0.8); border-radius: var(--radius); backdrop-filter: blur(12px); }
+.wn-lbl { font-family: var(--mono); font-size: 9px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-4); margin-bottom: 0.75rem; }
+.wn-body { font-size: 13px; color: var(--ink-2); line-height: 1.65; font-weight: 400; }
+
+/* ── MORE WORKS STRIP (Inverted) ── */
+.more-works {
+  padding: 8rem 0; border-top: 0.5px solid rgba(255,255,255,0.1);
+  position: relative; overflow: hidden;
+  background: linear-gradient(135deg, #0c1222 0%, #1e110a 100%);
+  color: white;
+}
+/* Grain Effect */
+.more-works::before {
+  content: "";
+  position: absolute; inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+  opacity: 0.15; pointer-events: none; mix-blend-mode: overlay;
+}
+/* Colorful Orbs for the blue-orange vibe */
+.more-works::after {
+  content: "";
+  position: absolute; inset: 0;
+  background: 
+    radial-gradient(circle at 10% 20%, rgba(37, 99, 235, 0.15) 0%, transparent 40%),
+    radial-gradient(circle at 90% 80%, rgba(249, 115, 22, 0.1) 0%, transparent 40%);
+  pointer-events: none;
+}
+
+.more-works .wrap { position: relative; z-index: 2; }
+.more-works h2 { color: white; }
+.more-works h2 em { color: #60a5fa; } /* Lighter blue for dark bg */
+.more-works .eyebrow { 
+  background: rgba(255,255,255,0.05); 
+  border-color: rgba(255,255,255,0.1);
+  color: rgba(255,255,255,0.5);
+}
+
+.mw-header {
+  display: flex; justify-content: space-between; align-items: flex-end;
+  margin-bottom: 3.5rem;
+}
+.mw-grid {
+  display: flex; gap: 2rem; overflow-x: auto;
+  padding-bottom: 2rem; scrollbar-width: none;
+}
+.mw-grid::-webkit-scrollbar { display: none; }
+
+.mw-card {
+  min-width: 320px; padding: 2.5rem;
+  background: rgba(255, 255, 255, 0.03); 
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 28px; text-decoration: none;
+  transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+  display: flex; flex-direction: column; gap: 1.5rem;
+  backdrop-filter: blur(10px);
+}
+.mw-card:hover { 
+  transform: translateY(-12px) scale(1.02); 
+  background: rgba(255, 255, 255, 0.06);
+  border-color: rgba(255, 255, 255, 0.2);
+  box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+}
+.mw-num { font-family: var(--mono); font-size: 10px; color: rgba(255,255,255,0.3); letter-spacing: 0.1em; }
+.mw-title { font-weight: 700; font-size: 18px; color: white; letter-spacing: -0.01em; }
+.mw-cat { font-size: 10px; text-transform: uppercase; letter-spacing: 0.15em; color: #60a5fa; font-weight: 700; }
+</style>
+</head>
+<body>
+
+<header class="main-header">
+  <a href="/index.html" class="header-logo">
+    <div class="logo-dot"></div>
+    Varsha Nambiar
+  </a>
+  <nav class="hidden md:flex">
+    <ul class="header-links">
+      <li><a href="/index.html#work">Works</a></li>
+      <li><a href="/index.html#wonderlands">Wonderlands</a></li>
+      <li><a href="/index.html#about">About</a></li>
+      <li><a href="/index.html#contact">Contact</a></li>
+    </ul>
+  </nav>
+  <button class="header-cta">Grab a coffee</button>
+</header>
+
+<aside class="project-nav">
+  <a href="#brief" class="project-nav-item">
+    <span class="project-nav-label">Brief</span>
+    <div class="project-nav-dot"></div>
+  </a>
+  <a href="#role" class="project-nav-item">
+    <span class="project-nav-label">Role</span>
+    <div class="project-nav-dot"></div>
+  </a>
+  <a href="#process" class="project-nav-item">
+    <span class="project-nav-label">Process</span>
+    <div class="project-nav-dot"></div>
+  </a>
+  <a href="#system" class="project-nav-item">
+    <span class="project-nav-label">System</span>
+    <div class="project-nav-dot"></div>
+  </a>
+  <a href="#insights" class="project-nav-item">
+    <span class="project-nav-label">Insights</span>
+    <div class="project-nav-dot"></div>
+  </a>
+  <a href="#learnings" class="project-nav-item">
+    <span class="project-nav-label">Learnings</span>
+    <div class="project-nav-dot"></div>
+  </a>
+</aside>
+
+
+<!-- ═══════ HERO ═══════ -->
+<div class="hero">
+  <div class="hero-body">
+
+    <div class="hero-l">
+      <div class="hero-pill"><span class="hero-pill-dot"></span>AI Policy Platform · Design Strategy</div>
+      <h1>"Designing a <em>living map</em> of Australian health policy."</h1>
+      <p class="hero-desc">I led design strategy and product thinking end-to-end — helping the Department of Health and Aged Care turn a complex, fragmented health system into something navigable, trustworthy, and genuinely explorable.</p>
+      <div class="hero-meta">
+        <div class="meta-row"><span class="meta-k">Client</span><span class="meta-v">Dept. of Health &amp; Aged Care, Australia · Scyne Advisory</span></div>
+        <div class="meta-row"><span class="meta-k">Platform</span><span class="meta-v">DHDA Interactive Health Landscape — Gravity</span></div>
+        <div class="meta-row"><span class="meta-k">Role</span><span class="meta-v">Lead Design Strategist · Product · UX/UI · Vibe-coded delivery</span></div>
+        <div class="meta-row"><span class="meta-k">Scope</span><span class="meta-v">Concept pitch → MVP → Phased roadmap · 3 platform sections</span></div>
+      </div>
+    </div>
+
+    <div class="hero-r">
+      <div class="stat-grid">
+        <div class="stat-cell"><div class="stat-n">3</div><div class="stat-lbl">Platform sections scoped and designed end-to-end</div></div>
+        <div class="stat-cell"><div class="stat-n">4</div><div class="stat-lbl">Interconnected systems in the architecture</div></div>
+        <div class="stat-cell"><div class="stat-n">9+</div><div class="stat-lbl">Population cohorts mapped across the landscape</div></div>
+        <div class="stat-cell"><div class="stat-n">MVP</div><div class="stat-lbl">Demonstrated to senior DHDA executives</div></div>
+      </div>
+      <div class="skills">
+        <span class="skill a">Design Strategy</span>
+        <span class="skill a">Systems Thinking</span>
+        <span class="skill a">Product Leadership</span>
+        <span class="skill t">Knowledge Graph</span>
+        <span class="skill t">AI Trust Design</span>
+        <span class="skill t">Ontology &amp; IA</span>
+        <span class="skill b">Vibe Coding</span>
+        <span class="skill b">Sprint Delivery</span>
+        <span class="skill b">Gov / Health Domain</span>
+        <span class="skill b">Stakeholder Research</span>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="hero-bar">
+    <div class="hb-item"><span class="hb-k">Sector</span><span class="hb-v">Government · Health Policy · AI</span></div>
+    <div class="hb-item"><span class="hb-k">Entities</span><span class="hb-v">Gravity · Scyne Advisory · DHDA</span></div>
+    <div class="hb-item"><span class="hb-k">Data sources</span><span class="hb-v">AIHW · OECD · DHDA Infospec</span></div>
+    <div class="hb-item"><span class="hb-k">AI frameworks</span><span class="hb-v">STEEPLEO · Knowledge Graph · Dual-badge trust layer</span></div>
+    <div class="hb-item"><span class="hb-k">Delivery</span><span class="hb-v">Rapid sprints · Vibe-coded front end</span></div>
+  </div>
+</div>
+
+
+<!-- ═══════ 01 BRIEF ═══════ -->
+<section id="brief">
+<div class="wrap">
+  <div class="two-col">
+    <div>
+      <div class="eyebrow"><span class="eyebrow-dot"></span>01 — The Brief</div>
+      <h2>Where systems complexity meets the need for <em>clarity</em></h2>
+    </div>
+    <p class="lead">The Australian Department of Health and Aged Care manages one of the most interconnected policy landscapes in the world — spanning diverse cohorts, competing priorities, and layered tiers of care. Data lived in silos. No shared map existed. Our brief was to build one — and to make AI a trusted part of how policymakers navigate it.</p>
+  </div>
+
+  <div class="brief-grid">
+    <div class="brief-card c1">
+      <div class="brief-title">A system too large to hold in one view</div>
+      <div class="brief-body">Health policy decisions touch millions of lives across children, First Nations communities, aged populations, and people with disability. Each cohort and domain existed in its own data silo. The opportunity was to design the connective tissue — a shared model that made the whole system legible without flattening its complexity.</div>
+    </div>
+    <div class="brief-card c2">
+      <div class="brief-title">Earning trust for AI in a high-consequence domain</div>
+      <div class="brief-body">Generative AI was entering government at the moment its credibility was still being established. Senior executives needed genuine insight — but equally needed confidence in where that insight came from. This shaped a defining challenge: building an AI experience that was transparent by default, not just capable.</div>
+    </div>
+    <div class="brief-card c3">
+      <div class="brief-title">Co-creating the brief, not just answering it</div>
+      <div class="brief-body">This project started at the concept pitch stage — before a product blueprint, before a stable ontology, before an agreed IA. I helped frame the problem space, shape the system model, and define the UX strategy alongside the team, collaborating across three entities with genuinely different perspectives.</div>
+    </div>
+  </div>
+
+  <div class="dq-wrap">
+    <div class="dq-lbl">Design question</div>
+    <div class="dq-text">"How might we help senior policymakers explore the complex, evolving pressures, domains, and enablers of the Australian health system — with genuine confidence in the data, clarity around the AI, and control over the depth of their inquiry?"</div>
+    <div class="dq-constraints">
+      <div class="dq-c"><div class="dq-dot"></div><div class="dq-ct"><strong>Aligning three entities</strong> around a shared vision of scope, language, and product intent — across Gravity, Scyne, and DHDA.</div></div>
+      <div class="dq-c"><div class="dq-dot"></div><div class="dq-ct"><strong>Designing Infospec and AI to coexist</strong> in the same interface without confusing users about what was verified versus generated.</div></div>
+      <div class="dq-c"><div class="dq-dot"></div><div class="dq-ct"><strong>Letting the ontology shape the UX</strong> — domains and tiers were fixed before design began, making the system's structure the product's logic.</div></div>
+      <div class="dq-c"><div class="dq-dot"></div><div class="dq-ct"><strong>Delivering with speed and coherence</strong> — concept validation, architecture, and front-end running simultaneously under a compressed timeline.</div></div>
+    </div>
+  </div>
+</div>
+</section>
+
+
+<!-- ═══════ 02 ROLE ═══════ -->
+<section id="role">
+<div class="wrap">
+  <div class="two-col">
+    <div>
+      <div class="eyebrow"><span class="eyebrow-dot"></span>02 — Role &amp; Ownership</div>
+      <h2>End-to-end — from first sketch to <em>shipped</em> product</h2>
+      <p class="lead" style="margin-top:1rem;">I led this project across its full arc — not as a specialist brought in for one phase, but as the person holding the thread from concept to delivery. That continuity of perspective shaped every decision.</p>
+    </div>
+    <div class="role-items">
+      <div class="role-item"><div class="role-arr">→</div><div><div class="role-name">Concept &amp; pitch framing</div><div class="role-body">Shaped the initial platform vision — the value proposition for executives, the AI trust philosophy, and the high-level interaction model. This early framing became the north star the team returned to throughout.</div></div></div>
+      <div class="role-item"><div class="role-arr">→</div><div><div class="role-name">User requirement &amp; story workshops</div><div class="role-body">Facilitated research-led workshops across DHDA's policy teams, analysts, and senior executives — listening for the need underneath the ask, translating outputs into user stories and PRDs the whole team worked from.</div></div></div>
+      <div class="role-item"><div class="role-arr">→</div><div><div class="role-name">System architecture &amp; ontology alignment</div><div class="role-body">Worked with ontology architects to translate the four-system health model into UX-legible navigation — preserving rigour without making it a barrier to exploration.</div></div></div>
+      <div class="role-item"><div class="role-arr">→</div><div><div class="role-name">End-to-end UX/UI design lead</div><div class="role-body">Owned interaction design, experience architecture, and visual design — including the AI trust layer, life course toggles, domain drill-down, and scenario simulation interface. Every decision grounded in the user's mental model and the system's structural logic.</div></div></div>
+      <div class="role-item"><div class="role-arr">→</div><div><div class="role-name">Platform management module — concept to shipped</div><div class="role-body">One of three major sections — governance &amp; platform management — delivered end-to-end by me and one team-mate: concept, ideation, and front-end integration via vibe coding. No separate engineering sprint.</div></div></div>
+    </div>
+  </div>
+
+  <div class="vibe-box">
+    <div class="vibe-lbl">⚡ Vibe-coded delivery — platform management module</div>
+    <div class="vibe-body">The platform management module is something I'm particularly proud of. Rather than handing a spec to a separate engineering team, my team-mate and I took it from <strong>whiteboard to working interface</strong> ourselves — using <span class="code">vibe coding</span> to close the gap between design intent and delivered product. Concept, ideation, and front-end integration — shipped together, by two people, with full coherence. It reflects how I think about design: <strong>not as a handover discipline, but as a making discipline.</strong></div>
+  </div>
+</div>
+</section>
+
+
+<!-- ═══════ 03 PROCESS ═══════ -->
+<section id="process">
+<div class="wrap">
+  <div class="two-col">
+    <div>
+      <div class="eyebrow"><span class="eyebrow-dot"></span>03 — Process</div>
+      <h2>A research-led journey from <em>ambiguity</em> to delivery</h2>
+    </div>
+    <p class="lead">Each phase built on the last — progressively narrowing ambiguity, deepening understanding of users and system, and translating research and structure into designed experience. Insights from later phases regularly fed back into earlier ones.</p>
+  </div>
+
+  <div class="process-table">
+    <div class="phase">
+      <div class="phase-lbl"><div class="phase-num">Phase 01</div><div class="phase-name">Problem Framing &amp; Concept Pitch</div></div>
+      <div class="phase-body">
+        <div class="phase-methods"><span class="phase-tag">Stakeholder alignment</span><span class="phase-tag">Value proposition</span><span class="phase-tag">AI trust model</span><span class="phase-tag">Concept prototype</span></div>
+        <div class="phase-text">I began by framing the product's core purpose — what it should feel like to use, what trust would need to look like in a government AI context, and what the simplest credible version could be. An early concept prototype gave us something tangible to align three entities around. This phase was about creating shared language before shared solutions.</div>
+      </div>
+    </div>
+    <div class="phase">
+      <div class="phase-lbl"><div class="phase-num">Phase 02</div><div class="phase-name">User Research &amp; Requirements</div></div>
+      <div class="phase-body">
+        <div class="phase-methods"><span class="phase-tag">Stakeholder workshops</span><span class="phase-tag">User story mapping</span><span class="phase-tag">PRD authoring</span><span class="phase-tag">Feature prioritisation</span></div>
+        <div class="phase-text">I led structured workshops across DHDA's policy research teams, senior analysts, and executive stakeholders — approaching each session as research as much as requirements-gathering. Listening carefully to how people described the system, where they felt lost, and what decisions they actually needed to make helped me surface needs that weren't always explicitly stated.</div>
+        <div class="phase-insight">Users rarely say what they need. They describe frustrations, workarounds, and goals. The research job was to hear beneath the surface.</div>
+      </div>
+    </div>
+    <div class="phase">
+      <div class="phase-lbl"><div class="phase-num">Phase 03</div><div class="phase-name">System Architecture &amp; Ontology Design</div></div>
+      <div class="phase-body">
+        <div class="phase-methods"><span class="phase-tag">4-system model</span><span class="phase-tag">STEEPLEO framework</span><span class="phase-tag">Domain tiering</span><span class="phase-tag">Cohort mapping</span><span class="phase-tag">Knowledge graph</span></div>
+        <div class="phase-text">Working closely with the ontology architects, I helped translate the four-system health model into something a designer and user could reason from. Domains and tiers were defined through this process — and rather than treating the fixed structure as a constraint on UX, we used it as the product's own logic. The STEEPLEO pressure framework became the analytical spine for AI-generated trend content.</div>
+        <div class="phase-insight">The system's architecture became the interaction model. Pressure → Threat or Opportunity → Domain Impact wasn't just a taxonomy — it became a navigable flow that users could feel, not just understand.</div>
+      </div>
+    </div>
+    <div class="phase">
+      <div class="phase-lbl"><div class="phase-num">Phase 04</div><div class="phase-name">UX Design &amp; Interaction Architecture</div></div>
+      <div class="phase-body">
+        <div class="phase-methods"><span class="phase-tag">Interaction flows</span><span class="phase-tag">AI trust layer</span><span class="phase-tag">Life course toggle</span><span class="phase-tag">Card architecture</span><span class="phase-tag">Scenario simulation UX</span></div>
+        <div class="phase-text">With the system architecture as foundation, I designed a two-click exploratory flow: System of Systems → Cohort → Domain → Pressure. The dual-badge trust layer (Verified Infospec / Generated AI) was designed as a visual grammar users could internalise quickly. I also designed the scenario simulation framework — giving the Known Knowns / Unknown Unknowns model a navigable, usable form for policy analysts.</div>
+      </div>
+    </div>
+    <div class="phase">
+      <div class="phase-lbl"><div class="phase-num">Phase 05</div><div class="phase-name">Prototype, Build &amp; Delivery</div></div>
+      <div class="phase-body">
+        <div class="phase-methods"><span class="phase-tag">Figma prototype</span><span class="phase-tag">Vibe-coded front end</span><span class="phase-tag">AI guardrails</span><span class="phase-tag">Executive demo</span></div>
+        <div class="phase-text">The MVP came together as a coherent, navigable prototype demonstrated to senior DHDA executives — with the AI trust layer, cohort switcher, and domain drill-down all operational. In parallel, my team-mate and I built and shipped the platform management and governance module using vibe coding — from concept to integrated front end.</div>
+        <div class="phase-insight">Design intent stayed intact all the way to delivery. No translation loss between design and engineering — because for this module, they were the same conversation.</div>
+      </div>
+    </div>
+  </div>
+</div>
+</section>
+
+
+<!-- ═══════ 04 SYSTEM ═══════ -->
+<section id="system">
+<div class="wrap">
+  <div class="two-col">
+    <div>
+      <div class="eyebrow"><span class="eyebrow-dot"></span>04 — System &amp; Features</div>
+      <h2>A four-system architecture, designed to <em>scale</em></h2>
+    </div>
+    <p class="lead">The Interactive Health Landscape wasn't a dashboard — it was a navigable model of the Australian health system, structured for policymakers to explore relationships, pressures, and insights at any depth.</p>
+  </div>
+
+  <div class="arch-strip">
+    <div class="arch-col"><div class="arch-head s1">System 1 — Operating environment</div><div class="arch-body"><div class="arch-row">STEEPLEO pressure categories</div><div class="arch-row">Trends → Threats / Opportunities</div><div class="arch-row">Domain impact scoring</div><div class="arch-row">AI-generated trend summaries</div><div class="arch-phase">✓ MVP scope</div></div></div>
+    <div class="arch-col"><div class="arch-head s2">System 2 — Core health system</div><div class="arch-body"><div class="arch-row">Population cohorts (9+)</div><div class="arch-row">Domain tiering (T2–T5)</div><div class="arch-row">Life course view toggles</div><div class="arch-row">Infospec static data layer</div><div class="arch-phase">✓ MVP scope</div></div></div>
+    <div class="arch-col"><div class="arch-head s3">System 3 — Operating model</div><div class="arch-body"><div class="arch-row">Capabilities &amp; FICs</div><div class="arch-row">Services taxonomy</div><div class="arch-row">Stakeholder mapping</div><div class="arch-row">Budget &amp; funding view</div><div class="arch-phase">→ Phase 2</div></div></div>
+    <div class="arch-col"><div class="arch-head s4">System 4 — Planning &amp; performance</div><div class="arch-body"><div class="arch-row">Strategy → outcomes link</div><div class="arch-row">Performance accountability</div><div class="arch-row">Programme resourcing</div><div class="arch-row">Assurance mechanisms</div><div class="arch-phase">→ Phase 3+</div></div></div>
+  </div>
+
+  <div class="feat-section">
+    <div class="feat-group">
+      <div class="feat-group-hd"><span class="feat-badge p12">Phase 1 &amp; 2 — Delivered</span><span class="feat-rule"></span></div>
+      <div class="feat-grid">
+        <div class="feat-card"><div class="feat-cat">Visual exploration</div><div class="feat-name">Landscape Visualisation</div><div class="feat-desc">Interactive, intuitive visualisation of the health system's big picture — enabling diverse stakeholders to explore any policy domain with ease.</div></div>
+        <div class="feat-card"><div class="feat-cat">Data foundation</div><div class="feat-name">Foundational Data Model &amp; Source Clustering</div><div class="feat-desc">A repository underpinning system architecture with automated categorisation of health policy data — organised, traceable, and ready for analysis.</div></div>
+        <div class="feat-card"><div class="feat-cat">Navigation</div><div class="feat-name">System of Systems View &amp; Drill-Down Access</div><div class="feat-desc">Unified visual representation integrating domains, strategies, and interdependencies — with drill-down into funding, capacity, and performance data.</div></div>
+        <div class="feat-card"><div class="feat-cat">Reporting</div><div class="feat-name">Cross-Domain Data Insights</div><div class="feat-desc">Facilitates correlation between health domains — surfacing connections across service trends, capacity, and funding to help analysts see the system whole.</div></div>
+      </div>
+    </div>
+    <div class="feat-group">
+      <div class="feat-group-hd"><span class="feat-badge p3">Phase 3 — In progress</span><span class="feat-rule"></span></div>
+      <div class="feat-grid">
+        <div class="feat-card"><div class="feat-cat">AI &amp; data</div><div class="feat-name">AI-Assisted Information Capture &amp; Predictive Analytics</div><div class="feat-desc">Automates data collection and continuous update of health policy information, while predicting performance trends and identifying implementation risks.</div></div>
+        <div class="feat-card"><div class="feat-cat">Collaboration</div><div class="feat-name">Stakeholder Management &amp; Nationwide Platform</div><div class="feat-desc">Continuously updated stakeholder collaboration tools alongside a centralised hub for knowledge exchange, policy planning, and programme monitoring.</div></div>
+      </div>
+    </div>
+    <div class="feat-group">
+      <div class="feat-group-hd"><span class="feat-badge pa">Aspirational — future vision</span><span class="feat-rule"></span></div>
+      <div class="feat-grid">
+        <div class="feat-card"><div class="feat-cat">AI intelligence</div><div class="feat-name">Policy Scenario Modelling</div><div class="feat-desc">AI models to simulate different policy scenarios and assess potential impact on health outcomes — a forward-looking lens on today's decisions.</div></div>
+        <div class="feat-card"><div class="feat-cat">Global intelligence</div><div class="feat-name">Global Benchmarking &amp; Early Warning Alerts</div><div class="feat-desc">Flags emerging health trends and risks based on global benchmarks — providing timely, contextual alerts to policymakers before issues escalate.</div></div>
+      </div>
+    </div>
+  </div>
+</div>
+</section>
+
+
+<!-- ═══════ 05 INSIGHTS ═══════ -->
+<section id="insights">
+<div class="wrap">
+  <div class="two-col">
+    <div>
+      <div class="eyebrow"><span class="eyebrow-dot"></span>05 — Key Insights</div>
+      <h2>What designing <em>in</em> complexity taught us</h2>
+    </div>
+    <p class="lead">These weren't observations from the outside. They came from sitting at the centre of the system — where the tensions between policy rigour, AI capability, and user need made themselves visible through the work itself.</p>
+  </div>
+
+  <div class="pull-quote">
+    <p>"The best way to decode complexity is to dive right in and sit at its centre — not analyse it from a distance. Only when you're inside the system do you see how AI outputs, knowledge availability, data accessibility, and user needs actually come together. Distance gives you a map. Proximity gives you understanding."</p>
+  </div>
+
+  <div class="insight-grid">
+    <div class="insight-card i1"><div class="ins-n">01</div><div class="ins-title">Vision is your main component — never detach</div><div class="ins-body">Product vision is like a Figma main component. You keep editing it, evolving it, letting it grow — but you never detach, because that's what keeps the character of the design coherent across every sprint. Every decision needs to be tied back. That thread is what makes a complex platform feel like one thing.</div></div>
+    <div class="insight-card i2"><div class="ins-n">02</div><div class="ins-title">Designing at the intersection of policy, usability, and trust</div><div class="ins-body">Every decision had to work on three levels simultaneously: defensible to policy leads, buildable by a small team, navigable by time-poor executives. The two-click flow and AI trust badges weren't flourishes — they were the answer to "how do we make a complex system feel safe to use?"</div></div>
+    <div class="insight-card i3"><div class="ins-n">03</div><div class="ins-title">No question is too many questions</div><div class="ins-body">In a domain this layered — spanning policy frameworks, clinical ontologies, data governance, and executive decision-making — curiosity is the method, not a sign of confusion. The people who asked the most tended to build the most coherent things.</div></div>
+    <div class="insight-card i4"><div class="ins-n">04</div><div class="ins-title">Users will never tell you what they want</div><div class="ins-body">They describe frustrations, workarounds, and goals. Policymakers said they wanted "better reports." What they actually needed was a way to see relationships between pressures they hadn't yet connected. Listen for the need underneath the ask.</div></div>
+    <div class="insight-card i5"><div class="ins-n">05</div><div class="ins-title">Ontology-first UX is a genuine design method</div><div class="ins-body">Starting from a fixed information architecture — rather than user flows — is unusual, but in government and systems domains it can be exactly right. When the system's own structure becomes the product's logic, UX design becomes the act of revealing that structure, not imposing one.</div></div>
+    <div class="insight-card i6"><div class="ins-n">06</div><div class="ins-title">Trust is a design problem, not a disclaimer</div><div class="ins-body">The dual-badge model built more executive confidence than any policy document could. Visible provenance — knowing exactly where something came from and how confident the system is in it — matters more than invisible accuracy. Show your work. Always.</div></div>
+  </div>
+</div>
+</section>
+
+
+<!-- ═══════ 06 LEARNINGS ═══════ -->
+<section id="learnings">
+<div class="wrap">
+  <div class="two-col">
+    <div>
+      <div class="eyebrow"><span class="eyebrow-dot"></span>06 — Learnings &amp; Outcome</div>
+      <h2>What I'm taking <em>forward</em></h2>
+    </div>
+    <p class="lead">The MVP was demonstrated to senior DHDA executives and laid the foundation for phased platform expansion. These are the things that stay with me into every systems project.</p>
+  </div>
+
+  <div class="lo-split">
+    <div>
+      <div class="learning-item"><div class="l-n">01</div><div><div class="l-title">Vibe coding changed what I could own</div><div class="l-body">Taking the platform management module from concept to integrated front end without a separate engineering sprint meant design intent survived all the way to delivered product. The gap between design and engineering closed — because for this module, they were the same conversation. That's a capability I want to keep building, not outsourcing.</div></div></div>
+      <div class="learning-item"><div class="l-n">02</div><div><div class="l-title">Shared artefacts create shared understanding</div><div class="l-body">The PRD wasn't just a document — it was the team's common ground across three entities with genuinely different priorities. In complex, multi-stakeholder projects, a shared anchor is what prevents good intentions from producing divergent outcomes. Invest in the artefact early.</div></div></div>
+      <div class="learning-item"><div class="l-n">03</div><div><div class="l-title">Constraint, made visible, builds confidence</div><div class="l-body">Scoping AI to descriptive outputs in MVP and surfacing that constraint explicitly in the interface didn't limit the product — it made it more trustworthy. Users appreciate honesty about what a system can and can't do today. Appropriate humility in a system is a feature, not a concession.</div></div></div>
+      <div class="learning-item"><div class="l-n">04</div><div><div class="l-title">Structure that emerges from the system is more durable</div><div class="l-body">When UX flows emerge from the system's own ontological structure rather than being imposed from outside, they're more resilient to scope changes and easier to scale. The information architecture didn't just organise the product — it explained it.</div></div></div>
+    </div>
+
+    <div class="outcome-panel">
+      <div class="o-stats">
+        <div class="o-stat"><div class="o-n">3</div><div class="o-lbl">Platform sections scoped &amp; designed</div></div>
+        <div class="o-stat"><div class="o-n">1</div><div class="o-lbl">Shipped via vibe coding, 2-person team</div></div>
+        <div class="o-stat"><div class="o-n">4</div><div class="o-lbl">System architecture layers, end-to-end</div></div>
+        <div class="o-stat"><div class="o-n">MVP</div><div class="o-lbl">Demonstrated to DHDA senior executives</div></div>
+      </div>
+      <div class="what-next">
+        <div class="wn-lbl">What this unlocked</div>
+        <div class="wn-body">A validated design and ontology model creates the runway for: AI query layer for natural language policy exploration, operating model integration, cross-cohort navigation across Women, First Nations, and Aged populations, and AI-driven scenario forecasting — with governance agreed at each stage.</div>
+      </div>
+    </div>
+  </div>
+</div>
+</section>
+
+
+<!-- ═══════ MORE WORKS ═══════ -->
+<section class="more-works">
+<div class="wrap">
+  <div class="mw-header">
+    <div>
+      <div class="eyebrow"><span class="eyebrow-dot"></span>Keep Exploring</div>
+      <h2>The <em>next</em> inquiry</h2>
+    </div>
+  </div>
+  <div class="mw-grid">
+    <a href="#" class="mw-card">
+      <div class="mw-num">02</div>
+      <div class="mw-title">Signals</div>
+      <div class="mw-cat">Thesis · Biological Intelligence</div>
+    </a>
+    <a href="#" class="mw-card">
+      <div class="mw-num">03</div>
+      <div class="mw-title">Absolute</div>
+      <div class="mw-cat">Design Strategy · Founder's Office</div>
+    </a>
+    <a href="#" class="mw-card">
+      <div class="mw-num">04</div>
+      <div class="mw-title">NUA</div>
+      <div class="mw-cat">Organisational Design</div>
+    </a>
+    <a href="/projects/joulebug.html" class="mw-card">
+      <div class="mw-num">05</div>
+      <div class="mw-title">JouleBug</div>
+      <div class="mw-cat">Behavioral Science</div>
+    </a>
+  </div>
+</div>
+</section>
+
+<div style="border-top:0.5px solid var(--border-2)">
+  <footer>
+    <div class="footer-l">DHDA Interactive Health Landscape · Case Study<br>Gravity · Scyne Advisory · Dept. of Health &amp; Aged Care, Australia</div>
+    <div class="footer-r">Lead Design Strategist · UX/UI · Product</div>
+  </footer>
+</div>
+
+</body>
+</html>

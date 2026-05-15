@@ -122,7 +122,7 @@ const ProjectCard = ({ number, title, category, description, intent, image, link
         <span className="text-[9px] font-black uppercase tracking-[0.2em] text-primary/60">{category}</span>
       </div>
       
-      <h3 className="text-2xl font-bold mb-4 group-hover:text-primary transition-colors tracking-tight">{title}</h3>
+      <h3 className="text-2xl font-bold mb-4 text-primary tracking-tight">{title}</h3>
       
       {/* Image Container */}
       <div className="relative w-full h-48 mb-8 rounded-2xl overflow-hidden bg-white/20 border border-white/40 shadow-inner group-hover:shadow-lg transition-all duration-500">
@@ -166,7 +166,7 @@ const ProjectCard = ({ number, title, category, description, intent, image, link
 
 const Work = () => {
   const projects = [
-    { number: "01", title: "Intelligent Policy Platform", category: "Product", description: "Creating a cohesive digital environment for the Department of Health Australia to navigate complex policy landscapes.", intent: "To untangle the threads of public health policy.", image: "/work-1.png", link: "/projects/intelligent-policy-platform.html" },
+    { number: "01", title: "Intelligent Policy Platform", category: "Product", description: "Creating a cohesive digital environment for the Department of Health Australia to navigate complex policy landscapes.", intent: "To untangle the threads of public health policy.", image: "/Interactive Health Landscape.png", link: "/projects/intelligent-policy-platform.html" },
     { number: "02", title: "Signals", category: "Thesis", description: "A living material library that bridges the gap between biological intelligence and information systems.", intent: "To archive the intelligence of the living world.", image: "/work-2.png" },
     { number: "03", title: "Absolute", category: "Founder's Office", description: "Serving as a Design Strategist within the Founder's Office to bridge the gap between vision and execution.", intent: "To architect the future of strategic design.", image: "/work-3.png" },
     { number: "04", title: "NUA", category: "Organisational Design", description: "A comprehensive design audit and organizational study for a pioneering fem-care startup.", intent: "To harmonize organizational intent with human care.", image: "/work-4.png" },

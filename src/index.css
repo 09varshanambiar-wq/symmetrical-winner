@@ -1,4 +1,4 @@
-@import "tailwindcss";
+@import url('https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&display=swap');
 
 @theme {
   --color-primary: #1856FF;
@@ -11,6 +11,7 @@
   
   --font-display: "Plus Jakarta Sans", system-ui, sans-serif;
   --font-body: "Plus Jakarta Sans", system-ui, sans-serif;
+  --font-serif: "Instrument Serif", serif;
   --font-mono: "JetBrains Mono", monospace;
 }
 
@@ -19,6 +20,7 @@
     @apply bg-[#F8FAFF] text-text font-body antialiased;
     margin: 0;
     padding: 0;
+    cursor: none;
     background-image: 
       radial-gradient(at 0% 0%, hsla(225, 100%, 95%, 1) 0, transparent 50%),
       radial-gradient(at 100% 0%, hsla(225, 100%, 90%, 1) 0, transparent 50%),
@@ -29,6 +31,10 @@
 
   h1, h2, h3, h4, h5, h6 {
     @apply font-display font-semibold tracking-tight;
+  }
+
+  a, button, [role="button"], .cursor-pointer {
+    cursor: none !important;
   }
 }
 
@@ -42,7 +48,7 @@
   }
 
   .liquid-button {
-    @apply px-6 py-3 bg-primary text-white font-semibold rounded-full shadow-lg shadow-primary/20 hover:shadow-primary/40 hover:scale-105 transition-all duration-300;
+    @apply px-6 py-3 bg-primary text-white font-semibold rounded-none shadow-lg shadow-primary/20 hover:shadow-primary/40 hover:scale-105 transition-all duration-300;
   }
 
   .section-label {

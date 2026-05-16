@@ -151,22 +151,44 @@ h2 em { font-style: italic; color: var(--teal); font-weight: 400; }
 
 /* ── BEAM VIZ ── */
 .beam-container {
-  position: relative; height: 400px; margin: 4rem 0;
+  position: relative; height: 600px; margin: 4rem 0 2rem 0;
+  display: flex; align-items: center; justify-content: flex-start;
+  background: rgba(0,0,0,0.03);
+  padding: 0 8rem;
+}
+.eye-icon { 
+  width: 56px; height: 56px; background: var(--blue); border-radius: 50%; 
+  z-index: 20; position: relative; 
+  box-shadow: 0 0 40px rgba(37, 99, 235, 0.3);
   display: flex; align-items: center; justify-content: center;
 }
-.eye-icon { width: 40px; height: 40px; background: var(--ink); border-radius: 50%; z-index: 10; position: absolute; left: 0; }
+.eye-icon::after {
+  content: ""; width: 22px; height: 22px; background: white; border-radius: 50%; opacity: 0.3;
+}
 .beam {
-  position: absolute; left: 20px; width: 80%; height: 60px;
-  background: linear-gradient(90deg, rgba(20, 184, 166, 0.4) 0%, transparent 100%);
-  clip-path: polygon(0% 50%, 100% 0%, 100% 100%);
+  position: absolute; left: 28px; width: 80%; height: 600px;
+  background: linear-gradient(90deg, rgba(20, 184, 166, 0.35) 0%, rgba(20, 184, 166, 0.01) 100%);
+  clip-path: polygon(0% 50%, 100% 30%, 100% 70%);
   transform-origin: left center;
+  z-index: 5;
 }
 .viz-node {
-  position: absolute; width: 24px; height: 24px; border-radius: 50%;
-  background: var(--ink-4); opacity: 0.4; filter: blur(2px);
+  position: absolute; width: 20px; height: 20px; border-radius: 50%;
+  background: linear-gradient(135deg, #bae6fd 0%, #7dd3fc 100%);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+  z-index: 10;
+  transition: all 0.3s;
 }
-.viz-node.active { background: #fde68a; opacity: 1; filter: none; width: 32px; height: 32px; box-shadow: 0 0 20px rgba(253, 230, 138, 0.5); }
-.viz-label { position: absolute; font-size: 10px; color: var(--ink-3); white-space: nowrap; }
+.viz-node.active { 
+  background: linear-gradient(135deg, #fde68a 0%, #fbbf24 100%);
+  width: 32px; height: 32px; 
+  box-shadow: 0 0 50px rgba(251, 191, 36, 0.5); 
+}
+.viz-label { 
+  position: absolute; left: 40px; top: 50%; transform: translateY(-50%);
+  font-family: var(--serif); font-size: 16px; color: var(--ink-2); 
+  white-space: nowrap; letter-spacing: -0.01em; font-weight: 500;
+}
 
 /* ── MECHANISMS CLOUD ── */
 .mechanisms-cloud {
@@ -346,6 +368,7 @@ h2 em { font-style: italic; color: var(--teal); font-weight: 400; }
         <p class="text-[10px] mt-4 italic color-ink-4">...and many more. The misleading propagation of which leads to a macro phenomenon.</p>
       </div>
 
+
       <div class="grid-3" style="margin-top: 6rem;">
         <div class="glass-card">
           <p class="font-mono text-[10px] uppercase text-teal mb-4">Journey</p>
@@ -390,12 +413,27 @@ h2 em { font-style: italic; color: var(--teal); font-weight: 400; }
         <p class="text-xs italic text-ink-3">"Efforts to maintain status quo by actors in power in face of social inertia."</p>
         <p class="text-xs italic text-ink-3">"Tech platforms appear to be amplifying or exacerbating the spread of such content."</p>
       </div>
-
-      <div style="margin-top: 4rem; text-align: center;">
-        <img src="/Joulebug.png" alt="Eco-chamber Effect Visualization" style="width: 100%; max-width: 1000px; border-radius: 40px; box-shadow: 0 20px 80px rgba(0,0,0,0.05);">
+    </div>
+    
+    <div class="beam-container">
+      <div class="eye-icon"></div>
+      <div class="beam"></div>
+      
+      <div class="viz-node" style="top: 15%; left: 70%;"><span class="viz-label">Air pollutants</span></div>
+      <div class="viz-node" style="top: 25%; left: 78%;"><span class="viz-label">Inequality</span></div>
+      <div class="viz-node" style="top: 38%; left: 84%;"><span class="viz-label">Water crisis</span></div>
+      <div class="viz-node active" style="top: 50%; left: 88%; transform: translate(-50%, -50%);">
+        <span class="viz-label" style="left: 40px; color: var(--ink); font-weight: 700;">Carbon Emissions</span>
       </div>
+      <div class="viz-node" style="top: 65%; left: 84%;"><span class="viz-label">Overconsumption</span></div>
+      <div class="viz-node" style="top: 78%; left: 78%;"><span class="viz-label">Biodiversity Loss</span></div>
+      <div class="viz-node" style="top: 90%; left: 70%;"><span class="viz-label">Health</span></div>
     </div>
   </section>
+
+  <div class="wrap" style="margin: 0 auto 4rem auto; text-align: center;">
+    <img src="/joulebug.jpg" alt="JouleBug Full Visualization" style="width: 100%; max-width: 1000px; border-radius: 40px; box-shadow: 0 20px 80px rgba(0,0,0,0.05);">
+  </div>
 
   <section id="learnings">
     <div class="wrap">

@@ -14,9 +14,9 @@ const Glow = ({ className }) => (
 );
 
 const Navigation = () => (
-  <nav className="fixed top-6 left-1/2 -translate-x-1/2 w-[90%] max-w-5xl h-14 glass-nav rounded-2xl z-50 flex items-center justify-between px-8">
+  <nav className="fixed top-6 left-1/2 -translate-x-1/2 w-[90%] max-w-5xl h-14 glass-nav rounded-none z-50 flex items-center justify-between px-8">
     <div className="font-display font-bold text-lg tracking-tight flex items-center gap-2">
-      <div className="w-2 h-2 bg-primary rounded-full animate-pulse" />
+      <div className="w-2 h-2 bg-primary rounded-none animate-pulse" />
       Varsha Nambiar
     </div>
     <div className="hidden md:flex space-x-8 text-[10px] font-bold uppercase tracking-widest text-text/60">
@@ -25,7 +25,7 @@ const Navigation = () => (
       <a href="#about" className="hover:text-primary transition-colors">About</a>
       <a href="#contact" className="hover:text-primary transition-colors">Contact</a>
     </div>
-    <button className="text-[10px] font-bold uppercase tracking-widest px-4 py-2 bg-primary/10 text-primary rounded-lg hover:bg-primary hover:text-white transition-all">
+    <button className="text-[10px] font-bold uppercase tracking-widest px-4 py-2 bg-primary/10 text-primary rounded-none hover:bg-primary hover:text-white transition-all">
       Grab a coffee
     </button>
   </nav>
@@ -81,21 +81,17 @@ const Hero = () => {
           transition={{ duration: 1.2, ease: "easeOut" }}
           className="pointer-events-auto"
         >
-          <span className="section-label mx-auto bg-primary/10 px-4 py-1.5 rounded-full inline-block mb-10 text-primary">
-            Systems Strategist & Futures Designer
-          </span>
-          <h1 className="text-7xl md:text-9xl font-bold leading-[0.9] mb-10 text-secondary tracking-tighter">
-            "Dance <br /> 
-            with <span className="text-primary italic font-light">Complexity</span>."
+          <h1 className="text-7xl md:text-9xl font-serif leading-[0.95] mb-10 text-secondary tracking-tight">
+            Multidisciplinary <br /> 
+            <span className="text-primary italic">Design Strategist</span>
           </h1>
-          <p className="text-lg md:text-2xl text-text/50 leading-relaxed mb-12 max-w-2xl mx-auto italic font-light">
-            Listening to the rhythms of human behavior and systemic feedback to 
-            find harmony within the digital and physical spaces we share.
+          <p className="text-lg md:text-2xl text-text/50 leading-relaxed mb-12 max-w-3xl mx-auto italic font-light">
+            creating systems, behaviours, research and solutions with design as a medium.
           </p>
           
           <div className="flex justify-center gap-6">
             <a href="#work" className="liquid-button">View the Inquiry</a>
-            <button className="px-8 py-3 glass-card rounded-full font-semibold text-sm hover:bg-white/60 transition-all">
+            <button className="px-8 py-3 glass-card rounded-none font-semibold text-sm hover:bg-white/60 transition-all">
               The Philosophy
             </button>
           </div>
@@ -109,96 +105,108 @@ const Hero = () => {
   );
 };
 
-const ProjectCard = ({ number, title, category, description, intent, image, link }) => {
-  const CardContent = (
-    <motion.div 
-      whileHover={{ y: -10 }}
-      className="glass-card p-10 rounded-[32px] group cursor-pointer h-full flex flex-col"
-    >
-      <div className="flex justify-between items-start mb-8">
-        <div className="w-12 h-12 glass-card rounded-xl flex items-center justify-center group-hover:bg-primary transition-all duration-500">
-          <span className="font-mono text-sm group-hover:text-white">{number}</span>
-        </div>
-        <span className="text-[9px] font-black uppercase tracking-[0.2em] text-primary/60">{category}</span>
-      </div>
-      
-      <h3 className="text-2xl font-bold mb-4 text-primary tracking-tight">{title}</h3>
-      
-      {/* Image Container */}
-      <div className="relative w-full h-48 mb-8 rounded-2xl overflow-hidden bg-white/20 border border-white/40 shadow-inner group-hover:shadow-lg transition-all duration-500">
-        {image ? (
-          <img 
-            src={image} 
-            alt={title} 
-            className="w-full h-full object-cover opacity-80 group-hover:opacity-100 group-hover:scale-110 transition-all duration-700 ease-out" 
-          />
-        ) : (
-          <div className="w-full h-full bg-gradient-to-br from-primary/5 to-secondary/5 flex items-center justify-center">
-            <Sparkles className="text-primary/20 animate-pulse" size={32} />
-          </div>
-        )}
-        <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-      </div>
+const ProjectCard = ({ number, title, category, image, link, span = "col-span-1" }) => (
+  <motion.a 
+    href={link}
+    whileHover={{ y: -8 }}
+    className={`group relative block h-[450px] bg-neutral-900 overflow-hidden rounded-none ${span}`}
+  >
+    {/* Number Overlay */}
+    <div className="absolute top-4 left-4 z-20">
+      <span className="font-serif italic text-3xl text-white/20 group-hover:text-white/60 transition-colors duration-500">{number}</span>
+    </div>
+    
+    {/* Category Overlay */}
+    <div className="absolute top-6 right-6 z-20">
+      <span className="px-3 py-1 bg-white/5 backdrop-blur-md border border-white/10 text-[8px] font-black uppercase tracking-[0.2em] text-white/70">
+        {category}
+      </span>
+    </div>
 
-      <p className="text-sm text-text/50 leading-relaxed mb-6 flex-grow">
-        {description}
-      </p>
-      <div className="pt-4 border-t border-primary/5">
-        <p className="text-[10px] font-black uppercase tracking-widest opacity-30 mb-2">The Intention</p>
-        <p className="text-xs italic text-text/60 leading-relaxed">{intent}</p>
-      </div>
-      <div className="mt-8 flex items-center text-[10px] font-bold uppercase tracking-widest gap-2 opacity-0 group-hover:opacity-100 group-hover:translate-x-2 transition-all duration-500">
-        Join the Inquiry <ArrowUpRight size={14} className="text-primary" />
-      </div>
-    </motion.div>
-  );
+    {/* Image Container */}
+    <div className="absolute inset-0 z-10">
+      {image ? (
+        <img 
+          src={image} 
+          alt={title} 
+          className="w-full h-full object-cover opacity-60 group-hover:opacity-100 group-hover:scale-110 transition-all duration-1000 ease-out" 
+        />
+      ) : (
+        <div className="w-full h-full bg-gradient-to-br from-primary/10 to-secondary/10" />
+      )}
+      <div className="absolute inset-0 bg-black/40 group-hover:bg-black/10 transition-colors duration-700" />
+    </div>
 
-  if (link) {
-    return (
-      <a href={link} className="block h-full no-underline">
-        {CardContent}
-      </a>
-    );
-  }
+    {/* Center Action */}
+    <div className="absolute inset-0 z-30 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-500 translate-y-4 group-hover:translate-y-0">
+      <div className="bg-white text-black px-6 py-3 text-[10px] font-black uppercase tracking-[0.2em] flex items-center gap-3 shadow-2xl">
+        View Inquiry <MoveRight size={14} />
+      </div>
+    </div>
 
-  return CardContent;
-};
+    {/* Bottom Info */}
+    <div className="absolute bottom-0 left-0 right-0 z-30 p-8 bg-gradient-to-t from-black/90 via-black/40 to-transparent transform translate-y-4 group-hover:translate-y-0 opacity-0 group-hover:opacity-100 transition-all duration-500">
+      <h3 className="text-xl font-bold text-white tracking-tight mb-1">{title}</h3>
+      <div className="w-8 h-0.5 bg-primary transform origin-left scale-x-0 group-hover:scale-x-100 transition-transform duration-700 delay-100" />
+    </div>
+  </motion.a>
+);
 
 const Work = () => {
-  const projects = [
-    { number: "01", title: "Intelligent Policy Platform", category: "Product", description: "Creating a cohesive digital environment for the Department of Health Australia to navigate complex policy landscapes.", intent: "To untangle the threads of public health policy.", image: "/Interactive Health Landscape.png", link: "/projects/intelligent-policy-platform.html" },
-    { number: "02", title: "Signals", category: "Thesis", description: "A living material library that bridges the gap between biological intelligence and information systems.", intent: "To archive the intelligence of the living world.", image: "/work-2.png" },
-    { number: "03", title: "Absolute", category: "Founder's Office", description: "Serving as a Design Strategist within the Founder's Office to bridge the gap between vision and execution.", intent: "To architect the future of strategic design.", image: "/work-3.png" },
-    { number: "04", title: "NUA", category: "Organisational Design", description: "A comprehensive design audit and organizational study for a pioneering fem-care startup.", intent: "To harmonize organizational intent with human care.", image: "/work-4.png" },
-    { number: "05", title: "JouleBug", category: "Shared Wisdom", description: "How might we nudge individual behavior toward collective care? A study in behavioral feedback and environmental agency.", intent: "To listen to the rhythm of our daily choices.", image: "/work-5.png", link: "/projects/joulebug.html" },
-    { number: "06", title: "Choice Paradox", category: "Digital Empathy", description: "Reframing digital choice as a space for quiet, intentional interaction.", intent: "To design for learning and rest.", image: "/work-6.png" }
+  const rows = [
+    {
+      title: "Systems Design",
+      projects: [
+        { number: "01", title: "Intelligent Policy Platform", category: "Product", image: "/IPP cover.png", link: "/projects/intelligent-policy-platform.html", span: "md:col-span-2" },
+        { number: "02", title: "Signals", category: "Thesis", image: "/leather signal .png", span: "md:col-span-1" },
+        { number: "03", title: "Story of Sustainability", category: "Inquiry", image: "/SOS1.png", span: "md:col-span-1" }
+      ]
+    },
+    {
+      title: "Business strategy design",
+      projects: [
+        { number: "04", title: "GravityOne Story", category: "Agency", image: "/work-1.png", span: "md:col-span-2" },
+        { number: "05", title: "The Absolute Business strategy", category: "Strategy", image: "/work-3.png", span: "md:col-span-2" }
+      ]
+    },
+    {
+      title: "Behaviours & Research Design",
+      projects: [
+        { number: "06", title: "The Choice Paradox", category: "Research", image: "/work-6.png", span: "md:col-span-1" },
+        { number: "07", title: "Joulebug Case", category: "Behavioral", image: "/joulebug.jpg", link: "/projects/joulebug.html", span: "md:col-span-3" }
+      ]
+    }
   ];
 
   return (
-    <section id="work" className="relative z-10 py-32 px-6">
+    <section id="work" className="relative z-10 py-32 px-6 bg-black text-white">
       <div className="max-w-[1600px] mx-auto">
         <motion.div 
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          className="mb-20 text-center"
+          className="mb-24 text-center"
         >
-          <span className="section-label inline-block mb-4">01. Selected Inquiry</span>
-          <h2 className="text-6xl md:text-8xl font-bold text-secondary/10 tracking-tighter leading-none">The Works.</h2>
+          <span className="section-label inline-block mb-4 text-primary">01. Selected Inquiry</span>
+          <h2 className="text-6xl md:text-8xl font-bold text-primary tracking-tighter leading-none">The Works.</h2>
         </motion.div>
         
-        <div className="grid md:grid-cols-3 gap-8">
-          {projects.map((project, index) => (
-            <motion.div
-              key={index}
-              initial={{ opacity: 0, y: 50 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: index * 0.1, duration: 0.8 }}
-              className="h-[600px]"
-            >
-              <ProjectCard {...project} />
-            </motion.div>
+        <div className="space-y-32">
+          {rows.map((row, rowIndex) => (
+            <div key={rowIndex} className="space-y-8">
+              <div className="flex items-center gap-10">
+                <span className="font-serif italic text-white/80 text-xl md:text-2xl whitespace-nowrap">
+                  {row.title}
+                </span>
+                <div className="h-[1px] bg-white/20 flex-grow"></div>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+                {row.projects.map((project, index) => (
+                  <ProjectCard key={index} {...project} />
+                ))}
+              </div>
+            </div>
           ))}
         </div>
       </div>
@@ -255,14 +263,14 @@ const SystemBreaker = () => (
 const WonderlandCard = ({ title, subtitle, bgClass }) => (
   <motion.div 
     whileHover={{ scale: 1.02 }}
-    className={`relative aspect-[4/3] rounded-3xl overflow-hidden glass-card group cursor-pointer ${bgClass}`}
+    className={`relative aspect-[4/3] rounded-none overflow-hidden glass-card group cursor-pointer ${bgClass}`}
   >
     <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
     <div className="absolute bottom-8 left-8">
       <p className="text-[10px] font-black uppercase tracking-widest text-text/40 mb-2">{subtitle}</p>
       <h4 className="text-xl font-bold text-secondary group-hover:text-primary transition-colors">{title}</h4>
     </div>
-    <div className="absolute top-8 right-8 w-10 h-10 glass-card rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all">
+    <div className="absolute top-8 right-8 w-10 h-10 glass-card rounded-none flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all">
       <Plus size={16} className="text-primary" />
     </div>
   </motion.div>
@@ -300,7 +308,7 @@ const Wonderlands = () => (
 
 const About = () => (
   <section id="about" className="py-32 px-6">
-    <div className="max-w-5xl mx-auto glass-card p-16 rounded-[48px] bg-primary/5">
+    <div className="max-w-5xl mx-auto glass-card p-16 rounded-none bg-primary/5">
       <span className="section-label">03. About Me</span>
       <h2 className="text-4xl md:text-5xl font-bold mb-10 leading-tight">
         Listening for the <span className="text-primary italic font-light">Leverage Points</span>.
@@ -331,7 +339,7 @@ const Contact = () => (
         <a href="mailto:hello@varshanambiar.com" className="liquid-button flex items-center gap-3 justify-center">
           <Mail size={20} /> hello@varshanambiar.com
         </a>
-        <button className="px-10 py-4 glass-card rounded-full font-semibold hover:bg-white/60 transition-all flex items-center gap-3 justify-center">
+        <button className="px-10 py-4 glass-card rounded-none font-semibold hover:bg-white/60 transition-all flex items-center gap-3 justify-center">
           <MessageSquare size={20} className="text-primary" /> Start an Inquiry
         </button>
       </div>
@@ -369,9 +377,61 @@ const Footer = () => (
   </footer>
 );
 
+const CustomCursor = () => {
+  const [position, setPosition] = React.useState({ x: 0, y: 0 });
+  const [isPointer, setIsPointer] = React.useState(false);
+  const [isDark, setIsDark] = React.useState(false);
+
+  React.useEffect(() => {
+    const handleMouseMove = (e) => {
+      setPosition({ x: e.clientX, y: e.clientY });
+      
+      // Get element under cursor to check background
+      const target = document.elementFromPoint(e.clientX, e.clientY);
+      if (target) {
+        const darkParent = target.closest('.bg-black');
+        setIsDark(!!darkParent);
+        
+        setIsPointer(
+          window.getComputedStyle(target).cursor === 'pointer' ||
+          target.tagName === 'A' ||
+          target.tagName === 'BUTTON'
+        );
+      }
+    };
+
+    window.addEventListener('mousemove', handleMouseMove);
+    return () => window.removeEventListener('mousemove', handleMouseMove);
+  }, []);
+
+  // Filter to turn image into #1856FF (brand blue)
+  const blueFilter = "brightness(0) saturate(100%) invert(26%) sepia(89%) saturate(5427%) hue-rotate(224deg) brightness(101%) contrast(106%)";
+
+  return (
+    <div 
+      className="fixed pointer-events-none z-[9999] transition-transform duration-75 ease-out"
+      style={{ 
+        left: position.x, 
+        top: position.y,
+        transform: `translate(-50%, -50%) scale(${isPointer ? 1.5 : 1})`,
+      }}
+    >
+      <img 
+        src="/cursor1.png" 
+        alt="cursor" 
+        className="w-8 h-8 object-contain transition-all duration-300"
+        style={{ 
+          filter: isDark ? 'invert(1) brightness(2)' : blueFilter 
+        }}
+      />
+    </div>
+  );
+};
+
 function App() {
   return (
     <div className="selection:bg-primary/20 selection:text-primary">
+      <CustomCursor />
       <Navigation />
       <main>
         <Hero />

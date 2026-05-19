@@ -1,0 +1,1469 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Signals: Towards a Bioabled World — Varsha Nambiar</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bio-blue: #0736BB;
+    --bio-blue-light: #EFF6FF;
+    --bio-blue-mid: #60A5FA;
+    --bio-blue-dark: #1E3A8A;
+    --bio-amber: #BA7517;
+    --bio-amber-light: #FAEEDA;
+    --bio-coral: #D85A30;
+    --bio-coral-light: #FAECE7;
+    --bio-gray: #888780;
+    --bio-gray-light: #F1EFE8;
+    --text-primary: #1a1a18;
+    --text-secondary: #5F5E5A;
+    --text-muted: #888780;
+    --surface: #ffffff;
+    --bg: #F9F8F5;
+    --border: rgba(0,0,0,0.08);
+    --border-strong: rgba(0,0,0,0.15);
+    --serif: 'Cormorant Garamond', Georgia, serif;
+    --sans: 'DM Sans', system-ui, sans-serif;
+  }
+
+  body {
+    font-family: var(--sans);
+    background: var(--bg);
+    color: var(--text-primary);
+    line-height: 1.6;
+    font-size: 16px;
+    font-weight: 300;
+  }
+
+  /* HERO */
+  .hero {
+    min-height: 100vh;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hero-left {
+    background: #1E3A8A;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    padding: 4rem;
+    position: relative;
+  }
+
+  .hero-left::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: repeating-linear-gradient(
+      45deg,
+      transparent,
+      transparent 40px,
+      rgba(255,255,255,0.02) 40px,
+      rgba(255,255,255,0.02) 41px
+    );
+  }
+
+  .hero-eyebrow {
+    font-family: var(--sans);
+    font-size: 11px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.5);
+    margin-bottom: 1.5rem;
+    position: relative;
+  }
+
+  .hero-title {
+    font-family: var(--serif);
+    font-size: clamp(3rem, 5vw, 5.5rem);
+    font-weight: 300;
+    line-height: 1.05;
+    color: #ffffff;
+    position: relative;
+    margin-bottom: 1rem;
+  }
+
+  .hero-title em {
+    font-style: italic;
+    color: #93C5FD;
+  }
+
+  .hero-subtitle {
+    font-family: var(--serif);
+    font-size: 1.1rem;
+    font-weight: 300;
+    color: rgba(255,255,255,0.65);
+    margin-bottom: 3rem;
+    position: relative;
+    line-height: 1.7;
+  }
+
+  .hero-meta {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    position: relative;
+    border-top: 1px solid rgba(255,255,255,0.12);
+    padding-top: 1.5rem;
+  }
+
+  .hero-meta-row {
+    display: flex;
+    gap: 2rem;
+  }
+
+  .meta-item {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  .meta-label {
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.35);
+  }
+
+  .meta-value {
+    font-size: 13px;
+    color: rgba(255,255,255,0.75);
+    font-weight: 300;
+  }
+
+  .hero-right {
+    background: #172554;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hero-image-placeholder {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    color: rgba(255,255,255,0.2);
+    font-size: 13px;
+    letter-spacing: 0.05em;
+    text-align: center;
+    padding: 2rem;
+  }
+
+  .hero-image-placeholder svg {
+    opacity: 0.15;
+    width: 80px;
+    height: 80px;
+  }
+
+  /* CONTENT */
+  .container {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 0 2.5rem;
+  }
+
+  .section {
+    padding: 6rem 0;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .section:last-child {
+    border-bottom: none;
+  }
+
+  .section-label {
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--bio-blue);
+    margin-bottom: 1rem;
+    font-weight: 500;
+  }
+
+  .section-title {
+    font-family: var(--serif);
+    font-size: clamp(2rem, 3.5vw, 3.2rem);
+    font-weight: 300;
+    line-height: 1.15;
+    color: var(--text-primary);
+    margin-bottom: 1.5rem;
+  }
+
+  .section-title em {
+    font-style: italic;
+    color: var(--bio-blue-dark);
+  }
+
+  .lead {
+    font-size: 1.1rem;
+    line-height: 1.8;
+    color: var(--text-secondary);
+    max-width: 680px;
+    font-weight: 300;
+  }
+
+  /* TWO COL LAYOUT */
+  .two-col {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 5rem;
+    align-items: center;
+  }
+
+  .two-col.reverse {
+    direction: rtl;
+  }
+
+  .two-col.reverse > * {
+    direction: ltr;
+  }
+
+  /* IMAGE PLACEHOLDERS */
+  .img-placeholder {
+    border-radius: 4px;
+    overflow: hidden;
+    position: relative;
+  }
+
+  .img-block {
+    background: var(--bio-blue-light);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0.75rem;
+    color: var(--bio-blue);
+    font-size: 12px;
+    letter-spacing: 0.05em;
+    text-align: center;
+    padding: 2rem 1.5rem;
+    font-weight: 400;
+  }
+
+  .img-block.amber {
+    background: var(--bio-amber-light);
+    color: var(--bio-amber);
+  }
+
+  .img-block.coral {
+    background: var(--bio-coral-light);
+    color: var(--bio-coral);
+  }
+
+  .img-block.gray {
+    background: var(--bio-gray-light);
+    color: var(--bio-gray);
+  }
+
+  .img-block svg {
+    opacity: 0.5;
+    width: 36px;
+    height: 36px;
+  }
+
+  .img-block .caption {
+    font-size: 11px;
+    opacity: 0.7;
+    margin-top: 0.25rem;
+  }
+
+  /* CARDS */
+  .cards-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem;
+    margin-top: 3rem;
+  }
+
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 1.75rem;
+  }
+
+  .card-icon {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 1rem;
+    font-size: 16px;
+    font-weight: 500;
+  }
+
+  .card-icon.blue { background: var(--bio-blue-light); color: var(--bio-blue-dark); }
+  .card-icon.amber { background: var(--bio-amber-light); color: var(--bio-amber); }
+  .card-icon.coral { background: var(--bio-coral-light); color: var(--bio-coral); }
+
+  .card-title {
+    font-family: var(--serif);
+    font-size: 1.15rem;
+    font-weight: 400;
+    color: var(--text-primary);
+    margin-bottom: 0.6rem;
+  }
+
+  .card-body {
+    font-size: 14px;
+    color: var(--text-secondary);
+    line-height: 1.7;
+    font-weight: 300;
+  }
+
+  /* METHODOLOGY STEPS */
+  .method-steps {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0;
+    margin-top: 3rem;
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    overflow: hidden;
+  }
+
+  .method-step {
+    padding: 2rem 2.5rem;
+    border-right: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    position: relative;
+  }
+
+  .method-step:nth-child(even) {
+    border-right: none;
+  }
+
+  .method-step:nth-child(3),
+  .method-step:nth-child(4) {
+    border-bottom: none;
+  }
+
+  .step-number {
+    font-family: var(--serif);
+    font-size: 3rem;
+    font-weight: 300;
+    color: var(--bio-blue-light);
+    line-height: 1;
+    margin-bottom: 0.5rem;
+  }
+
+  .step-title {
+    font-size: 13px;
+    font-weight: 500;
+    letter-spacing: 0.05em;
+    color: var(--bio-blue-dark);
+    margin-bottom: 0.5rem;
+    text-transform: uppercase;
+    font-size: 11px;
+    letter-spacing: 0.15em;
+  }
+
+  .step-body {
+    font-size: 14px;
+    color: var(--text-secondary);
+    line-height: 1.7;
+    font-weight: 300;
+  }
+
+  /* PULLQUOTE */
+  .pullquote {
+    border-left: 3px solid var(--bio-blue);
+    padding: 1rem 2rem;
+    margin: 3rem 0;
+    background: var(--bio-blue-light);
+    border-radius: 0 4px 4px 0;
+  }
+
+  .pullquote p {
+    font-family: var(--serif);
+    font-size: 1.3rem;
+    font-weight: 300;
+    font-style: italic;
+    color: var(--bio-blue-dark);
+    line-height: 1.6;
+  }
+
+  .pullquote cite {
+    display: block;
+    font-size: 12px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--bio-blue);
+    margin-top: 0.75rem;
+    font-style: normal;
+    font-family: var(--sans);
+    font-weight: 500;
+  }
+
+  /* INSIGHT PILLS */
+  .insights-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    margin-top: 2rem;
+  }
+
+  .insight-pill {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 1rem;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 100px;
+    font-size: 13px;
+    color: var(--text-primary);
+    font-weight: 300;
+  }
+
+  .insight-pill .dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--bio-blue);
+    flex-shrink: 0;
+  }
+
+  /* SOLUTION FEATURE */
+  .solution-feature {
+    display: grid;
+    grid-template-columns: 1fr 1.2fr;
+    gap: 4rem;
+    align-items: start;
+    margin-bottom: 5rem;
+    padding-bottom: 5rem;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .solution-feature:last-child {
+    border-bottom: none;
+    margin-bottom: 0;
+  }
+
+  .solution-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 4px 10px;
+    background: var(--bio-blue-light);
+    border-radius: 100px;
+    font-size: 11px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--bio-blue-dark);
+    font-weight: 500;
+    margin-bottom: 1rem;
+  }
+
+  .solution-title {
+    font-family: var(--serif);
+    font-size: 2rem;
+    font-weight: 300;
+    color: var(--text-primary);
+    margin-bottom: 1rem;
+    line-height: 1.2;
+  }
+
+  .solution-desc {
+    font-size: 15px;
+    color: var(--text-secondary);
+    line-height: 1.8;
+    font-weight: 300;
+    margin-bottom: 1.5rem;
+  }
+
+  .feature-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+  }
+
+  .feature-list li {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.6rem;
+    font-size: 14px;
+    color: var(--text-secondary);
+    font-weight: 300;
+    line-height: 1.5;
+  }
+
+  .feature-list li::before {
+    content: '';
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    background: var(--bio-blue);
+    margin-top: 7px;
+    flex-shrink: 0;
+  }
+
+  /* STAKEHOLDERS */
+  .stakeholder-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1rem;
+    margin-top: 3rem;
+  }
+
+  .stakeholder-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 1.25rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .stakeholder-role {
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--bio-blue);
+    font-weight: 500;
+  }
+
+  .stakeholder-name {
+    font-family: var(--serif);
+    font-size: 1rem;
+    font-weight: 400;
+    color: var(--text-primary);
+  }
+
+  .stakeholder-org {
+    font-size: 12px;
+    color: var(--text-muted);
+    font-weight: 300;
+  }
+
+  /* OUTCOMES */
+  .outcomes-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem;
+    margin-top: 3rem;
+  }
+
+  .outcome-card {
+    padding: 2rem;
+    border-radius: 4px;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .outcome-card.primary { background: #1E3A8A; }
+  .outcome-card.secondary { background: var(--bio-blue-light); border: 1px solid rgba(7,54,187,0.2); }
+  .outcome-card.tertiary { background: var(--surface); border: 1px solid var(--border); }
+
+  .outcome-label {
+    font-size: 10px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    font-weight: 500;
+  }
+
+  .outcome-card.primary .outcome-label { color: rgba(255,255,255,0.5); }
+  .outcome-card.secondary .outcome-label { color: var(--bio-blue); }
+  .outcome-card.tertiary .outcome-label { color: var(--text-muted); }
+
+  .outcome-title {
+    font-family: var(--serif);
+    font-size: 1.2rem;
+    font-weight: 300;
+    line-height: 1.3;
+  }
+
+  .outcome-card.primary .outcome-title { color: #ffffff; }
+  .outcome-card.secondary .outcome-title { color: var(--bio-blue-dark); }
+  .outcome-card.tertiary .outcome-title { color: var(--text-primary); }
+
+  .outcome-body {
+    font-size: 13px;
+    line-height: 1.7;
+    font-weight: 300;
+  }
+
+  .outcome-card.primary .outcome-body { color: rgba(255,255,255,0.7); }
+  .outcome-card.secondary .outcome-body { color: var(--bio-blue-dark); }
+  .outcome-card.tertiary .outcome-body { color: var(--text-secondary); }
+
+  /* TIMELINE */
+  .timeline {
+    position: relative;
+    padding-left: 2rem;
+    margin-top: 3rem;
+  }
+
+  .timeline::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 8px;
+    bottom: 8px;
+    width: 1px;
+    background: var(--border-strong);
+  }
+
+  .timeline-item {
+    position: relative;
+    padding-bottom: 2.5rem;
+    padding-left: 1.5rem;
+  }
+
+  .timeline-item:last-child {
+    padding-bottom: 0;
+  }
+
+  .timeline-item::before {
+    content: '';
+    position: absolute;
+    left: -2rem;
+    top: 8px;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--bio-blue);
+    border: 2px solid var(--bg);
+    box-shadow: 0 0 0 1px var(--bio-blue);
+  }
+
+  .timeline-label {
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--bio-blue);
+    font-weight: 500;
+    margin-bottom: 0.4rem;
+  }
+
+  .timeline-title {
+    font-family: var(--serif);
+    font-size: 1.1rem;
+    font-weight: 400;
+    color: var(--text-primary);
+    margin-bottom: 0.4rem;
+  }
+
+  .timeline-body {
+    font-size: 14px;
+    color: var(--text-secondary);
+    line-height: 1.7;
+    font-weight: 300;
+  }
+
+  /* STAT BAR */
+  .stat-row {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 0;
+    background: #1E3A8A;
+    border-radius: 4px;
+    overflow: hidden;
+    margin-top: 3rem;
+  }
+
+  .stat-item {
+    padding: 2rem 1.75rem;
+    border-right: 1px solid rgba(255,255,255,0.1);
+  }
+
+  .stat-item:last-child {
+    border-right: none;
+  }
+
+  .stat-number {
+    font-family: var(--serif);
+    font-size: 2.5rem;
+    font-weight: 300;
+    color: #93C5FD;
+    line-height: 1;
+    margin-bottom: 0.4rem;
+  }
+
+  .stat-label {
+    font-size: 12px;
+    color: rgba(255,255,255,0.55);
+    font-weight: 300;
+    line-height: 1.4;
+  }
+
+  /* PHOTO GRID */
+  .photo-grid {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr;
+    grid-template-rows: 240px 240px;
+    gap: 1rem;
+    margin-top: 3rem;
+  }
+
+  .photo-cell {
+    border-radius: 4px;
+    overflow: hidden;
+  }
+
+  .photo-cell.span-rows {
+    grid-row: 1 / 3;
+  }
+
+  /* FOOTER */
+  .project-footer {
+    background: #1E3A8A;
+    padding: 4rem 0;
+    margin-top: 0;
+  }
+
+  .footer-inner {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 0 2.5rem;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 4rem;
+    align-items: end;
+  }
+
+  .footer-title {
+    font-family: var(--serif);
+    font-size: 2.5rem;
+    font-weight: 300;
+    color: #ffffff;
+    margin-bottom: 1rem;
+    line-height: 1.15;
+  }
+
+  .footer-title em { font-style: italic; color: #93C5FD; }
+
+  .footer-body {
+    font-size: 14px;
+    color: rgba(255,255,255,0.55);
+    line-height: 1.8;
+    font-weight: 300;
+    max-width: 480px;
+  }
+
+  .footer-credits {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    align-self: end;
+  }
+
+  .credit-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    padding: 0.6rem 0;
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+    font-size: 13px;
+  }
+
+  .credit-label {
+    color: rgba(255,255,255,0.35);
+    font-weight: 300;
+  }
+
+  .credit-value {
+    color: rgba(255,255,255,0.7);
+    font-weight: 300;
+    text-align: right;
+  }
+
+  .sdg-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-top: 1.5rem;
+  }
+
+  .sdg-tag {
+    padding: 4px 10px;
+    background: rgba(255,255,255,0.08);
+    border-radius: 100px;
+    font-size: 11px;
+    color: rgba(255,255,255,0.5);
+    letter-spacing: 0.05em;
+  }
+
+  /* LARGE FEATURE AREA */
+  .feature-area {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    overflow: hidden;
+  }
+
+  .feature-area-header {
+    background: var(--bio-gray-light);
+    padding: 1.25rem 1.75rem;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .feature-area-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+  }
+
+  .feature-area-body {
+    padding: 2rem 1.75rem;
+  }
+
+  /* WHEEL ILLUSTRATION */
+  .wheel-visual {
+    width: 100%;
+    aspect-ratio: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--bio-blue-light);
+    border-radius: 4px;
+    overflow: hidden;
+    position: relative;
+  }
+
+  /* RESPONSIVE */
+  @media (max-width: 900px) {
+    .hero { grid-template-columns: 1fr; min-height: auto; }
+    .hero-left { padding: 3rem 2rem; min-height: 80vh; }
+    .hero-right { min-height: 50vw; }
+    .two-col { grid-template-columns: 1fr; gap: 2.5rem; }
+    .two-col.reverse { direction: ltr; }
+    .cards-grid { grid-template-columns: 1fr; }
+    .method-steps { grid-template-columns: 1fr; }
+    .stakeholder-grid { grid-template-columns: 1fr 1fr; }
+    .outcomes-grid { grid-template-columns: 1fr; }
+    .stat-row { grid-template-columns: 1fr 1fr; }
+    .photo-grid { grid-template-columns: 1fr 1fr; grid-template-rows: auto; }
+    .photo-cell.span-rows { grid-row: auto; }
+    .footer-inner { grid-template-columns: 1fr; gap: 2rem; }
+    .solution-feature { grid-template-columns: 1fr; gap: 2rem; }
+    .container { padding: 0 1.5rem; }
+    .section { padding: 4rem 0; }
+  }
+
+  @media (max-width: 600px) {
+    .stakeholder-grid { grid-template-columns: 1fr; }
+    .stat-row { grid-template-columns: 1fr 1fr; }
+    .hero-meta-row { flex-direction: column; gap: 1rem; }
+  }
+</style>
+</head>
+<body>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-left">
+    <div class="hero-eyebrow">Masters Thesis · Systems Design · NID Gandhinagar · 2024</div>
+    <h1 class="hero-title">Towards a<br><em>Bioabled</em><br>World</h1>
+    <p class="hero-subtitle">Navigating future scenarios of bio-based materials & its intersection with society. A systems design research into India's nascent biomaterial landscape.</p>
+    <div class="hero-meta">
+      <div class="hero-meta-row">
+        <div class="meta-item">
+          <span class="meta-label">Designer</span>
+          <span class="meta-value">Varsha Nambiar</span>
+        </div>
+        <div class="meta-item">
+          <span class="meta-label">Program</span>
+          <span class="meta-value">Strategic Design Management</span>
+        </div>
+      </div>
+      <div class="hero-meta-row">
+        <div class="meta-item">
+          <span class="meta-label">Sponsor / Validator</span>
+          <span class="meta-value">Mandag — Arto Sivonen (Futurist, Helsinki)</span>
+        </div>
+        <div class="meta-item">
+          <span class="meta-label">Guide</span>
+          <span class="meta-value">Prof. S. Guruprasad</span>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="hero-right">
+    <img src="/leather signal .png" alt="Kombucha leather prototype" style="width: 100%; height: 100%; object-fit: cover; position: absolute; inset: 0;" />
+  </div>
+</section>
+
+<!-- CONTEXT -->
+<section class="section">
+  <div class="container">
+    <p class="section-label">01 — Context</p>
+    <div class="two-col">
+      <div>
+        <h2 class="section-title">Biology holds the answers<br>we've been <em>searching for</em></h2>
+        <p class="lead">Hundreds of millions of years of evolution have produced an extraordinary diversity of functional solutions. The bio-based materials sector stands at the intersection of that ancient intelligence and the urgent demands of our climate crisis — yet India's industry remains nascent, undercharted, and difficult to navigate.</p>
+        <div class="insights-row" style="margin-top: 2rem;">
+          <span class="insight-pill"><span class="dot"></span>India bio-plastics market: USD 447M (2023)</span>
+          <span class="insight-pill"><span class="dot"></span>Projected: USD 1.8B by 2030</span>
+          <span class="insight-pill"><span class="dot"></span>CAGR of 22.1%</span>
+          <span class="insight-pill"><span class="dot"></span>400M metric tons plastic waste/year globally</span>
+        </div>
+      </div>
+      <div>
+        <div class="img-block" style="height: 340px;">
+          <!-- PLACEHOLDER: Replace with circularity gap report visualization, planetary boundaries graphic, or India bioeconomy infographic -->
+          <svg viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="18" cy="18" r="14" stroke="currentColor" stroke-width="1.5"/>
+            <path d="M18 6 L18 30 M6 18 L30 18" stroke="currentColor" stroke-width="1" opacity="0.4"/>
+          </svg>
+          [ Insert: India bioeconomy / circularity gap visualization ]
+          <span class="caption">Source: Circularity Gap Report / India Bioeconomy Report 2020</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="pullquote">
+      <p>"What if we look at materials from an ecocentric standpoint — with the application of 'cultivating' and 'growing' of materials instead of assembling and constructing?"</p>
+      <cite>— Research thesis framing, Towards a Bioabled World</cite>
+    </div>
+
+    <div class="stat-row">
+      <div class="stat-item">
+        <div class="stat-number">USD 41B</div>
+        <div class="stat-label">Global bio-based materials market (2023)</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-number">25.6%</div>
+        <div class="stat-label">Projected CAGR through 2032</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-number">2%</div>
+        <div class="stat-label">Kerala's share in India's biotech startup registrations</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-number">45%</div>
+        <div class="stat-label">India's BioEconomy from southern states</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- APPROACH -->
+<section class="section">
+  <div class="container">
+    <p class="section-label">02 — Approach & Framing</p>
+    <div class="two-col reverse">
+      <div>
+        <h2 class="section-title">A systems lens on<br>an <em>emerging frontier</em></h2>
+        <p class="lead" style="margin-bottom: 1.5rem;">This project emerged from firsthand experience scaling biomaterial production at Absolute, India's leading bioscience company — where the gap between laboratory innovation and societal adoption became viscerally clear. Validated by futurist Arto Sivonen (Mandag, Helsinki), the research was anchored in Strategic Design Management methodology at NID Gandhinagar.</p>
+        <p style="font-size: 15px; color: var(--text-secondary); line-height: 1.8; font-weight: 300;">The project unpacks a system riddled with nomenclature confusion, greenwashing, scaling barriers, and missing infrastructure — and asks: what design interventions can accelerate India's transition to a bioabled world?</p>
+
+        <div style="margin-top: 2rem; display: flex; flex-direction: column; gap: 0.75rem;">
+          <div style="padding: 0.8rem 1.2rem; background: var(--bio-blue-light); border-radius: 4px; font-size: 14px; color: var(--bio-blue-dark); font-weight: 300;">
+            <strong style="font-weight: 500;">Scope 1:</strong> Megatrend analysis of bioscience & bio-based innovation
+          </div>
+          <div style="padding: 0.8rem 1.2rem; background: var(--bio-amber-light); border-radius: 4px; font-size: 14px; color: #714F0B; font-weight: 300;">
+            <strong style="font-weight: 500;">Scope 2:</strong> Challenges in the India bio-based industry system
+          </div>
+          <div style="padding: 0.8rem 1.2rem; background: var(--bio-coral-light); border-radius: 4px; font-size: 14px; color: #712B13; font-weight: 300;">
+            <strong style="font-weight: 500;">Scope 3:</strong> Bio-innovation futures & design strategy for adoption
+          </div>
+        </div>
+      </div>
+      <div>
+        <div class="img-block amber" style="height: 400px;">
+          <!-- PLACEHOLDER: Replace with project brief visual / Absolute bioscience work / SEED Kochi event photograph -->
+          <svg viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect x="4" y="4" width="28" height="28" rx="3" stroke="currentColor" stroke-width="1.5" stroke-dasharray="5 3"/>
+            <path d="M14 22 L18 14 L22 22" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M15.5 19.5 L20.5 19.5" stroke="currentColor" stroke-width="1" stroke-linecap="round"/>
+          </svg>
+          [ Insert: Project brief / context photograph ]
+          <span class="caption">Internship at Absolute / Project Planet 2040</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- METHODOLOGY -->
+<section class="section" style="background: var(--bio-gray-light);">
+  <div class="container">
+    <p class="section-label">03 — Methodology</p>
+    <h2 class="section-title" style="max-width: 600px;">A structured journey from signals <em>to solutions</em></h2>
+    <p class="lead" style="margin-bottom: 3rem;">The research roadmap followed a rigorous dual-track approach — integrating secondary research with deep primary immersion — guided by the principle: "First, what could I do? Second, what could I read? And third, who could I ask?"</p>
+
+    <div class="method-steps">
+      <div class="method-step">
+        <div class="step-number">01</div>
+        <div class="step-title">Secondary Research — Getting the beat</div>
+        <div class="step-body">Netnography of the industry nomenclature landscape (bio-inspired, bio-based, bio-mimetic, bio-informed). Megatrend mapping — environmental, social, technological, economic trends shaping bio-based adoption through 2050. Material coordinate systems, market analysis, driver mapping.</div>
+      </div>
+      <div class="method-step">
+        <div class="step-number">02</div>
+        <div class="step-title">Primary Research — Expert panels & immersion</div>
+        <div class="step-body">Delphi interviews with 8 stakeholders — scientists, architects, entrepreneurs, futurists. Factory visits to Cocotuft (coir manufacturing, Cherthala). Observational study at Terrarium founder event, Bengaluru. Participatory research event "Home Tomorrow" at SEEDKochi.</div>
+      </div>
+      <div class="method-step">
+        <div class="step-number">03</div>
+        <div class="step-title">Synthesis — Sum of parts</div>
+        <div class="step-body">Systems thinking applied to the full bio-based landscape. PESTEL + Porter's 5 Forces challenge analysis. Calotropis seed visualization of innovator mapping. Insight formulation across regulatory, mindset, technological, environmental, and operational dimensions.</div>
+      </div>
+      <div class="method-step">
+        <div class="step-number">04</div>
+        <div class="step-title">Ideation & Solutions</div>
+        <div class="step-body">Six hat thinking and prototype generation. Design usability testing. Two complementary solution sets: Signals (micro-scale digital library) and the Circular Materials Collective (macro-scale PPP model). Kombucha leather experiment as proof-of-concept.</div>
+      </div>
+    </div>
+
+    <!-- STAKEHOLDERS -->
+    <div style="margin-top: 4rem;">
+      <h3 style="font-family: var(--serif); font-size: 1.4rem; font-weight: 300; margin-bottom: 0.5rem; color: var(--text-primary);">Primary research stakeholders</h3>
+      <p style="font-size: 14px; color: var(--text-secondary); margin-bottom: 0; font-weight: 300;">8 Delphi interviews spanning scientists, design professors, entrepreneurs, architects, and futurists</p>
+      <div class="stakeholder-grid">
+        <div class="stakeholder-card">
+          <span class="stakeholder-role">Lead Scientist</span>
+          <span class="stakeholder-name">Dr. Prashant Khare</span>
+          <span class="stakeholder-org">Absolute — Bioleather & gene editing</span>
+        </div>
+        <div class="stakeholder-card">
+          <span class="stakeholder-role">Design Professor</span>
+          <span class="stakeholder-name">Ar. Anooja J</span>
+          <span class="stakeholder-org">C.A.T / NIFT — Banana fibre PHD</span>
+        </div>
+        <div class="stakeholder-card">
+          <span class="stakeholder-role">Professor</span>
+          <span class="stakeholder-name">Dr. Nagendra Prabhu</span>
+          <span class="stakeholder-org">SD College, Alappuzha — Water Hyacinth</span>
+        </div>
+        <div class="stakeholder-card">
+          <span class="stakeholder-role">Architect</span>
+          <span class="stakeholder-name">Ar. Vivek George Sanu</span>
+          <span class="stakeholder-org">CBH London — Cococrete (coir)</span>
+        </div>
+        <div class="stakeholder-card">
+          <span class="stakeholder-role">Entrepreneur</span>
+          <span class="stakeholder-name">Anu</span>
+          <span class="stakeholder-org">Varsya Eco Solutions — bio-layer packaging</span>
+        </div>
+        <div class="stakeholder-card">
+          <span class="stakeholder-role">Entrepreneur</span>
+          <span class="stakeholder-name">Rishabh Suri</span>
+          <span class="stakeholder-org">Qudrat — rice starch cutlery</span>
+        </div>
+        <div class="stakeholder-card">
+          <span class="stakeholder-role">Futurist</span>
+          <span class="stakeholder-name">Arto Sivonen</span>
+          <span class="stakeholder-org">Mandag, Helsinki — project validator</span>
+        </div>
+        <div class="stakeholder-card">
+          <span class="stakeholder-role">Industry CEO</span>
+          <span class="stakeholder-name">Arjun Mahadevan</span>
+          <span class="stakeholder-org">Cocotuft — 100yr coir manufacturer</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FIELD RESEARCH -->
+<section class="section">
+  <div class="container">
+    <p class="section-label">04 — Field Research</p>
+    <div class="two-col">
+      <div>
+        <h2 class="section-title">"Home Tomorrow"<br><em>participatory installation</em></h2>
+        <p class="lead" style="margin-bottom: 1.5rem;">Conducted at SEEDKochi — an architecture college's annual student exhibition — the participatory research brought the future of bio-based materials to life in a domestic, relatable context. 50+ attendees, including students and general public, interacted with real bio-material prototypes.</p>
+        <div class="timeline">
+          <div class="timeline-item">
+            <div class="timeline-label">Step 1</div>
+            <div class="timeline-title">A peek into the future</div>
+            <div class="timeline-body">A curated narration painted the picture of home in 2040 — using megatrends and weak signals to expand participants' imagination about what could be possible.</div>
+          </div>
+          <div class="timeline-item">
+            <div class="timeline-label">Step 2</div>
+            <div class="timeline-title">Material literacy quiz</div>
+            <div class="timeline-body">Participants were tested on which common household materials biodegrade — revealing a striking knowledge gap. Clay was the most misidentified as biodegradable.</div>
+          </div>
+          <div class="timeline-item">
+            <div class="timeline-label">Step 3</div>
+            <div class="timeline-title">Touch, feel, decide</div>
+            <div class="timeline-body">Physical prototypes of Malai bio-leather were presented. Participants chose between bio-leather and conventional leather at different price points — revealing cost and aesthetics as the primary adoption barriers.</div>
+          </div>
+          <div class="timeline-item">
+            <div class="timeline-label">Insight</div>
+            <div class="timeline-title">A new material will only be adopted if its cost and aesthetics match or exceed those of existing options.</div>
+            <div class="timeline-body">The research validated a hypothesis that India was at a nascent 'innovation culture' stage — and that there is significant scope for systemic planning to drive this transition forward.</div>
+          </div>
+        </div>
+      </div>
+      <div style="display: flex; flex-direction: column; gap: 1rem;">
+        <div class="img-block" style="height: 220px;">
+          <!-- PLACEHOLDER: Replace with SEEDKochi event photograph — participants interacting with bio-material samples -->
+          <svg viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="18" cy="14" r="5" stroke="currentColor" stroke-width="1.5"/>
+            <path d="M8 30 Q8 22 18 22 Q28 22 28 30" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+          </svg>
+          [ Insert: SEEDKochi event photograph ]
+          <span class="caption">Participatory research — "Home Tomorrow", Kochi</span>
+        </div>
+        <div class="img-block gray" style="height: 220px;">
+          <!-- PLACEHOLDER: Replace with Cocotuft factory visit photograph or Terrarium event photograph -->
+          <svg viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect x="4" y="14" width="28" height="18" rx="2" stroke="currentColor" stroke-width="1.5"/>
+            <path d="M12 14 L12 10 Q12 6 18 6 Q24 6 24 10 L24 14" stroke="currentColor" stroke-width="1.5"/>
+          </svg>
+          [ Insert: Delphi interview / factory visit photograph ]
+          <span class="caption">Delphi field research — Cocotuft Factory, Cherthala</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- KEY INSIGHTS -->
+<section class="section" style="background: #1E3A8A;">
+  <div class="container">
+    <p class="section-label" style="color: rgba(255,255,255,0.4);">05 — Key Insights</p>
+    <h2 class="section-title" style="color: #ffffff; max-width: 700px;">What the system<br>revealed about itself</h2>
+    <div class="cards-grid" style="margin-top: 3rem;">
+      <div style="background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1); border-radius: 4px; padding: 1.75rem;">
+        <div style="font-size: 10px; letter-spacing: 0.15em; text-transform: uppercase; color: rgba(255,255,255,0.4); margin-bottom: 0.75rem; font-weight: 500;">Insight 01</div>
+        <h3 style="font-family: var(--serif); font-size: 1.1rem; color: #93C5FD; margin-bottom: 0.75rem; font-weight: 300; line-height: 1.3;">Circularity is ignored in the highlight of "bio"</h3>
+        <p style="font-size: 14px; color: rgba(255,255,255,0.6); line-height: 1.7; font-weight: 300;">Founders focus on the upstream story of innovation while overlooking end-of-life. Home composting is not legally approved in India. Industrial composting ≠ consumer behaviour. Reusability is an untapped market.</p>
+      </div>
+      <div style="background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1); border-radius: 4px; padding: 1.75rem;">
+        <div style="font-size: 10px; letter-spacing: 0.15em; text-transform: uppercase; color: rgba(255,255,255,0.4); margin-bottom: 0.75rem; font-weight: 500;">Insight 02</div>
+        <h3 style="font-family: var(--serif); font-size: 1.1rem; color: #93C5FD; margin-bottom: 0.75rem; font-weight: 300; line-height: 1.3;">Nomenclature is a conscious blind eye</h3>
+        <p style="font-size: 14px; color: rgba(255,255,255,0.6); line-height: 1.7; font-weight: 300;">Bio-based, bio-mimetic, bio-inspired, bio-informed — conflated terms create greenwashing and consumer confusion. The industry lacks a shared, accessible taxonomy that enables informed decision-making.</p>
+      </div>
+      <div style="background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1); border-radius: 4px; padding: 1.75rem;">
+        <div style="font-size: 10px; letter-spacing: 0.15em; text-transform: uppercase; color: rgba(255,255,255,0.4); margin-bottom: 0.75rem; font-weight: 500;">Insight 03</div>
+        <h3 style="font-family: var(--serif); font-size: 1.1rem; color: #93C5FD; margin-bottom: 0.75rem; font-weight: 300; line-height: 1.3;">Innovation in India runs ahead of its business muscle</h3>
+        <p style="font-size: 14px; color: rgba(255,255,255,0.6); line-height: 1.7; font-weight: 300;">Delphi analysis revealed founders are heavily ideation-oriented but weaker on community, collaboration, and scaling. The pattern: innovation → technology → business model → regulation. Business is the bottleneck.</p>
+      </div>
+      <div style="background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1); border-radius: 4px; padding: 1.75rem;">
+        <div style="font-size: 10px; letter-spacing: 0.15em; text-transform: uppercase; color: rgba(255,255,255,0.4); margin-bottom: 0.75rem; font-weight: 500;">Insight 04</div>
+        <h3 style="font-family: var(--serif); font-size: 1.1rem; color: #93C5FD; margin-bottom: 0.75rem; font-weight: 300; line-height: 1.3;">Perception of sophistication locks out adoption</h3>
+        <p style="font-size: 14px; color: rgba(255,255,255,0.6); line-height: 1.7; font-weight: 300;">Bio-based materials read as "distant" and "lab-only" to the public. Yet from fermentation to crafts, many processes are deeply familiar. The gap is awareness and proximity — not technological access.</p>
+      </div>
+      <div style="background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1); border-radius: 4px; padding: 1.75rem;">
+        <div style="font-size: 10px; letter-spacing: 0.15em; text-transform: uppercase; color: rgba(255,255,255,0.4); margin-bottom: 0.75rem; font-weight: 500;">Insight 05</div>
+        <h3 style="font-family: var(--serif); font-size: 1.1rem; color: #93C5FD; margin-bottom: 0.75rem; font-weight: 300; line-height: 1.3;">Circularity demands a localized model of innovation</h3>
+        <p style="font-size: 14px; rgba(255,255,255,0.6); line-height: 1.7; font-weight: 300; color: rgba(255,255,255,0.6);">Glocalization — the shift of economic power to the East — creates a unique window for India. Startups must source locally, build domestic demand, and think from the circular lifecycle outward, not the product inward.</p>
+      </div>
+      <div style="background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1); border-radius: 4px; padding: 1.75rem;">
+        <div style="font-size: 10px; letter-spacing: 0.15em; text-transform: uppercase; color: rgba(255,255,255,0.4); margin-bottom: 0.75rem; font-weight: 500;">Insight 06</div>
+        <h3 style="font-family: var(--serif); font-size: 1.1rem; color: #93C5FD; margin-bottom: 0.75rem; font-weight: 300; line-height: 1.3;">Co-opetition is the only way to scale at speed</h3>
+        <p style="font-size: 14px; color: rgba(255,255,255,0.6); line-height: 1.7; font-weight: 300;">"When you innovate, you innovate it for you and for the world. But no one bio-based company can serve the entire world." — Anu, Varsya. Open-source knowledge sharing and cooperative infrastructure are essential.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SOLUTION 1: SIGNALS -->
+<section class="section">
+  <div class="container">
+    <p class="section-label">06 — Solution Set</p>
+    <h2 class="section-title" style="max-width: 700px; margin-bottom: 0.5rem;">A <em>multifaceted</em> response to the ever-growing bio-material industry</h2>
+    <p class="lead" style="margin-bottom: 5rem;">Two complementary solutions operate at different scales — a micro-level digital platform to democratise knowledge, and a macro-level systemic model to physically convene stakeholders in a region.</p>
+
+    <div class="solution-feature">
+      <div>
+        <div class="solution-badge">Solution 01 · Digital Platform</div>
+        <h3 class="solution-title">nature Signals</h3>
+        <p class="solution-desc">A living library to find, share, and innovate with bio-based, bio-inspired, and bio-mimetic materials. Signals is designed as a dynamic, growing repository — the world's largest of its kind for natural raw materials.</p>
+        <p class="solution-desc">Unlike static archives, Signals integrates End-Of-Life management as a core feature — requiring contributors to explain how their innovation degrades, composts, or re-enters the cycle. This makes circularity non-optional.</p>
+        <ul class="feature-list">
+          <li>80+ raw materials mapped in the Innovation Wheel with primary material, secondary additive, and outcome product layers</li>
+          <li>EOL (End-Of-Life) field required on every submission — shifting conversation from birth to full lifecycle</li>
+          <li>Searchable by material feel, outcome, innovator, industry sector, and phase of innovation</li>
+          <li>Collaboration portal connecting scientists, designers, architects, manufacturers, and researchers</li>
+          <li>Ownership and IP attribution visible — fostering open-source knowledge culture</li>
+          <li>Feedback loop (Reddit-style) enabling authentic community review of innovations</li>
+          <li>Tech partnership: NT Global. Validation: Mandag (Arto Sivonen, Helsinki)</li>
+        </ul>
+      </div>
+      <div style="display: flex; flex-direction: column; gap: 1rem;">
+        <div class="img-block" style="height: 260px;">
+          <!-- PLACEHOLDER: Replace with Signals platform prototype screenshot — the Innovation Wheel UI -->
+          <svg viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="18" cy="18" r="14" stroke="currentColor" stroke-width="1.5"/>
+            <circle cx="18" cy="18" r="8" stroke="currentColor" stroke-width="1" stroke-dasharray="3 2"/>
+            <circle cx="18" cy="18" r="3" stroke="currentColor" stroke-width="1"/>
+          </svg>
+          [ Insert: Signals Innovation Wheel UI screenshot ]
+          <span class="caption">Signals platform prototype — Innovation Wheel</span>
+        </div>
+        <div class="img-block gray" style="height: 220px;">
+          <!-- PLACEHOLDER: Replace with Signals material library page screenshot showing a material entry with EOL data -->
+          <svg viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect x="4" y="4" width="28" height="28" rx="3" stroke="currentColor" stroke-width="1.5"/>
+            <path d="M10 12 L26 12 M10 18 L22 18 M10 24 L18 24" stroke="currentColor" stroke-width="1" stroke-linecap="round"/>
+          </svg>
+          [ Insert: Signals material library entry screenshot ]
+          <span class="caption">Material card with science, performance, application + EOL</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- KOMBUCHA EXPERIMENT -->
+    <div style="background: var(--bio-blue-light); border-radius: 4px; padding: 2.5rem; margin-bottom: 4rem; border: 1px solid rgba(7,54,187,0.15);">
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 3rem; align-items: center;">
+        <div>
+          <div class="solution-badge" style="margin-bottom: 1rem;">Ongoing experiment — testing the wheel</div>
+          <h3 style="font-family: var(--serif); font-size: 1.6rem; font-weight: 300; color: var(--bio-blue-dark); margin-bottom: 0.75rem;">Kombucha leather</h3>
+          <p style="font-size: 14px; color: var(--bio-blue-dark); line-height: 1.8; font-weight: 300; margin-bottom: 1rem;">An experiment to test the Signals wheel in action — grown in a home environment over 28 days to form a SCOBY leather, then dried for 3 additional days. The resulting material is flexible with lower tensile strength — opening the door for lemongrass as a secondary additive. Batch 2 is underway.</p>
+          <p style="font-size: 13px; color: var(--bio-blue); font-style: italic;">Tea brew → SCOBY mother culture → 2.5 weeks → drying → initial prototype</p>
+        </div>
+        <div class="img-block" style="height: 200px; background: white; border-color: rgba(7,54,187,0.2);">
+          <!-- PLACEHOLDER: Replace with Kombucha leather process photographs — showing stages of SCOBY growth -->
+          <svg viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M18 6 Q24 8 28 14 Q32 20 28 26 Q24 32 18 30 Q12 28 8 22 Q4 16 8 10 Q12 4 18 6Z" stroke="#0736BB" stroke-width="1.5"/>
+          </svg>
+          [ Insert: Kombucha leather prototype photograph ]
+          <span class="caption">Kombucha leather prototype — Kochi, 2024</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- SOLUTION 2 -->
+    <div class="solution-feature">
+      <div>
+        <div class="solution-badge" style="background: var(--bio-amber-light); color: var(--bio-amber);">Solution 02 · Systemic Model</div>
+        <h3 class="solution-title">Circular Materials Collective</h3>
+        <p class="solution-desc">A Public-Private Partnership (PPP) model designed for the state of Kerala — and replicable across any Indian state with agricultural biomass. The CMC acts as a catalyst for the bio-based materials industry by physically bringing together manufacturers, startups, scientists, government bodies, institutions, think tanks, architects, designers, and farmers.</p>
+        <p class="solution-desc">The model is grounded in the "co-opetition" philosophy — individual players benefit by sharing knowledge and infrastructure, while competing in the market. Kerala, with 2% of India's bio-tech startups but enormous agricultural biodiversity, is the ideal starting node.</p>
+        <ul class="feature-list">
+          <li>Cradle-to-cradle material lifecycle as the ideological foundation</li>
+          <li>Connects Kerala's 6-7 existing bio-material startups with traditional manufacturers (eg. Cocotuft, 100 years old) lacking innovation</li>
+          <li>Banana fibre working scenario: Cocotuft has an international bulk order — CMC matches them with Ar. Anooja J's research on banana pseudostem fibre extraction</li>
+          <li>Three-phase growth: awareness collaboration → material management → full PPP formation</li>
+          <li>Scalable as a hub-and-spoke model across Indian states with high biomass production</li>
+          <li>Aligned with KSUM, KSIDC, KSBB, Life Science Park, Rebuild Kerala Initiative</li>
+        </ul>
+      </div>
+      <div style="display: flex; flex-direction: column; gap: 1rem;">
+        <div class="img-block amber" style="height: 300px;">
+          <!-- PLACEHOLDER: Replace with CMC model diagram / systems map created in the thesis -->
+          <svg viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="18" cy="18" r="4" stroke="currentColor" stroke-width="1.5"/>
+            <circle cx="8" cy="10" r="3" stroke="currentColor" stroke-width="1.2"/>
+            <circle cx="28" cy="10" r="3" stroke="currentColor" stroke-width="1.2"/>
+            <circle cx="8" cy="26" r="3" stroke="currentColor" stroke-width="1.2"/>
+            <circle cx="28" cy="26" r="3" stroke="currentColor" stroke-width="1.2"/>
+            <line x1="11" y1="12" x2="15" y2="16" stroke="currentColor" stroke-width="1" stroke-dasharray="2 2"/>
+            <line x1="25" y1="12" x2="21" y2="16" stroke="currentColor" stroke-width="1" stroke-dasharray="2 2"/>
+            <line x1="11" y1="24" x2="15" y2="20" stroke="currentColor" stroke-width="1" stroke-dasharray="2 2"/>
+            <line x1="25" y1="24" x2="21" y2="20" stroke="currentColor" stroke-width="1" stroke-dasharray="2 2"/>
+          </svg>
+          [ Insert: CMC model diagram / stakeholder ecosystem map ]
+          <span class="caption">Circular Materials Collective — systems model for Kerala</span>
+        </div>
+        <div class="img-block coral" style="height: 200px;">
+          <!-- PLACEHOLDER: Replace with Kerala agricultural map / biomass distribution visual -->
+          <svg viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M18 4 L24 14 L32 16 L24 24 L26 32 L18 28 L10 32 L12 24 L4 16 L12 14 Z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
+          </svg>
+          [ Insert: Kerala agricultural crop distribution visualization ]
+          <span class="caption">Kerala biomass potential — Tapioca, Banana, Coconut as primary feedstocks</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- KERALA IN FOCUS -->
+<section class="section" style="background: var(--bio-gray-light);">
+  <div class="container">
+    <p class="section-label">07 — Kerala in Limelight</p>
+    <div class="two-col">
+      <div>
+        <h2 class="section-title">A tropical <em>goldmine</em> waiting to be activated</h2>
+        <p class="lead" style="margin-bottom: 2rem;">Despite extraordinary biodiversity and agricultural wealth — coconuts, bananas, tapioca, rubber, coir — Kerala accounts for just 2% of India's biotech startup registrations. The research examined why, and what structural design interventions could unlock this potential.</p>
+
+        <div style="display: flex; flex-direction: column; gap: 1rem; margin-bottom: 2rem;">
+          <div style="padding: 1.2rem 1.5rem; background: var(--surface); border: 1px solid var(--border); border-radius: 4px;">
+            <div style="font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-muted); margin-bottom: 0.4rem; font-weight: 500;">Barrier 01</div>
+            <p style="font-size: 14px; color: var(--text-secondary); font-weight: 300; line-height: 1.6;">Land, labour, and rent costs are prohibitive for early-stage startups in Kerala — especially relative to cities like Bangalore, Hyderabad, and Delhi.</p>
+          </div>
+          <div style="padding: 1.2rem 1.5rem; background: var(--surface); border: 1px solid var(--border); border-radius: 4px;">
+            <div style="font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-muted); margin-bottom: 0.4rem; font-weight: 500;">Barrier 02</div>
+            <p style="font-size: 14px; color: var(--text-secondary); font-weight: 300; line-height: 1.6;">Missing micro-economy infrastructure — labs, chemical suppliers, and equipment — delays prototyping and testing phases that all biomaterial startups depend on.</p>
+          </div>
+          <div style="padding: 1.2rem 1.5rem; background: var(--surface); border: 1px solid var(--border); border-radius: 4px;">
+            <div style="font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-muted); margin-bottom: 0.4rem; font-weight: 500;">Barrier 03</div>
+            <p style="font-size: 14px; color: var(--text-secondary); font-weight: 300; line-height: 1.6;">Government funds and proceedings (KSUM) are delayed. State schemes are less accessible than central ones. Capacity building for manufacturing tangible goods is absent from the startup support framework.</p>
+          </div>
+        </div>
+
+        <div class="pullquote" style="margin: 0;">
+          <p>"Kerala being a tropical paradise has a lot of potential to become a testament to circular city — where all materials are either biodegradable or recyclable."</p>
+          <cite>— Varsha Nambiar, Research Thesis</cite>
+        </div>
+      </div>
+
+      <div style="display: flex; flex-direction: column; gap: 1rem;">
+        <div class="img-block" style="height: 260px;">
+          <!-- PLACEHOLDER: Replace with Water Hyacinth research photograph / Kerala backwater imagery -->
+          <svg viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M4 24 Q10 18 18 22 Q26 26 32 20" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+            <path d="M4 28 Q10 22 18 26 Q26 30 32 24" stroke="currentColor" stroke-width="1" stroke-linecap="round" opacity="0.5"/>
+            <path d="M16 22 Q14 16 18 12 Q22 8 20 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+          </svg>
+          [ Insert: Water Hyacinth / Kerala backwater ecosystem photograph ]
+          <span class="caption">Water Hyacinth — parasitic weed being converted to paper, fiber, pigments</span>
+        </div>
+        <div class="img-block gray" style="height: 180px;">
+          <!-- PLACEHOLDER: Replace with Kerala agricultural statistics visual / crop production chart -->
+          <svg viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect x="4" y="24" width="5" height="8" rx="1" stroke="currentColor" stroke-width="1.2"/>
+            <rect x="11" y="18" width="5" height="14" rx="1" stroke="currentColor" stroke-width="1.2"/>
+            <rect x="18" y="12" width="5" height="20" rx="1" stroke="currentColor" stroke-width="1.2"/>
+            <rect x="25" y="16" width="5" height="16" rx="1" stroke="currentColor" stroke-width="1.2"/>
+          </svg>
+          [ Insert: Kerala crop production statistics chart ]
+          <span class="caption">Agricultural residue opportunity — 2022–23 data</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- OUTCOMES -->
+<section class="section">
+  <div class="container">
+    <p class="section-label">08 — Outcomes & Impact</p>
+    <h2 class="section-title" style="max-width: 600px;">What this project <em>set in motion</em></h2>
+    <p class="lead" style="margin-bottom: 3rem;">The project has catalysed a shift in societal thinking about materials and sustainability in Kerala — and produced tangible design artefacts, institutional collaborations, and a roadmap for an emerging circular bioeconomy.</p>
+
+    <div class="outcomes-grid">
+      <div class="outcome-card primary">
+        <div class="outcome-label">Digital Platform</div>
+        <div class="outcome-title">nature Signals</div>
+        <div class="outcome-body">A working prototype of the world's largest living library of natural raw materials — with 80+ materials catalogued, Innovation Wheel UI, EOL management layer, and active Instagram presence. Website (WIP). Material database in appendix.</div>
+      </div>
+      <div class="outcome-card primary">
+        <div class="outcome-label">Systemic Model</div>
+        <div class="outcome-title">Circular Materials Collective</div>
+        <div class="outcome-body">A PPP framework for Kerala — connecting 6–7 bio-material startups with traditional manufacturers, research institutions, and government bodies. Working scenario tested with real Cocotuft order brief and banana fibre innovation.</div>
+      </div>
+      <div class="outcome-card primary">
+        <div class="outcome-label">Material Experiment</div>
+        <div class="outcome-title">Kombucha leather prototype</div>
+        <div class="outcome-body">A hands-on trial of the Signals Innovation Wheel in practice — home-grown SCOBY leather over 28 days. Batch 2 underway with lemongrass as secondary material. Documents the full lifecycle from tea to textile.</div>
+      </div>
+      <div class="outcome-card secondary">
+        <div class="outcome-label">Community</div>
+        <div class="outcome-title">Participatory workshop model</div>
+        <div class="outcome-body">Proven format for public awareness: stakeholder talk + material interaction + thought collection. Invitation received from TKM College of Architecture, Kollam to conduct a follow-up workshop.</div>
+      </div>
+      <div class="outcome-card secondary">
+        <div class="outcome-label">Research</div>
+        <div class="outcome-title">Comprehensive systems analysis</div>
+        <div class="outcome-body">RACI map, Calotropis seed innovator visualization, PESTEL + Porter's 5 Forces analysis, Material Coordinate System, Possibility Map, and Megatrend Impact Radar — a full systems design documentation of India's nascent bio-industry.</div>
+      </div>
+      <div class="outcome-card secondary">
+        <div class="outcome-label">Collaborations activated</div>
+        <div class="outcome-title">Industry network engaged</div>
+        <div class="outcome-body">Active partnerships with Bambrew, Malai, Qudrat, Varsya, Cocotuft, SEED Kochi, and Terrarium. Validated by Mandag (Helsinki). Technology partner: NT Global. Academic mentorship: Prof. S. Guruprasad, NID Gandhinagar.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- REFLECTION -->
+<section class="section" style="background: var(--bio-gray-light);">
+  <div class="container">
+    <p class="section-label">09 — Reflection</p>
+    <div class="two-col">
+      <div>
+        <h2 class="section-title">What I learnt — and where<br>I'm <em>going next</em></h2>
+        <p style="font-size: 15px; color: var(--text-secondary); line-height: 1.9; font-weight: 300; margin-bottom: 1.5rem;">"Towards a Bioabled World is a journey that has just begun. I know now how to begin my journey in this field — I got to connect to the right people, right platforms, right initiatives. The confidence I gained by convincing brands to collaborate, giving a talk on my thesis and speaking with brilliant minds in the industry will help me move forward. It seems possible."</p>
+        <p style="font-size: 15px; color: var(--text-secondary); line-height: 1.9; font-weight: 300; margin-bottom: 2rem;">"There is life in biology — there is a life that a product lives — there is our life — and then there is the end to all of this. Biology took care of its end. We are taking care of our lives' ends. But why are we not bothered about our creations' end? It all ties down to choices."</p>
+        <div class="insights-row">
+          <span class="insight-pill"><span class="dot"></span>Systems thinking</span>
+          <span class="insight-pill"><span class="dot"></span>Bio-material fluency</span>
+          <span class="insight-pill"><span class="dot"></span>Stakeholder engagement</span>
+          <span class="insight-pill"><span class="dot"></span>Futures design</span>
+          <span class="insight-pill"><span class="dot"></span>Circular economy</span>
+          <span class="insight-pill"><span class="dot"></span>PPP model design</span>
+          <span class="insight-pill"><span class="dot"></span>Design for India</span>
+        </div>
+      </div>
+      <div>
+        <div class="img-block" style="height: 380px;">
+          <!-- PLACEHOLDER: Replace with a portrait photograph, or field research photograph that represents personal journey — author at SEEDKochi, at a factory visit, or working on Kombucha leather -->
+          <svg viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="18" cy="14" r="5" stroke="currentColor" stroke-width="1.5"/>
+            <path d="M8 32 Q8 24 18 24 Q28 24 28 32" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+            <path d="M26 8 L28 10 M30 14 L32 14 M26 20 L28 18" stroke="currentColor" stroke-width="1" stroke-linecap="round" opacity="0.5"/>
+          </svg>
+          [ Insert: Portrait or personal field research photograph — Varsha Nambiar ]
+          <span class="caption">Author at field research / SEEDKochi event / Kochi 2024</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="project-footer">
+  <div class="footer-inner">
+    <div>
+      <h2 class="footer-title">Towards a<br><em>Bioabled</em> World</h2>
+      <p class="footer-body">A self-sponsored Masters thesis in Strategic Design Management at the National Institute of Design, Gandhinagar — validated by futurist Arto Sivonen (Mandag, Helsinki) and guided by Prof. S. Guruprasad. The project lays the systemic groundwork for India's transition into a circular bio-based economy.</p>
+      <div class="sdg-tags">
+        <span class="sdg-tag">SDG 9 — Industry & Innovation</span>
+        <span class="sdg-tag">SDG 12 — Responsible Consumption</span>
+        <span class="sdg-tag">SDG 13 — Climate Action</span>
+        <span class="sdg-tag">SDG 15 — Life on Land</span>
+        <span class="sdg-tag">SDG 17 — Partnerships</span>
+      </div>
+    </div>
+    <div class="footer-credits">
+      <div class="credit-row">
+        <span class="credit-label">Designer</span>
+        <span class="credit-value">Varsha Nambiar</span>
+      </div>
+      <div class="credit-row">
+        <span class="credit-label">Institution</span>
+        <span class="credit-value">NID Gandhinagar — Strategic Design Management</span>
+      </div>
+      <div class="credit-row">
+        <span class="credit-label">Sponsor</span>
+        <span class="credit-value">Self-sponsored / Live project</span>
+      </div>
+      <div class="credit-row">
+        <span class="credit-label">Validation</span>
+        <span class="credit-value">Mandag — Arto Sivonen, Helsinki</span>
+      </div>
+      <div class="credit-row">
+        <span class="credit-label">Guide</span>
+        <span class="credit-value">Prof. S. Guruprasad</span>
+      </div>
+      <div class="credit-row">
+        <span class="credit-label">Year</span>
+        <span class="credit-value">Graduation Project 2024</span>
+      </div>
+      <div class="credit-row" style="border-bottom: none;">
+        <span class="credit-label">Process partners</span>
+        <span class="credit-value">SEED Kochi, Mandag, Bambrew, Malai, Qudrat, Varsya, Cocotuft</span>
+      </div>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>

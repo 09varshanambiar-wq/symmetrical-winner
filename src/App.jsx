@@ -158,8 +158,8 @@ const Work = () => {
       title: "Systems Design",
       projects: [
         { number: "01", title: "Intelligent Policy Platform", category: "Product", image: "/IPP cover.png", link: "/projects/intelligent-policy-platform.html", span: "md:col-span-2" },
-        { number: "02", title: "Signals", category: "Thesis", image: "/leather signal .png", span: "md:col-span-1" },
-        { number: "03", title: "Story of Sustainability", category: "Inquiry", image: "/SOS1.png", span: "md:col-span-1" }
+        { number: "02", title: "Signals", category: "Thesis", image: "/leather signal .png", link: "/projects/signals.html", span: "md:col-span-1" },
+        { number: "03", title: "Story of Sustainability", category: "Inquiry", image: "/SOS1.png", link: "/projects/story-of-sustainability.html", span: "md:col-span-1" }
       ]
     },
     {

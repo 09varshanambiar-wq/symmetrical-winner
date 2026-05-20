@@ -74,28 +74,79 @@ const Hero = () => {
       <Glow className="top-20 left-10 w-[500px] h-[500px] bg-primary" />
       <Glow className="bottom-20 right-10 w-[600px] h-[600px] bg-warning/30" />
       
-      <div className="max-w-7xl mx-auto z-10 text-center pointer-events-none">
+      <div className="max-w-7xl mx-auto z-10 text-center pointer-events-none w-full">
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 1.2, ease: "easeOut" }}
-          className="pointer-events-auto"
+          className="pointer-events-auto flex flex-col md:flex-row items-center justify-between gap-8 md:gap-12"
         >
-          <h1 className="text-7xl md:text-9xl font-serif leading-[0.95] mb-10 text-secondary tracking-tight">
-            Multidisciplinary <br /> 
-            <span className="text-primary italic">Design Strategist</span>
-          </h1>
-          <p className="text-lg md:text-2xl text-text/50 leading-relaxed mb-12 max-w-3xl mx-auto italic font-light">
-            creating systems, behaviours, research and solutions with design as a medium.
-          </p>
-          
-          <div className="flex justify-center gap-6">
-            <a href="#work" className="liquid-button">View the Inquiry</a>
-            <button className="px-8 py-3 glass-card rounded-none font-semibold text-sm hover:bg-white/60 transition-all">
+          {/* Left CTA: View the Inquiry */}
+          <div className="w-full md:w-auto flex justify-center md:justify-start order-2 md:order-1">
+            <a 
+              href="#work" 
+              className="px-8 py-3 border border-primary text-primary hover:bg-primary hover:text-white transition-all rounded-none font-semibold text-sm whitespace-nowrap"
+            >
+              View the Inquiry
+            </a>
+          </div>
+
+          {/* Center Text (Title and Subtitle) */}
+          <div className="flex-1 text-center order-1 md:order-2">
+            <h1 className="text-5xl md:text-7xl font-dmsans font-light leading-[0.95] mb-10 text-secondary tracking-tight">
+              Multidisciplinary <br /> 
+              <span className="text-primary italic">Design Strategist</span>
+            </h1>
+            <p className="text-lg md:text-2xl text-text/75 leading-relaxed mb-0 max-w-5xl mx-auto font-dmsans font-light">
+              creating systems, behaviours, research and solutions with design as a medium.
+            </p>
+          </div>
+
+          {/* Right CTA: The Philosophy */}
+          <div className="w-full md:w-auto flex justify-center md:justify-end order-3">
+            <button className="px-8 py-3 glass-card rounded-none font-semibold text-sm hover:bg-white/60 transition-all whitespace-nowrap">
               The Philosophy
             </button>
           </div>
         </motion.div>
+
+        {/* Thin Auto-Scrolling Photo Marquee (Edge-to-Edge) */}
+        <div className="mt-16 w-screen relative left-1/2 -translate-x-1/2 overflow-hidden py-3 border-y border-primary/20 bg-white/5 backdrop-blur-sm select-none pointer-events-auto">
+          <div className="animate-marquee flex whitespace-nowrap gap-6">
+            {[...Array(3)].map((_, i) => (
+              <React.Fragment key={i}>
+                {/* IPP */}
+                <div className="w-[200px] h-[110px] flex-shrink-0 overflow-hidden bg-neutral-100 shadow-sm border border-black/5 group cursor-pointer">
+                  <img src="/IPP cover.png" alt="IPP" className="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-110" />
+                </div>
+                {/* Signals */}
+                <div className="w-[200px] h-[110px] flex-shrink-0 overflow-hidden bg-neutral-100 shadow-sm border border-black/5 group cursor-pointer">
+                  <img src="/leather signal .png" alt="Signals" className="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-110" />
+                </div>
+                {/* SOS */}
+                <div className="w-[200px] h-[110px] flex-shrink-0 overflow-hidden bg-neutral-100 shadow-sm border border-black/5 group cursor-pointer">
+                  <img src="/SOS1.png" alt="SOS" className="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-110" />
+                </div>
+                {/* Joulebug */}
+                <div className="w-[200px] h-[110px] flex-shrink-0 overflow-hidden bg-neutral-100 shadow-sm border border-black/5 group cursor-pointer">
+                  <img src="/joulebug.jpg" alt="Joulebug" className="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-110" />
+                </div>
+                {/* GravityOne */}
+                <div className="w-[200px] h-[110px] flex-shrink-0 overflow-hidden bg-neutral-100 shadow-sm border border-black/5 group cursor-pointer">
+                  <img src="/work-1.png" alt="GravityOne" className="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-110" />
+                </div>
+                {/* Absolute */}
+                <div className="w-[200px] h-[110px] flex-shrink-0 overflow-hidden bg-neutral-100 shadow-sm border border-black/5 group cursor-pointer">
+                  <img src="/work-3.png" alt="Absolute" className="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-110" />
+                </div>
+                {/* Choice Paradox */}
+                <div className="w-[200px] h-[110px] flex-shrink-0 overflow-hidden bg-neutral-100 shadow-sm border border-black/5 group cursor-pointer">
+                  <img src="/work-6.png" alt="Choice Paradox" className="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-110" />
+                </div>
+              </React.Fragment>
+            ))}
+          </div>
+        </div>
       </div>
       
       {/* Background Glass Shapes */}
@@ -260,21 +311,32 @@ const SystemBreaker = () => (
   </section>
 );
 
-const WonderlandCard = ({ title, subtitle, bgClass }) => (
-  <motion.div 
-    whileHover={{ scale: 1.02 }}
-    className={`relative aspect-[4/3] rounded-none overflow-hidden glass-card group cursor-pointer ${bgClass}`}
-  >
-    <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
-    <div className="absolute bottom-8 left-8">
-      <p className="text-[10px] font-black uppercase tracking-widest text-text/40 mb-2">{subtitle}</p>
-      <h4 className="text-xl font-bold text-secondary group-hover:text-primary transition-colors">{title}</h4>
-    </div>
-    <div className="absolute top-8 right-8 w-10 h-10 glass-card rounded-none flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all">
-      <Plus size={16} className="text-primary" />
-    </div>
-  </motion.div>
-);
+const WonderlandCard = ({ title, subtitle, bgClass, image, link }) => {
+  const CardWrapper = link ? motion.a : motion.div;
+  return (
+    <CardWrapper 
+      href={link}
+      whileHover={{ scale: 1.02 }}
+      className={`relative aspect-[4/3] rounded-none overflow-hidden glass-card group cursor-pointer block ${bgClass}`}
+    >
+      {image && (
+        <img 
+          src={image} 
+          alt={title} 
+          className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-110" 
+        />
+      )}
+      <div className={`absolute inset-0 bg-gradient-to-t ${image ? 'from-black/80 via-black/20 to-transparent' : 'from-black/20 to-transparent opacity-0 group-hover:opacity-100'} transition-opacity`} />
+      <div className="absolute bottom-8 left-8 z-10">
+        <p className={`text-[10px] font-black uppercase tracking-widest mb-2 ${image ? 'text-white/80' : 'text-text/40'}`}>{subtitle}</p>
+        <h4 className={`text-xl font-bold transition-colors ${image ? 'text-white group-hover:text-white/80' : 'text-secondary group-hover:text-primary'}`}>{title}</h4>
+      </div>
+      <div className="absolute top-8 right-8 w-10 h-10 glass-card rounded-none flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all z-10">
+        <Plus size={16} className={image ? "text-white" : "text-primary"} />
+      </div>
+    </CardWrapper>
+  );
+};
 
 const Wonderlands = () => (
   <section id="wonderlands" className="py-32 px-6 bg-[#FAF7F2]">
@@ -287,14 +349,18 @@ const Wonderlands = () => (
       </div>
       <div className="grid md:grid-cols-3 gap-8">
         <WonderlandCard 
-          title="Gaze Aversion"
+          title="Human Gaze Aversion to Metacognition"
           subtitle="Metacognition Inquiry"
           bgClass="bg-white/50"
+          image="/metacognition.avif"
+          link="https://www.behance.net/gallery/147242677/Metacognition-in-gaze-aversion"
         />
         <WonderlandCard 
-          title="The Leafling: Swing"
+          title="The leafling"
           subtitle="Product Design"
           bgClass="bg-[#DBC6A7]/20"
+          image="/Leafling.png"
+          link="/The Leafling.html"
         />
         <WonderlandCard 
           title="Agriculture by 2050"
@@ -306,42 +372,152 @@ const Wonderlands = () => (
   </section>
 );
 
-const About = () => (
-  <section id="about" className="py-32 px-6">
-    <div className="max-w-5xl mx-auto glass-card p-16 rounded-none bg-primary/5">
-      <span className="section-label">03. About Me</span>
-      <h2 className="text-4xl md:text-5xl font-bold mb-10 leading-tight">
-        Listening for the <span className="text-primary italic font-light">Leverage Points</span>.
-      </h2>
-      <div className="grid md:grid-cols-2 gap-12 text-lg text-text/60 leading-relaxed font-light">
-        <p>
-          I operate at the intersection of architecture, behavior, and strategy. 
-          My practice is about finding the points where small changes in narrative 
-          or structure can lead to significant shifts in collective wellbeing.
-        </p>
-        <p>
-          Influenced by Donella Meadows and Neri Oxman, I aim to design 
-          environments that encourage metacognition—allowing us to 
-          understand our role in the systems that shape our lives.
-        </p>
+const About = () => {
+  const carouselImages = [
+    "/work-1.png",
+    "/work-2.png",
+    "/work-3.png",
+    "/work-4.png",
+    "/work-5.png",
+    "/work-6.png",
+    "/b7617e_c63877547b2e4a5c804d965fc7ff985a~mv2.jpg.avif"
+  ];
+
+  return (
+    <section id="about" className="relative bg-black overflow-hidden select-none">
+      {/* Split grid: Text on Left, Image on Right */}
+      <div className="grid grid-cols-1 md:grid-cols-12 bg-black border-b-[4px] border-primary">
+        
+        {/* Left column: Text */}
+        <div className="col-span-1 md:col-span-7 lg:col-span-8 p-12 md:p-20 lg:p-28 flex flex-col justify-center bg-black text-white">
+          <span className="text-[11px] font-mono uppercase tracking-[0.35em] text-white/40 mb-12 block">
+            ABOUT
+          </span>
+          
+          <h2 className="text-4xl md:text-5xl lg:text-6xl font-light text-white mb-10 leading-tight">
+            Hello,<br />
+            I’m <span className="font-serif italic font-normal text-white">Varsha Nambiar</span>,
+          </h2>
+          
+          <div className="space-y-6 text-[16px] md:text-[17px] text-white/70 leading-relaxed font-light max-w-2xl">
+            <p>
+              I enjoy listening to stories and finding meaning in the little things around me. 
+              Curiosity drives me. Whether it is learning a new word every day or validating a 
+              sudden epiphany. Non-fiction is my comfort zone when it comes to reading, and I 
+              am endlessly fascinated by metaphors, analogies, and the way ideas connect 
+              across disciplines.
+            </p>
+            <p>
+              I like to believe Architecture changed who I am and Design changes the way I 
+              look at things. Grateful for the sea of perspectives both provide. If I could make 
+              somebody’s life easier via designing solutions then that’s where I wanna be.
+            </p>
+            <p>
+              I feel deeply connected to nature, not only for the calm and wonder it offers, 
+              but also for the countless possibilities and discoveries it still holds.
+            </p>
+          </div>
+        </div>
+
+        {/* Right column: Image with vertical divider border */}
+        <div className="col-span-1 md:col-span-5 lg:col-span-4 relative border-t-[4px] md:border-t-0 md:border-l-[4px] border-primary bg-black overflow-hidden h-[500px] md:h-auto min-h-[500px]">
+          <div className="relative w-full h-full group cursor-pointer">
+            {/* Black and White image */}
+            <img 
+              src="/me.png" 
+              alt="Varsha Nambiar (B&W)" 
+              className="absolute inset-0 w-full h-full object-cover transition-opacity duration-700 ease-in-out group-hover:opacity-0"
+            />
+            {/* Color image */}
+            <img 
+              src="/me_colour.png" 
+              alt="Varsha Nambiar (Color)" 
+              className="absolute inset-0 w-full h-full object-cover opacity-0 transition-opacity duration-700 ease-in-out group-hover:opacity-100"
+            />
+          </div>
+        </div>
+
       </div>
-    </div>
-  </section>
-);
+
+      {/* Under-section: Scrolling Marquee */}
+      <div className="bg-black py-16 w-full">
+        {/* Infinite Photo Marquee */}
+        <div className="w-full overflow-hidden relative">
+          {/* Gradient overlay fades on left and right */}
+          <div className="absolute top-0 left-0 w-24 md:w-48 h-full bg-gradient-to-r from-black to-transparent z-10 pointer-events-none" />
+          <div className="absolute top-0 right-0 w-24 md:w-48 h-full bg-gradient-to-l from-black to-transparent z-10 pointer-events-none" />
+          
+          <div className="animate-marquee gap-6 flex">
+            {/* Set 1 */}
+            {carouselImages.map((src, idx) => (
+              <div key={`c1-${idx}`} className="w-[280px] h-[190px] md:w-[320px] md:h-[220px] flex-shrink-0 overflow-hidden bg-neutral-900 border border-white/5 group">
+                <img 
+                  src={src} 
+                  alt={`Gallery photo ${idx + 1}`} 
+                  className="w-full h-full object-cover transition-all duration-700 ease-out filter grayscale group-hover:grayscale-0 group-hover:scale-105"
+                />
+              </div>
+            ))}
+            {/* Set 2 (for seamless looping) */}
+            {carouselImages.map((src, idx) => (
+              <div key={`c2-${idx}`} className="w-[280px] h-[190px] md:w-[320px] md:h-[220px] flex-shrink-0 overflow-hidden bg-neutral-900 border border-white/5 group">
+                <img 
+                  src={src} 
+                  alt={`Gallery photo loop ${idx + 1}`} 
+                  className="w-full h-full object-cover transition-all duration-700 ease-out filter grayscale group-hover:grayscale-0 group-hover:scale-105"
+                />
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+};
 
 const Contact = () => (
-  <section id="contact" className="py-32 px-6">
+  <section id="contact" className="py-32 px-6 bg-black text-white border-t border-white/10">
     <div className="max-w-7xl mx-auto text-center">
-      <h2 className="text-4xl md:text-5xl font-bold text-secondary mb-12 whitespace-nowrap overflow-hidden text-ellipsis">
-        Shall we begin a quiet inquiry into the systems that shape us?
+      <h2 className="text-4xl md:text-5xl font-dmsans italic font-light text-white mb-12 leading-relaxed">
+        Would you like to dive into a conversation?
       </h2>
-      <div className="flex flex-col md:flex-row justify-center gap-6">
-        <a href="mailto:hello@varshanambiar.com" className="liquid-button flex items-center gap-3 justify-center">
-          <Mail size={20} /> hello@varshanambiar.com
+      <div className="flex justify-center items-center gap-8">
+        {/* Gmail Button */}
+        <a 
+          href="mailto:hello@varshanambiar.com" 
+          title="Gmail"
+          className="w-16 h-16 rounded-full bg-white/10 backdrop-blur-md border border-white/20 hover:bg-white hover:text-black hover:border-white text-white transition-all duration-300 flex items-center justify-center hover:scale-110 active:scale-95 shadow-lg group"
+        >
+          <Mail size={24} className="group-hover:scale-110 transition-transform duration-300" />
         </a>
-        <button className="px-10 py-4 glass-card rounded-none font-semibold hover:bg-white/60 transition-all flex items-center gap-3 justify-center">
-          <MessageSquare size={20} className="text-primary" /> Start an Inquiry
-        </button>
+        
+        {/* LinkedIn Button */}
+        <a 
+          href="https://linkedin.com" 
+          target="_blank" 
+          rel="noopener noreferrer"
+          title="LinkedIn"
+          className="w-16 h-16 rounded-full bg-white/10 backdrop-blur-md border border-white/20 hover:bg-white hover:text-black hover:border-white text-white transition-all duration-300 flex items-center justify-center hover:scale-110 active:scale-95 shadow-lg group"
+        >
+          <svg className="w-6 h-6 fill-current group-hover:scale-110 transition-transform duration-300" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.779-1.75-1.75s.784-1.75 1.75-1.75 1.75.779 1.75 1.75-.784 1.75-1.75 1.75zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/>
+          </svg>
+        </a>
+
+        {/* Instagram Button */}
+        <a 
+          href="https://instagram.com" 
+          target="_blank" 
+          rel="noopener noreferrer"
+          title="Instagram"
+          className="w-16 h-16 rounded-full bg-white/10 backdrop-blur-md border border-white/20 hover:bg-white hover:text-black hover:border-white text-white transition-all duration-300 flex items-center justify-center hover:scale-110 active:scale-95 shadow-lg group"
+        >
+          <svg className="w-6 h-6 stroke-current fill-none group-hover:scale-110 transition-transform duration-300" viewBox="0 0 24 24" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" xmlns="http://www.w3.org/2000/svg">
+            <rect x="2" y="2" width="20" height="20" rx="5" ry="5"/>
+            <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/>
+            <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/>
+          </svg>
+        </a>
       </div>
     </div>
   </section>

@@ -153,58 +153,93 @@ h2 em { font-style: italic; color: var(--blue); }
 
 /* ── HERO ── */
 .hero {
-  min-height: 100vh; padding-top: 54px;
-  display: flex; flex-direction: column;
+  min-height: 100vh;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  position: relative;
+  overflow: hidden;
 }
-.hero-body {
-  flex: 1; display: grid; grid-template-columns: 1fr 1fr;
-  max-width: var(--max); margin: 0 auto; padding: 0 var(--pad);
-  align-items: center;
+.hero-left {
+  background: #1e3a8a;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: 4rem;
+  position: relative;
 }
-.hero-l { padding: 5rem 4.5rem 5rem 0; border-right: 0.5px solid var(--border-2); }
-.hero-r { padding: 5rem 0 5rem 4.5rem; }
-
-.hero-pill {
-  display: inline-flex; align-items: center; gap: 0.6rem;
-  font-family: var(--mono); font-size: 10px; letter-spacing: 0.14em;
-  text-transform: uppercase; color: var(--blue);
-  background: var(--surface-t); border: 0.5px solid var(--border-2);
-  padding: 6px 14px; border-radius: 20px; margin-bottom: 2rem;
-  backdrop-filter: blur(10px);
+.hero-left::before {
+  content: '';
+  position: absolute; inset: 0;
+  background: repeating-linear-gradient(
+    45deg, transparent, transparent 40px,
+    rgba(255,255,255,0.02) 40px, rgba(255,255,255,0.02) 41px
+  );
 }
-.hero-pill-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--blue); }
-
+.hero-right {
+  position: relative;
+  overflow: hidden;
+}
+.hero-right img {
+  width: 100%; height: 100%; object-fit: cover;
+  position: absolute; inset: 0;
+}
+.hero-eyebrow {
+  font-family: var(--sans); font-size: 11px;
+  letter-spacing: 0.15em; text-transform: uppercase;
+  color: rgba(255,255,255,0.5); margin-bottom: 1.5rem;
+  position: relative;
+}
 h1 {
-  font-family: var(--sans);
-  font-size: clamp(2.4rem, 5vw, 3.8rem);
-  line-height: 1.06; font-weight: 700;
-  letter-spacing: -0.03em; color: var(--ink);
-  margin-bottom: 1.75rem;
+  font-family: var(--serif);
+  font-size: clamp(2.8rem, 5vw, 5rem);
+  line-height: 1.06; font-weight: 300;
+  letter-spacing: -0.02em; color: #ffffff;
+  margin-bottom: 1.25rem; position: relative;
 }
 h1 em {
-  font-family: var(--serif); font-style: italic;
-  color: var(--blue); font-weight: 400;
+  font-style: italic; color: #93c5fd; font-weight: 300;
 }
-.hero-desc { font-size: 1rem; color: var(--ink-2); max-width: 400px; line-height: 1.7; font-weight: 400; }
-.hero-meta { margin-top: 2.5rem; padding-top: 2rem; border-top: 0.5px solid var(--border-2); display: flex; flex-direction: column; gap: 0.7rem; }
-.meta-row { display: flex; gap: 1.5rem; align-items: baseline; }
-.meta-k { font-family: var(--mono); font-size: 9px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--ink-4); min-width: 64px; }
-.meta-v { font-size: 13px; color: var(--ink-2); font-weight: 500; }
+.hero-subtitle {
+  font-family: var(--serif); font-size: 1.05rem; font-weight: 300;
+  color: rgba(255,255,255,0.65); margin-bottom: 2.5rem;
+  position: relative; line-height: 1.7; max-width: 440px;
+}
+.hero-meta {
+  display: flex; flex-direction: column; gap: 0.5rem;
+  position: relative;
+  border-top: 1px solid rgba(255,255,255,0.12);
+  padding-top: 1.5rem;
+}
+.hero-meta-row { display: flex; gap: 2rem; }
+.meta-item { display: flex; flex-direction: column; gap: 2px; }
+.meta-label { font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; color: rgba(255,255,255,0.35); }
+.meta-value { font-size: 13px; color: rgba(255,255,255,0.75); font-weight: 300; }
 
-/* stat grid */
-.stat-grid {
-  display: grid; grid-template-columns: 1fr 1fr;
-  gap: 1px; background: var(--border-2);
-  border: 0.5px solid var(--border-2); border-radius: var(--radius);
-  overflow: hidden; margin-bottom: 1.5rem;
+@media (max-width: 900px) {
+  .hero { grid-template-columns: 1fr; min-height: auto; }
+  .hero-left { min-height: 80vh; padding: 3rem 2rem; }
+  .hero-right { min-height: 50vw; }
 }
-.stat-cell {
-  background: var(--surface-t); padding: 1.4rem 1.5rem;
-  backdrop-filter: blur(10px);
-}
-.stat-n { font-family: var(--sans); font-size: 2rem; font-weight: 700; line-height: 1; color: var(--blue); margin-bottom: 4px; }
-.stat-lbl { font-size: 12px; color: var(--ink-3); line-height: 1.4; font-weight: 400; }
 
+/* stat strip below hero */
+.stat-strip {
+  display: grid; grid-template-columns: repeat(4, 1fr);
+  gap: 0; background: var(--ink);
+  overflow: hidden;
+}
+.stat-strip .stat-cell {
+  padding: 2rem 1.75rem;
+  border-right: 1px solid rgba(255,255,255,0.08);
+}
+.stat-strip .stat-cell:last-child { border-right: none; }
+.stat-strip .stat-n { font-family: var(--sans); font-size: 2rem; font-weight: 700; line-height: 1; color: #93c5fd; margin-bottom: 4px; }
+.stat-strip .stat-lbl { font-size: 12px; color: rgba(255,255,255,0.5); line-height: 1.4; font-weight: 300; }
+
+.skills-bar {
+  padding: 1.5rem var(--pad); max-width: var(--max); margin: 0 auto;
+  display: flex; flex-wrap: wrap; gap: 0.4rem;
+  border-bottom: 0.5px solid var(--border-2);
+}
 .skills { display: flex; flex-wrap: wrap; gap: 0.4rem; }
 .skill {
   font-family: var(--mono); font-size: 10px; letter-spacing: 0.03em;
@@ -214,17 +249,6 @@ h1 em {
 .skill.a { background: var(--blue-light); color: var(--blue-2); border-color: rgba(37,99,235,0.2); }
 .skill.t { background: var(--teal-light); color: #0369a1; border-color: rgba(14,165,233,0.2); }
 .skill.b { background: var(--surface-t); color: var(--ink-3); backdrop-filter: blur(6px); }
-
-/* hero bottom bar */
-.hero-bar {
-  border-top: 0.5px solid var(--border-2);
-  padding: 1.5rem var(--pad);
-  max-width: var(--max); margin: 0 auto;
-  display: flex; gap: 3rem; flex-wrap: wrap;
-}
-.hb-item { display: flex; flex-direction: column; gap: 3px; }
-.hb-k { font-family: var(--mono); font-size: 9px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-4); }
-.hb-v { font-size: 12px; color: var(--ink-2); font-weight: 500; }
 
 /* ── BRIEF ── */
 .brief-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 1.25rem; margin-top: 3rem; }
@@ -387,7 +411,7 @@ h1 em {
 
 /* ── MORE WORKS STRIP (Inverted) ── */
 .more-works {
-  padding: 8rem 0; border-top: 0.5px solid rgba(255,255,255,0.1);
+  padding: 4rem 0; border-top: 0.5px solid rgba(255,255,255,0.1);
   position: relative; overflow: hidden;
   background: linear-gradient(135deg, #0c1222 0%, #1e110a 100%);
   color: white;
@@ -409,9 +433,9 @@ h1 em {
   pointer-events: none;
 }
 
-.more-works .wrap { position: relative; z-index: 2; }
-.more-works h2 { color: white; }
-.more-works h2 em { color: #60a5fa; } /* Lighter blue for dark bg */
+.more-works .mw-inner { position: relative; z-index: 2; max-width: 1080px; margin: 0 auto; padding: 0 var(--pad); }
+.more-works h2 { color: white; font-family: var(--serif); font-size: clamp(1.9rem, 3.2vw, 2.75rem); line-height: 1.1; letter-spacing: -0.02em; margin-bottom: 1rem; }
+.more-works h2 em { color: #60a5fa; font-style: italic; } /* Lighter blue for dark bg */
 .more-works .eyebrow { 
   background: rgba(255,255,255,0.05); 
   border-color: rgba(255,255,255,0.1);
@@ -446,6 +470,22 @@ h1 em {
 .mw-num { font-family: var(--mono); font-size: 10px; color: rgba(255,255,255,0.3); letter-spacing: 0.1em; }
 .mw-title { font-weight: 700; font-size: 18px; color: white; letter-spacing: -0.01em; }
 .mw-cat { font-size: 10px; text-transform: uppercase; letter-spacing: 0.15em; color: #60a5fa; font-weight: 700; }
+
+/* ── CONTACT FOOTER ── */
+.contact-footer {
+  padding: 5rem 0;
+  background: var(--bg);
+  border-top: 0.5px solid rgba(0,0,0,0.08);
+  text-align: center;
+}
+.contact-footer .cf-inner { max-width: var(--max); margin: 0 auto; padding: 0 var(--pad); }
+.cf-logo { font-family: var(--sans); font-weight: 800; font-size: 22px; color: var(--ink); margin-bottom: 0.4rem; display: flex; align-items: center; justify-content: center; gap: 10px; }
+.cf-logo-dot { width: 8px; height: 8px; background: var(--blue); border-radius: 50%; }
+.cf-role { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.3em; color: var(--blue); margin-bottom: 2rem; }
+.cf-links { display: flex; justify-content: center; gap: 3rem; margin-bottom: 3rem; }
+.cf-links a { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.15em; color: var(--ink-4); text-decoration: none; transition: color 0.3s; }
+.cf-links a:hover { color: var(--blue); }
+.cf-copy { font-size: 9px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5em; color: var(--ink-4); opacity: 0.5; }
 </style>
 </head>
 <body>
@@ -495,56 +535,60 @@ h1 em {
 
 
 <!-- ═══════ HERO ═══════ -->
-<div class="hero">
-  <div class="hero-body">
-
-    <div class="hero-l">
-      <div class="hero-pill"><span class="hero-pill-dot"></span>Intelligent Policy Platform · Design Strategy</div>
-      <h1>"Designing a <em>living map</em> of Australian health policy."</h1>
-      <p class="hero-desc">I led design strategy and product thinking end-to-end — helping the Department of Health and Aged Care turn a complex, fragmented health system into something navigable, trustworthy, and genuinely explorable.</p>
-      <div class="hero-meta">
-        <div class="meta-row"><span class="meta-k">Client</span><span class="meta-v">Dept. of Health &amp; Aged Care, Australia · Scyne Advisory</span></div>
-        <div class="meta-row"><span class="meta-k">Platform</span><span class="meta-v">DHDA Interactive Health Landscape — Gravity</span></div>
-        <div class="meta-row"><span class="meta-k">Role</span><span class="meta-v">Lead Design Strategist · Product · UX/UI · Vibe-coded delivery</span></div>
-        <div class="meta-row"><span class="meta-k">Scope</span><span class="meta-v">Concept pitch → MVP → Phased roadmap · 3 platform sections</span></div>
+<section class="hero">
+  <div class="hero-left">
+    <div class="hero-eyebrow">Intelligent Policy Platform · Design Strategy</div>
+    <h1>Designing a<br><em>living map</em><br>of health policy</h1>
+    <p class="hero-subtitle">I led design strategy and product thinking end-to-end — helping the Department of Health and Aged Care turn a complex, fragmented health system into something navigable, trustworthy, and genuinely explorable.</p>
+    <div class="hero-meta">
+      <div class="hero-meta-row">
+        <div class="meta-item">
+          <span class="meta-label">Client</span>
+          <span class="meta-value">Dept. of Health &amp; Aged Care, Australia · Scyne Advisory</span>
+        </div>
+        <div class="meta-item">
+          <span class="meta-label">Platform</span>
+          <span class="meta-value">DHDA Interactive Health Landscape — Gravity</span>
+        </div>
+      </div>
+      <div class="hero-meta-row">
+        <div class="meta-item">
+          <span class="meta-label">Role</span>
+          <span class="meta-value">Lead Design Strategist · Product · UX/UI</span>
+        </div>
+        <div class="meta-item">
+          <span class="meta-label">Scope</span>
+          <span class="meta-value">Concept pitch → MVP → Phased roadmap</span>
+        </div>
       </div>
     </div>
-
-    <div class="hero-r">
-      <div class="stat-grid">
-        <div class="stat-cell"><div class="stat-n">3</div><div class="stat-lbl">Platform sections scoped and designed end-to-end</div></div>
-        <div class="stat-cell"><div class="stat-n">4</div><div class="stat-lbl">Interconnected systems in the architecture</div></div>
-        <div class="stat-cell"><div class="stat-n">9+</div><div class="stat-lbl">Population cohorts mapped across the landscape</div></div>
-        <div class="stat-cell"><div class="stat-n">MVP</div><div class="stat-lbl">Demonstrated to senior DHDA executives</div></div>
-      </div>
-      <div class="skills">
-        <span class="skill a">Design Strategy</span>
-        <span class="skill a">Systems Thinking</span>
-        <span class="skill a">Product Leadership</span>
-        <span class="skill t">Knowledge Graph</span>
-        <span class="skill t">AI Trust Design</span>
-        <span class="skill t">Ontology &amp; IA</span>
-        <span class="skill b">Vibe Coding</span>
-        <span class="skill b">Sprint Delivery</span>
-        <span class="skill b">Gov / Health Domain</span>
-        <span class="skill b">Stakeholder Research</span>
-      </div>
-    </div>
-
   </div>
-
-  <div class="hero-bar">
-    <div class="hb-item"><span class="hb-k">Sector</span><span class="hb-v">Government · Health Policy · AI</span></div>
-    <div class="hb-item"><span class="hb-k">Entities</span><span class="hb-v">Gravity · Scyne Advisory · DHDA</span></div>
-    <div class="hb-item"><span class="hb-k">Data sources</span><span class="hb-v">AIHW · OECD · DHDA Infospec</span></div>
-    <div class="hb-item"><span class="hb-k">AI frameworks</span><span class="hb-v">STEEPLEO · Knowledge Graph · Dual-badge trust layer</span></div>
-    <div class="hb-item"><span class="hb-k">Delivery</span><span class="hb-v">Rapid sprints · Vibe-coded front end</span></div>
+  <div class="hero-right">
+    <img src="/Interactive Health Landscape.png" alt="Interactive Health Landscape" />
   </div>
+</section>
+
+<!-- Stat strip -->
+<div class="stat-strip">
+  <div class="stat-cell"><div class="stat-n">3</div><div class="stat-lbl">Platform sections scoped and designed end-to-end</div></div>
+  <div class="stat-cell"><div class="stat-n">4</div><div class="stat-lbl">Interconnected systems in the architecture</div></div>
+  <div class="stat-cell"><div class="stat-n">9+</div><div class="stat-lbl">Population cohorts mapped across the landscape</div></div>
+  <div class="stat-cell"><div class="stat-n">MVP</div><div class="stat-lbl">Demonstrated to senior DHDA executives</div></div>
 </div>
 
-<div class="wrap" style="margin-top: -4rem; margin-bottom: 4rem; position: relative; z-index: 10;">
-  <div class="glass" style="padding: 1rem; border-radius: 40px; overflow: hidden;">
-    <img src="/Interactive Health Landscape.png" alt="Intelligent Policy Platform" style="width: 100%; border-radius: 32px; display: block; box-shadow: 0 20px 80px rgba(37,99,235,0.1);">
+<!-- Skills bar -->
+<div class="skills-bar">
+  <div class="skills">
+    <span class="skill a">Design Strategy</span>
+    <span class="skill a">Systems Thinking</span>
+    <span class="skill a">Product Leadership</span>
+    <span class="skill t">Knowledge Graph</span>
+    <span class="skill t">AI Trust Design</span>
+    <span class="skill t">Ontology &amp; IA</span>
+    <span class="skill b">Vibe Coding</span>
+    <span class="skill b">Sprint Delivery</span>
+    <span class="skill b">Gov / Health Domain</span>
+    <span class="skill b">Stakeholder Research</span>
   </div>
 </div>
 
@@ -557,7 +601,12 @@ h1 em {
       <div class="eyebrow"><span class="eyebrow-dot"></span>01 — The Brief</div>
       <h2>Where systems complexity meets the need for <em>clarity</em></h2>
     </div>
-    <p class="lead">The Australian Department of Health and Aged Care manages one of the most interconnected policy landscapes in the world — spanning diverse cohorts, competing priorities, and layered tiers of care. Data lived in silos. No shared map existed. Our brief was to build one — and to make AI a trusted part of how policymakers navigate it.</p>
+    <div style="display: flex; flex-direction: column; gap: 1.25rem;">
+      <p class="lead" style="margin: 0;">The Interactive Health Landscape (IHL) is a structured digital platform designed to help policymakers explore the Australian health ecosystem as one connected system. The project brought together health domains, population groups, social determinants, pressures, global health indicators, and operating models into a single explorable environment.</p>
+      <p class="lead" style="margin: 0;">The platform was designed to help government stakeholders move beyond fragmented reports and disconnected policy documents. Instead of viewing health information in silos, users could explore relationships across systems, understand how pressures affect outcomes, and navigate the broader health landscape through an intuitive visual interface.</p>
+      <p class="lead" style="margin: 0;">The project sat at the intersection of systems thinking, policy design, information architecture, UX strategy, ontology design, and AI-enabled future planning.</p>
+      <p class="lead" style="margin: 0;">This work was developed in collaboration with GravityONE for the Department of Health, Disability and Ageing.</p>
+    </div>
   </div>
 
   <div class="brief-grid">
@@ -782,44 +831,50 @@ h1 em {
 
 <!-- ═══════ MORE WORKS ═══════ -->
 <section class="more-works">
-<div class="wrap">
-  <div class="mw-header">
-    <div>
-      <div class="eyebrow"><span class="eyebrow-dot"></span>Keep Exploring</div>
-      <h2>The <em>next</em> inquiry</h2>
+  <div class="mw-inner">
+    <div class="mw-header">
+      <div>
+        <h2>Keep <em>exploring</em></h2>
+      </div>
+    </div>
+    <div class="mw-grid">
+      <a href="/projects/intelligent-policy-platform.html" class="mw-card">
+        <div class="mw-num">01</div>
+        <div class="mw-title">Intelligent Policy Platform</div>
+        <div class="mw-cat">Design Strategy · AI</div>
+      </a>
+      <a href="/projects/signals.html" class="mw-card">
+        <div class="mw-num">02</div>
+        <div class="mw-title">Signals</div>
+        <div class="mw-cat">Thesis · Biological Intelligence</div>
+      </a>
+      <a href="/projects/joulebug.html" class="mw-card">
+        <div class="mw-num">03</div>
+        <div class="mw-title">JouleBug</div>
+        <div class="mw-cat">Behavioural Science · Sustainability</div>
+      </a>
+      <a href="/projects/story-of-sustainability.html" class="mw-card">
+        <div class="mw-num">04</div>
+        <div class="mw-title">Choreography of Sustainability</div>
+        <div class="mw-cat">Inquiry · Systems Thinking</div>
+      </a>
     </div>
   </div>
-  <div class="mw-grid">
-    <a href="#" class="mw-card">
-      <div class="mw-num">02</div>
-      <div class="mw-title">Signals</div>
-      <div class="mw-cat">Thesis · Biological Intelligence</div>
-    </a>
-    <a href="#" class="mw-card">
-      <div class="mw-num">03</div>
-      <div class="mw-title">Absolute</div>
-      <div class="mw-cat">Design Strategy · Founder's Office</div>
-    </a>
-    <a href="#" class="mw-card">
-      <div class="mw-num">04</div>
-      <div class="mw-title">NUA</div>
-      <div class="mw-cat">Organisational Design</div>
-    </a>
-    <a href="/projects/joulebug.html" class="mw-card">
-      <div class="mw-num">05</div>
-      <div class="mw-title">JouleBug</div>
-      <div class="mw-cat">Behavioral Science</div>
-    </a>
-  </div>
-</div>
 </section>
 
-<div style="border-top:0.5px solid var(--border-2)">
-  <footer>
-    <div class="footer-l">DHDA Interactive Health Landscape · Case Study<br>Gravity · Scyne Advisory · Dept. of Health &amp; Aged Care, Australia</div>
-    <div class="footer-r">Lead Design Strategist · UX/UI · Product</div>
-  </footer>
-</div>
+<!-- CONTACT FOOTER -->
+<footer class="contact-footer">
+  <div class="cf-inner">
+    <div class="cf-logo"><div class="cf-logo-dot"></div>Varsha Nambiar</div>
+    <div class="cf-role">Multidisciplinary Design Strategist</div>
+    <div class="cf-links">
+      <a href="#">LinkedIn</a>
+      <a href="#">Instagram</a>
+      <a href="#">Portfolio</a>
+    </div>
+    <div class="cf-copy">&copy; 2026 Varsha Nambiar &mdash; Inspired by the Art of Listening</div>
+  </div>
+</footer>
 
 </body>
 </html>

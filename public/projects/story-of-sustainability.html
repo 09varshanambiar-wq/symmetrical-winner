@@ -17,7 +17,7 @@
   --ink-2:     #3d4166;
   --ink-3:     #7b80aa;
   --ink-4:     #a8adc9;
-  --brand:     #059669; /* emerald-600 */
+  --brand:     #059669;
   --brand-light:#d1fae5;
   --teal:      #14b8a6;
   --border:    rgba(5, 150, 105, 0.08);
@@ -25,7 +25,7 @@
   --sans:      'Manrope', system-ui, sans-serif;
   --mono:      'Space Mono', monospace;
   --max:       1200px;
-  --pad:       2rem;
+  --pad:       4.5rem;
 }
 
 html { scroll-behavior: smooth; }
@@ -141,6 +141,66 @@ ul li::before { content: "→"; position: absolute; left: 0; color: var(--brand)
 .chapter-nav-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--ink-4); transition: all 0.3s; }
 .chapter-nav-item:hover .chapter-nav-dot { background: var(--brand); transform: scale(1.5); }
 
+/* ── MORE WORKS (Next Inquiry) ── */
+.more-works {
+  padding: 4rem 0; border-top: 0.5px solid rgba(255,255,255,0.1);
+  position: relative; overflow: hidden;
+  background: linear-gradient(135deg, #0c1222 0%, #1e110a 100%);
+  color: white;
+}
+.more-works::before {
+  content: ""; position: absolute; inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+  opacity: 0.15; pointer-events: none; mix-blend-mode: overlay;
+}
+.more-works::after {
+  content: ""; position: absolute; inset: 0;
+  background: radial-gradient(circle at 10% 20%, rgba(37, 99, 235, 0.15) 0%, transparent 40%),
+              radial-gradient(circle at 90% 80%, rgba(249, 115, 22, 0.1) 0%, transparent 40%);
+  pointer-events: none;
+}
+.more-works .mw-inner { position: relative; z-index: 2; max-width: 1080px; margin: 0 auto; padding: 0 4.5rem; }
+.more-works h2.mw-title-h2 { color: white; font-family: var(--serif); font-size: clamp(1.9rem, 3.2vw, 2.75rem); line-height: 1.1; letter-spacing: -0.02em; margin-bottom: 1rem; }
+.more-works h2.mw-title-h2 em { font-style: italic; color: #60a5fa; }
+.mw-eyebrow {
+  display: inline-flex; align-items: center; gap: 0.6rem;
+  font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase;
+  color: rgba(255,255,255,0.5); background: rgba(255,255,255,0.05);
+  border: 0.5px solid rgba(255,255,255,0.1); padding: 5px 12px;
+  border-radius: 20px; margin-bottom: 1.25rem;
+}
+.mw-eyebrow-dot { width: 5px; height: 5px; border-radius: 50%; background: #60a5fa; }
+.mw-header { display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 3.5rem; }
+.mw-grid { display: flex; gap: 2rem; overflow-x: auto; padding-bottom: 2rem; scrollbar-width: none; }
+.mw-grid::-webkit-scrollbar { display: none; }
+.mw-card {
+  min-width: 300px; padding: 2.5rem;
+  background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 28px; text-decoration: none;
+  transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+  display: flex; flex-direction: column; gap: 1.5rem; backdrop-filter: blur(10px);
+}
+.mw-card:hover { transform: translateY(-12px) scale(1.02); background: rgba(255,255,255,0.06); border-color: rgba(255,255,255,0.2); box-shadow: 0 20px 40px rgba(0,0,0,0.3); }
+.mw-num { font-size: 10px; color: rgba(255,255,255,0.3); letter-spacing: 0.1em; }
+.mw-title { font-weight: 700; font-size: 18px; color: white; letter-spacing: -0.01em; }
+.mw-cat { font-size: 10px; text-transform: uppercase; letter-spacing: 0.15em; color: #60a5fa; font-weight: 700; }
+
+/* ── CONTACT FOOTER ── */
+.contact-footer {
+  padding: 5rem 0;
+  background: var(--bg);
+  border-top: 0.5px solid rgba(0,0,0,0.08);
+  text-align: center;
+}
+.contact-footer .cf-inner { max-width: 1080px; margin: 0 auto; padding: 0 4.5rem; }
+.cf-logo { font-family: var(--sans); font-weight: 800; font-size: 22px; color: var(--ink); margin-bottom: 0.4rem; display: flex; align-items: center; justify-content: center; gap: 10px; }
+.cf-logo-dot { width: 8px; height: 8px; background: var(--brand); border-radius: 50%; }
+.cf-role { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.3em; color: var(--brand); margin-bottom: 2rem; }
+.cf-links { display: flex; justify-content: center; gap: 3rem; margin-bottom: 3rem; }
+.cf-links a { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.15em; color: var(--ink-4); text-decoration: none; transition: color 0.3s; }
+.cf-links a:hover { color: var(--brand); }
+.cf-copy { font-size: 9px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5em; color: var(--ink-4); opacity: 0.5; }
+
 </style>
 </head>
 <body>
@@ -153,6 +213,7 @@ ul li::before { content: "→"; position: absolute; left: 0; color: var(--brand)
   <nav>
     <ul class="header-links">
       <li><a href="/index.html#work">Works</a></li>
+      <li><a href="/index.html#wonderlands">Wonderlands</a></li>
       <li><a href="/index.html#about">About</a></li>
       <li><a href="/index.html#contact">Contact</a></li>
     </ul>
@@ -619,9 +680,9 @@ ul li::before { content: "→"; position: absolute; left: 0; color: var(--brand)
         <div class="quote-author">— Donella Meadows</div>
       </div>
     </div>
-    <img src="/choreography/Pasted%20Graphic%2032.png" alt="Dance with systems" style="width: 100%; height: auto; display: block; margin: 4rem 0;">
+    <img src="/choreography/Pasted%20Graphic%2032.png" alt="Dance with systems" style="width: 100%; height: auto; display: block; margin: 4.5rem 0;">
     <div class="wrap" style="max-width: 1000px;">
-      <p class="lead" style="text-align: center; margin-top: 4rem;">Perhaps the future does not ask us to dominate nature more intelligently, but to participate within it more consciously.<br/>To listen before extracting.<br/>To belong before building.<br/>To understand that sustainability is not a fixed solution, but an ongoing relationship with the systems that sustain life.</p>
+      <p class="lead" style="text-align: center; margin-top: 4.5rem;">Perhaps the future does not ask us to dominate nature more intelligently, but to participate within it more consciously.<br/>To listen before extracting.<br/>To belong before building.<br/>To understand that sustainability is not a fixed solution, but an ongoing relationship with the systems that sustain life.</p>
 
       <div style="text-align: center; margin-top: 6rem; padding-top: 3rem; border-top: 1px dashed var(--border);">
         <p style="font-family: var(--serif); font-size: 1.5rem; font-style: italic; color: var(--ink-3);">With Love,<br/>Pramoddini Warale & Varsha Nambiar</p>
@@ -630,12 +691,50 @@ ul li::before { content: "→"; position: absolute; left: 0; color: var(--brand)
     </div>
   </section>
 
-</main>
+<!-- THE NEXT INQUIRY -->
+<section class="more-works">
+  <div class="mw-inner">
+    <div class="mw-header">
+      <div>
+        <h2 class="mw-title-h2">Keep <em>exploring</em></h2>
+      </div>
+    </div>
+    <div class="mw-grid">
+      <a href="/projects/intelligent-policy-platform.html" class="mw-card">
+        <div class="mw-num">01</div>
+        <div class="mw-title">Intelligent Policy Platform</div>
+        <div class="mw-cat">Design Strategy · AI</div>
+      </a>
+      <a href="/projects/signals.html" class="mw-card">
+        <div class="mw-num">02</div>
+        <div class="mw-title">Signals</div>
+        <div class="mw-cat">Thesis · Biological Intelligence</div>
+      </a>
+      <a href="/projects/joulebug.html" class="mw-card">
+        <div class="mw-num">03</div>
+        <div class="mw-title">JouleBug</div>
+        <div class="mw-cat">Behavioural Science · Sustainability</div>
+      </a>
+      <a href="/projects/story-of-sustainability.html" class="mw-card">
+        <div class="mw-num">04</div>
+        <div class="mw-title">Choreography of Sustainability</div>
+        <div class="mw-cat">Inquiry · Systems Thinking</div>
+      </a>
+    </div>
+  </div>
+</section>
 
-<footer style="padding: 4rem 0; border-top: 1px solid var(--border); background: var(--bg);">
-  <div class="wrap" style="display: flex; justify-content: space-between; align-items: center; color: var(--ink-4); font-size: 11px; font-family: var(--mono);">
-    <div>Choreography of Sustainability · Thematic Inquiry</div>
-    <div>Varsha Nambiar & Pramoddini Warale · 2026</div>
+<!-- CONTACT FOOTER -->
+<footer class="contact-footer">
+  <div class="cf-inner">
+    <div class="cf-logo"><div class="cf-logo-dot"></div>Varsha Nambiar</div>
+    <div class="cf-role">Multidisciplinary Design Strategist</div>
+    <div class="cf-links">
+      <a href="#">LinkedIn</a>
+      <a href="#">Instagram</a>
+      <a href="#">Portfolio</a>
+    </div>
+    <div class="cf-copy">© 2026 Varsha Nambiar — Inspired by the Art of Listening</div>
   </div>
 </footer>
 

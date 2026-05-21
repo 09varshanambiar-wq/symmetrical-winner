@@ -107,12 +107,17 @@ body {
   transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
 }
 .project-nav-item:hover .project-nav-label { opacity: 1; transform: translateX(0); }
+.project-nav-item.active .project-nav-label { opacity: 1; transform: translateX(0); color: var(--blue); }
 .project-nav-dot {
   width: 6px; height: 6px; border-radius: 50%;
   background: var(--ink-4); transition: all 0.3s;
   border: 1px solid transparent;
 }
 .project-nav-item:hover .project-nav-dot {
+  background: var(--blue); transform: scale(1.5);
+  box-shadow: 0 0 10px rgba(37, 99, 235, 0.4);
+}
+.project-nav-item.active .project-nav-dot {
   background: var(--blue); transform: scale(1.5);
   box-shadow: 0 0 10px rgba(37, 99, 235, 0.4);
 }
@@ -332,21 +337,41 @@ h1 em {
 
 /* ── ARCHITECTURE ── */
 .arch-strip {
-  display: grid; grid-template-columns: repeat(4,1fr);
+  display: grid; grid-template-columns: repeat(3, 1fr);
   gap: 1px; background: var(--border-2);
   border: 0.5px solid var(--border-2); border-radius: var(--radius);
   overflow: hidden; margin-top: 3rem;
 }
-.arch-col { background: rgba(255,255,255,0.55); backdrop-filter: blur(6px); }
+.arch-col {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  background: rgba(255,255,255,0.55);
+  backdrop-filter: blur(6px);
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.arch-col:hover {
+  background: rgba(255,255,255,0.75);
+  transform: translateY(-4px);
+  box-shadow: 0 10px 30px rgba(37,99,235,0.08);
+  z-index: 10;
+}
 .arch-head { padding: 0.85rem 1rem; border-bottom: 0.5px solid var(--border-2); font-family: var(--mono); font-size: 9px; letter-spacing: 0.1em; text-transform: uppercase; }
 .arch-head.s1 { background: var(--blue-light); color: var(--blue-2); }
-.arch-head.s2 { background: var(--teal-light); color: #0369a1; }
-.arch-head.s3 { background: var(--amber-light); color: var(--amber); }
-.arch-head.s4 { background: var(--bg-3); color: var(--ink-3); }
-.arch-body { padding: 1rem; }
-.arch-row { font-size: 12px; color: var(--ink-2); line-height: 1.4; padding: 4px 0; border-bottom: 0.5px solid var(--border); font-weight: 400; }
-.arch-row:last-child { border-bottom: none; }
-.arch-phase { font-family: var(--mono); font-size: 9px; color: var(--ink-4); margin-top: 8px; }
+.arch-head.s2 { background: var(--amber-light); color: var(--amber); }
+.arch-head.s3 { background: var(--teal-light); color: #0369a1; }
+.arch-head.s4 { background: #f3e8ff; color: #6b21a8; }
+.arch-head.s5 { background: #e0e7ff; color: #3730a3; }
+.arch-head.s6 { background: #d1fae5; color: #065f46; }
+.arch-body { padding: 1.25rem; flex-grow: 1; display: flex; flex-direction: column; }
+.arch-desc { font-size: 13px; color: var(--ink-2); line-height: 1.62; font-weight: 400; }
+.arch-desc strong { color: var(--ink); font-weight: 600; }
+@media (max-width: 900px) {
+  .arch-strip { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 600px) {
+  .arch-strip { grid-template-columns: 1fr; }
+}
 
 /* ── FEATURES ── */
 .feat-section { margin-top: 3.5rem; display: flex; flex-direction: column; gap: 2.5rem; }
@@ -471,6 +496,79 @@ h1 em {
 .mw-title { font-weight: 700; font-size: 18px; color: white; letter-spacing: -0.01em; }
 .mw-cat { font-size: 10px; text-transform: uppercase; letter-spacing: 0.15em; color: #60a5fa; font-weight: 700; }
 
+/* ── LAPTOP MOCKUP ── */
+.laptop-container {
+  max-width: 840px;
+  margin: 4.5rem auto 1rem auto;
+  position: relative;
+  padding: 0 4%;
+}
+.laptop-screen {
+  background: #080810;
+  border-radius: 20px 20px 0 0;
+  border: 12px solid #111216;
+  border-bottom: 22px solid #111216;
+  position: relative;
+  box-shadow: 0 30px 60px rgba(26,29,46,0.25);
+  aspect-ratio: 3020 / 1654;
+  overflow: hidden;
+}
+.camera-dot {
+  position: absolute;
+  top: 5px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #1e293b;
+  border: 1px solid rgba(255,255,255,0.05);
+  z-index: 5;
+}
+.camera-dot::after {
+  content: '';
+  position: absolute;
+  top: 1px;
+  left: 1px;
+  width: 2px;
+  height: 2px;
+  border-radius: 50%;
+  background: #0ea5e9;
+  opacity: 0.7;
+}
+.screen-content {
+  width: 100%;
+  height: 100%;
+  background: #0a0a0f;
+  position: relative;
+  overflow: hidden;
+}
+.screen-content video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+.laptop-base {
+  height: 14px;
+  background: linear-gradient(to bottom, #e2e8f0 0%, #cbd5e1 100%);
+  border-radius: 0 0 16px 16px;
+  position: relative;
+  width: 108%;
+  left: -4%;
+  box-shadow: 
+    0 16px 24px rgba(26,29,46,0.12),
+    0 4px 6px rgba(26,29,46,0.08);
+}
+.base-latch {
+  width: 70px;
+  height: 5px;
+  background: #94a3b8;
+  margin: 0 auto;
+  border-radius: 0 0 5px 5px;
+  box-shadow: inset 0 1px 2px rgba(0,0,0,0.1);
+}
+
 /* ── CONTACT FOOTER ── */
 .contact-footer {
   padding: 5rem 0;
@@ -564,7 +662,7 @@ h1 em {
     </div>
   </div>
   <div class="hero-right">
-    <img src="/Interactive Health Landscape.png" alt="Interactive Health Landscape" />
+    <img src="/IPP cover.png" alt="Interactive Health Landscape" />
   </div>
 </section>
 
@@ -670,10 +768,69 @@ h1 em {
   <div class="two-col">
     <div>
       <div class="eyebrow"><span class="eyebrow-dot"></span>03 — Process</div>
-      <h2>A research-led journey from <em>ambiguity</em> to delivery</h2>
+      <h2>Research and Discovery</h2>
     </div>
     <p class="lead">Each phase built on the last — progressively narrowing ambiguity, deepening understanding of users and system, and translating research and structure into designed experience. Insights from later phases regularly fed back into earlier ones.</p>
   </div>
+
+  <div class="research-discovery" style="padding: 1rem 0; margin-top: 2.5rem; margin-bottom: 4rem;">
+    <div style="display: grid; grid-template-columns: 1fr 1px 1fr; gap: 4rem;">
+      <!-- Left Column -->
+      <div>
+        <h4 style="font-size: 1.05rem; font-weight: 500; color: var(--ink); margin-bottom: 1.5rem; letter-spacing: 0.02em;">Understanding the System</h4>
+        <div style="font-size: 14.5px; color: var(--ink-2); font-style: italic; line-height: 1.75;">
+          <p style="margin-bottom: 1rem;">The first phase focused on understanding how the Australian health ecosystem was structured and familiarising their hierarchies.</p>
+          <p style="margin-bottom: 0.75rem;">This included:</p>
+          <ul style="margin-left: 1.5rem; margin-bottom: 1.5rem; list-style-type: disc;">
+            <li>Existing policy structures & frameworks</li>
+            <li>Domain relationships</li>
+            <li>Population cohorts & OECD health benchmarks</li>
+            <li>Social determinants</li>
+            <li>Health pressures</li>
+            <li>Service tiers</li>
+            <li>Government operating models</li>
+            <li>Stakeholder structures</li>
+            <li>AIHW datasets and governance systems</li>
+          </ul>
+          <p>The objective was to identify how information was connected and used across systems.</p>
+        </div>
+      </div>
+
+      <!-- Divider -->
+      <div style="background: linear-gradient(to bottom, rgba(37,99,235,0.05), rgba(37,99,235,0.2), rgba(37,99,235,0.05));"></div>
+
+      <!-- Right Column -->
+      <div>
+        <h4 style="font-size: 1.05rem; font-weight: 500; color: var(--ink); margin-bottom: 1.5rem; letter-spacing: 0.02em;">Stakeholder Research</h4>
+        <div style="font-size: 14.5px; color: var(--ink-2); font-style: italic; line-height: 1.75;">
+          <p style="margin-bottom: 0.75rem;">The project involved ongoing discussions and workshops with policy teams, domain specialists, and stakeholders.<br>The goal was to understand:</p>
+          <ul style="margin-left: 1.5rem; margin-bottom: 1.5rem; list-style-type: disc;">
+            <li>How policymakers currently navigate information</li>
+            <li>Where information fragmentation created friction</li>
+            <li>Which relationships between systems were difficult to identify</li>
+            <li>How different teams interpreted the same data differently</li>
+            <li>What level of detail different users required</li>
+            <li>How trust and credibility influenced decision making</li>
+          </ul>
+          <p style="margin-bottom: 0.75rem;">One key insight from the research phase was that users rarely struggled because information was unavailable.<br>They struggled because:</p>
+          <ul style="margin-left: 1.5rem; list-style-type: disc;">
+            <li>Information was disconnected</li>
+            <li>Relationships between systems were invisible</li>
+            <li>Navigation lacked structure</li>
+            <li>Context was difficult to maintain</li>
+            <li>Systems were not designed for exploration</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- Bottom Inset -->
+    <div style="border-left: 4px solid var(--blue); margin-top: 3.5rem; background: linear-gradient(90deg, rgba(37,99,235,0.04) 0%, transparent 100%); padding: 1.5rem; border-radius: 0 var(--radius) var(--radius) 0;">
+      <p style="font-size: 14.5px; font-style: italic; color: var(--ink); margin: 0; line-height: 1.7; font-weight: 400;">The study also highlighted challenges in terms of the users not knowing what they want in particular. They had a latent need that required information to be accessible in swift ways.<br>This shifted the project from a data display problem into a systems navigation problem.</p>
+    </div>
+  </div>
+
+  <h2 style="margin-bottom: 2.5rem;">Research design and frameworks used in the journey.</h2>
 
   <div class="process-table">
     <div class="phase">
@@ -725,16 +882,48 @@ h1 em {
   <div class="two-col">
     <div>
       <div class="eyebrow"><span class="eyebrow-dot"></span>04 — System &amp; Features</div>
-      <h2>A four-system architecture, designed to <em>scale</em></h2>
+      <h2>Multi-system health ontology, designed to <em>scale</em></h2>
     </div>
     <p class="lead">The Interactive Health Landscape wasn't a dashboard — it was a navigable model of the Australian health system, structured for policymakers to explore relationships, pressures, and insights at any depth.</p>
   </div>
 
   <div class="arch-strip">
-    <div class="arch-col"><div class="arch-head s1">System 1 — Operating environment</div><div class="arch-body"><div class="arch-row">STEEPLEO pressure categories</div><div class="arch-row">Trends → Threats / Opportunities</div><div class="arch-row">Domain impact scoring</div><div class="arch-row">AI-generated trend summaries</div><div class="arch-phase">✓ MVP scope</div></div></div>
-    <div class="arch-col"><div class="arch-head s2">System 2 — Core health system</div><div class="arch-body"><div class="arch-row">Population cohorts (9+)</div><div class="arch-row">Domain tiering (T2–T5)</div><div class="arch-row">Life course view toggles</div><div class="arch-row">Infospec static data layer</div><div class="arch-phase">✓ MVP scope</div></div></div>
-    <div class="arch-col"><div class="arch-head s3">System 3 — Operating model</div><div class="arch-body"><div class="arch-row">Capabilities &amp; FICs</div><div class="arch-row">Services taxonomy</div><div class="arch-row">Stakeholder mapping</div><div class="arch-row">Budget &amp; funding view</div><div class="arch-phase">→ Phase 2</div></div></div>
-    <div class="arch-col"><div class="arch-head s4">System 4 — Planning &amp; performance</div><div class="arch-body"><div class="arch-row">Strategy → outcomes link</div><div class="arch-row">Performance accountability</div><div class="arch-row">Programme resourcing</div><div class="arch-row">Assurance mechanisms</div><div class="arch-phase">→ Phase 3+</div></div></div>
+    <div class="arch-col">
+      <div class="arch-head s1">01 — Operating Environment</div>
+      <div class="arch-body">
+        <p class="arch-desc">External context and pressures shaping demand for health services. Structured across <strong>L1 Trend Categories</strong> (social, technology, political, environmental, economic, legal, ethical), <strong>L2 Trends and Drivers</strong>, <strong>L3 Opportunities and Threats</strong>, and <strong>L4 Impacts and Pressures</strong>.</p>
+      </div>
+    </div>
+    <div class="arch-col">
+      <div class="arch-head s2">02 — Operating Model</div>
+      <div class="arch-body">
+        <p class="arch-desc">The organising engine mobilising resources, capabilities, services and stakeholders. Structured across <strong>L1 Government Organisational Structures</strong>, <strong>L2 Capabilities</strong> (including FICS - Fundamental Inputs into Capabilities), <strong>L3 Services</strong>, and <strong>L4 Stakeholders</strong>.</p>
+      </div>
+    </div>
+    <div class="arch-col">
+      <div class="arch-head s3">03 — Core Health System</div>
+      <div class="arch-body">
+        <p class="arch-desc">The structured levels of care: <strong>Specialist, Acute and Residential Care</strong>; <strong>Primary Health and Community Care</strong>; and <strong>Health Promotion and Disease Prevention</strong>.</p>
+      </div>
+    </div>
+    <div class="arch-col">
+      <div class="arch-head s4">04 — Cohorts &amp; Determinants</div>
+      <div class="arch-body">
+        <p class="arch-desc"><strong>Population Cohorts</strong> (e.g. Children and Youth, Older People, First Nations People, Women's Health, Men's Health, Mothers and Babies, People with a Disability, LGBTQIA+, Culturally and Linguistically Diverse, People in Prison) and <strong>Social Determinants of Health</strong> (Housing, Income, Employment, Education, Environment, Food Security, Social Support Network, Rural and Remote).</p>
+      </div>
+    </div>
+    <div class="arch-col">
+      <div class="arch-head s5">05 — Global Health</div>
+      <div class="arch-body">
+        <p class="arch-desc">International health dimensions including <strong>Population Health Outcomes</strong>, <strong>Equity of Health Outcomes</strong>, <strong>Quality and Safety of Care</strong>, <strong>System Performance and Efficiency</strong>, <strong>Citizen Experience and Engagement</strong>, <strong>Public Health and Prevention Outcomes</strong>, and <strong>System Resilience and Sustainability</strong>.</p>
+      </div>
+    </div>
+    <div class="arch-col">
+      <div class="arch-head s6">06 — Health Domains</div>
+      <div class="arch-body">
+        <p class="arch-desc">Thematic areas integrating related services, programs and policies. Each <strong>Health Domain</strong> carries a profile within the IHL.</p>
+      </div>
+    </div>
   </div>
 
   <div class="feat-section">
@@ -760,6 +949,21 @@ h1 em {
         <div class="feat-card"><div class="feat-cat">AI intelligence</div><div class="feat-name">Policy Scenario Modelling</div><div class="feat-desc">AI models to simulate different policy scenarios and assess potential impact on health outcomes — a forward-looking lens on today's decisions.</div></div>
         <div class="feat-card"><div class="feat-cat">Global intelligence</div><div class="feat-name">Global Benchmarking &amp; Early Warning Alerts</div><div class="feat-desc">Flags emerging health trends and risks based on global benchmarks — providing timely, contextual alerts to policymakers before issues escalate.</div></div>
       </div>
+    </div>
+  </div>
+
+  <div class="laptop-container">
+    <div class="laptop-screen">
+      <div class="camera-dot"></div>
+      <div class="screen-content">
+        <video autoplay loop muted playsinline>
+          <source src="/Screen Recording 2026-05-21 at 1.51.51 PM.mov" type="video/mp4">
+          Your browser does not support the video tag.
+        </video>
+      </div>
+    </div>
+    <div class="laptop-base">
+      <div class="base-latch"></div>
     </div>
   </div>
 </div>
@@ -875,6 +1079,36 @@ h1 em {
     <div class="cf-copy">&copy; 2026 Varsha Nambiar &mdash; Inspired by the Art of Listening</div>
   </div>
 </footer>
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const sections = document.querySelectorAll('section[id]');
+    const navItems = document.querySelectorAll('.project-nav-item');
+
+    const observerOptions = {
+      root: null,
+      rootMargin: '-30% 0px -70% 0px',
+      threshold: 0
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          const id = entry.target.getAttribute('id');
+          navItems.forEach(item => {
+            if (item.getAttribute('href') === `#${id}`) {
+              item.classList.add('active');
+            } else {
+              item.classList.remove('active');
+            }
+          });
+        }
+      });
+    }, observerOptions);
+
+    sections.forEach(section => observer.observe(section));
+  });
+</script>
 
 </body>
 </html>

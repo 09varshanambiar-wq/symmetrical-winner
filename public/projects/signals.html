@@ -240,6 +240,7 @@
     background: var(--bio-blue-light);
     border: 1px solid var(--border);
     border-radius: 4px;
+    position: relative;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -868,6 +869,39 @@
     .hero-meta-row { flex-direction: column; gap: 1rem; }
   }
 
+  /* ── VERTICAL PROJECT NAV (on the right) ── */
+  .project-nav {
+    position: fixed; top: 50%; right: 2rem; transform: translateY(-50%);
+    z-index: 250; display: flex; flex-direction: column; gap: 1.5rem;
+    align-items: flex-end;
+  }
+  .project-nav-item {
+    display: flex; align-items: center; gap: 1rem;
+    text-decoration: none;
+  }
+  .project-nav-label {
+    font-family: var(--sans); font-size: 9px; text-transform: uppercase;
+    letter-spacing: 0.15em; color: var(--text-muted);
+    opacity: 0; transform: translateX(10px);
+    transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .project-nav-item:hover .project-nav-label { opacity: 1; transform: translateX(0); }
+  .project-nav-item.active .project-nav-label { opacity: 1; transform: translateX(0); color: var(--bio-blue); }
+  .project-nav-dot {
+    width: 6px; height: 6px; border-radius: 50%;
+    background: var(--text-muted); transition: all 0.3s;
+    border: 1px solid transparent;
+  }
+  .project-nav-item:hover .project-nav-dot {
+    background: var(--bio-blue); transform: scale(1.5);
+    box-shadow: 0 0 10px rgba(7, 54, 187, 0.4);
+  }
+  .project-nav-item.active .project-nav-dot {
+    background: var(--bio-blue); transform: scale(1.5);
+    box-shadow: 0 0 10px rgba(7, 54, 187, 0.4);
+  }
+  @media (max-width: 1024px) { .project-nav { display: none; } }
+
   /* ── UNIVERSAL HEADER ── */
   .main-header {
     position: fixed; top: 24px; left: 50%; transform: translateX(-50%);
@@ -982,6 +1016,45 @@
   <button class="header-cta">Grab a coffee</button>
 </header>
 
+<aside class="project-nav">
+  <a href="#context" class="project-nav-item">
+    <span class="project-nav-label">Context</span>
+    <div class="project-nav-dot"></div>
+  </a>
+  <a href="#approach" class="project-nav-item">
+    <span class="project-nav-label">Approach</span>
+    <div class="project-nav-dot"></div>
+  </a>
+  <a href="#methodology" class="project-nav-item">
+    <span class="project-nav-label">Methodology</span>
+    <div class="project-nav-dot"></div>
+  </a>
+  <a href="#field-research" class="project-nav-item">
+    <span class="project-nav-label">Field Research</span>
+    <div class="project-nav-dot"></div>
+  </a>
+  <a href="#insights" class="project-nav-item">
+    <span class="project-nav-label">Insights</span>
+    <div class="project-nav-dot"></div>
+  </a>
+  <a href="#kerala" class="project-nav-item">
+    <span class="project-nav-label">Kerala</span>
+    <div class="project-nav-dot"></div>
+  </a>
+  <a href="#solutions" class="project-nav-item">
+    <span class="project-nav-label">Solutions</span>
+    <div class="project-nav-dot"></div>
+  </a>
+  <a href="#outcomes" class="project-nav-item">
+    <span class="project-nav-label">Outcomes</span>
+    <div class="project-nav-dot"></div>
+  </a>
+  <a href="#reflection" class="project-nav-item">
+    <span class="project-nav-label">Reflection</span>
+    <div class="project-nav-dot"></div>
+  </a>
+</aside>
+
 <!-- HERO -->
 <section class="hero">
   <div class="hero-left">
@@ -1017,12 +1090,17 @@
 </section>
 
 <!-- SNEAK PEEK CTA BANNER -->
-<a href="https://www.figma.com/proto/c7JelKLXCZFRGNBfR6USpy/Bioabled-World?page-id=0%3A1&node-id=68-174&viewport=-1189%2C-3245%2C0.14&t=NFAKnfZtlejvJtLV-1&scaling=contain&content-scaling=fixed&starting-point-node-id=68%3A174&desktop-link-click-timestamp=1779289675842&desktop-ul-exp-bucket=po&desktop-ul-pref-conflict=1" target="_blank" rel="noopener noreferrer" style="display: flex; width: 100%; align-items: center; justify-content: center; padding: 18px; background: var(--bio-blue-light); color: var(--bio-blue); text-transform: uppercase; font-family: var(--sans); font-weight: 600; font-size: 13px; letter-spacing: 0.15em; text-decoration: none; border-bottom: 1px solid var(--border); transition: background 0.3s ease, color 0.3s ease;" onmouseover="this.style.background='var(--bio-blue)'; this.style.color='white';" onmouseout="this.style.background='var(--bio-blue-light)'; this.style.color='var(--bio-blue)';">
-  Take a sneak peek <span style="margin-left: 8px; font-size: 1.1em;">↗</span>
-</a>
+<div style="display: flex; width: 100%; border-bottom: 1px solid var(--border);">
+  <a href="https://www.figma.com/proto/c7JelKLXCZFRGNBfR6USpy/Bioabled-World?page-id=0%3A1&node-id=68-174&viewport=-1189%2C-3245%2C0.14&t=NFAKnfZtlejvJtLV-1&scaling=contain&content-scaling=fixed&starting-point-node-id=68%3A174" target="_blank" rel="noopener noreferrer" style="flex: 1; display: flex; align-items: center; justify-content: center; padding: 18px; background: var(--bio-blue-light); color: var(--bio-blue); text-transform: uppercase; font-family: var(--sans); font-weight: 600; font-size: 13px; letter-spacing: 0.15em; text-decoration: none; border-right: 1px solid var(--border); transition: background 0.3s ease, color 0.3s ease;" onmouseover="this.style.background='var(--bio-blue)'; this.style.color='white';" onmouseout="this.style.background='var(--bio-blue-light)'; this.style.color='var(--bio-blue)';">
+    Take a sneak peek
+  </a>
+  <a href="#" target="_blank" rel="noopener noreferrer" style="flex: 1; display: flex; align-items: center; justify-content: center; padding: 18px; background: var(--bio-blue-light); color: var(--bio-blue); text-transform: uppercase; font-family: var(--sans); font-weight: 600; font-size: 13px; letter-spacing: 0.15em; text-decoration: none; transition: background 0.3s ease, color 0.3s ease;" onmouseover="this.style.background='var(--bio-blue)'; this.style.color='white';" onmouseout="this.style.background='var(--bio-blue-light)'; this.style.color='var(--bio-blue)';">
+    Read full thesis
+  </a>
+</div>
 
 <!-- CONTEXT -->
-<section class="section">
+<section class="section" id="context">
   <div class="container">
     <p class="section-label">01 — Context</p>
     <div class="two-col">
@@ -1071,7 +1149,7 @@
 </section>
 
 <!-- APPROACH -->
-<section class="section">
+<section class="section" id="approach">
   <div class="container">
     <p class="section-label">02 — Approach & Framing</p>
     <div class="two-col reverse">
@@ -1103,7 +1181,7 @@
 </section>
 
 <!-- METHODOLOGY -->
-<section class="section" style="background: var(--bio-gray-light);">
+<section class="section" style="background: var(--bio-gray-light);" id="methodology">
   <div class="container">
     <p class="section-label">03 — Methodology</p>
     <h2 class="section-title" style="max-width: 600px;">A structured journey from signals <em>to solutions</em></h2>
@@ -1183,7 +1261,7 @@
 </section>
 
 <!-- FIELD RESEARCH -->
-<section class="section">
+<section class="section" id="field-research">
   <div class="container">
     <p class="section-label">04 — Field Research</p>
     <div class="two-col">
@@ -1228,7 +1306,7 @@
 </section>
 
 <!-- KEY INSIGHTS -->
-<section class="section" style="background: #1E3A8A;">
+<section class="section" style="background: #1E3A8A;" id="insights">
   <div class="container">
     <p class="section-label" style="color: rgba(255,255,255,0.4);">05 — Key Insights</p>
     <h2 class="section-title" style="color: #ffffff; max-width: 700px;">What the system<br>revealed about itself</h2>
@@ -1289,6 +1367,7 @@
   .carousel-image-container {
     height: 380px;
     border-radius: 8px;
+    border: none;
     overflow: hidden;
     cursor: zoom-in;
     box-shadow: 0 10px 30px rgba(0,0,0,0.05);
@@ -1402,87 +1481,10 @@
   }
 </script>
 
-<!-- SOLUTION 1: SIGNALS -->
-<section class="section">
-  <div class="container">
-    <p class="section-label">06 — Solution Set</p>
-    <h2 class="section-title" style="max-width: 700px; margin-bottom: 0.5rem;">A <em>multifaceted</em> response to the ever-growing bio-material industry</h2>
-    <p class="lead" style="margin-bottom: 5rem;">Two complementary solutions operate at different scales — a micro-level digital platform to democratise knowledge, and a macro-level systemic model to physically convene stakeholders in a region.</p>
-
-    <div class="solution-feature">
-      <div>
-        <div class="solution-badge">Solution 01 · Digital Platform</div>
-        <h3 class="solution-title">nature Signals</h3>
-        <p class="solution-desc">A living library to find, share, and innovate with bio-based, bio-inspired, and bio-mimetic materials. Signals is designed as a dynamic, growing repository — the world's largest of its kind for natural raw materials.</p>
-        <p class="solution-desc">Unlike static archives, Signals integrates End-Of-Life management as a core feature — requiring contributors to explain how their innovation degrades, composts, or re-enters the cycle. This makes circularity non-optional.</p>
-        <ul class="feature-list">
-          <li>80+ raw materials mapped in the Innovation Wheel with primary material, secondary additive, and outcome product layers</li>
-          <li>EOL (End-Of-Life) field required on every submission — shifting conversation from birth to full lifecycle</li>
-          <li>Searchable by material feel, outcome, innovator, industry sector, and phase of innovation</li>
-          <li>Collaboration portal connecting scientists, designers, architects, manufacturers, and researchers</li>
-          <li>Ownership and IP attribution visible — fostering open-source knowledge culture</li>
-          <li>Feedback loop (Reddit-style) enabling authentic community review of innovations</li>
-          <li>Tech partnership: NT Global. Validation: Mandag (Arto Sivonen, Helsinki)</li>
-        </ul>
-      </div>
-      <div style="display: flex; flex-direction: column; height: 100%;">
-        <div class="img-block" style="flex: 1; min-height: 500px; overflow: hidden; padding: 0; background: transparent; position: relative; display: flex; align-items: center; justify-content: center; border: none; box-shadow: none;">
-          <img src="/Nature%20signal%201%201.png" alt="Signals platform prototype — Innovation Wheel" style="width: 100%; height: 100%; object-fit: contain; object-position: center; transform: scale(1.55);" />
-          <span class="caption" style="position: absolute; bottom: -25px; left: 0; width: 100%; text-align: center;">Signals platform prototype — Innovation Wheel</span>
-        </div>
-      </div>
-    </div>
-
-    <!-- KOMBUCHA EXPERIMENT -->
-    <div style="background: var(--bio-blue-light); border-radius: 4px; padding: 2.5rem; margin-bottom: 4rem; border: 1px solid rgba(7,54,187,0.15);">
-      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 3rem; align-items: center;">
-        <div>
-          <div class="solution-badge" style="margin-bottom: 1rem;">Ongoing experiment — testing the wheel</div>
-          <h3 style="font-family: var(--serif); font-size: 1.6rem; font-weight: 300; color: var(--bio-blue-dark); margin-bottom: 0.75rem;">Kombucha leather</h3>
-          <p style="font-size: 14px; color: var(--bio-blue-dark); line-height: 1.8; font-weight: 300; margin-bottom: 1rem;">An experiment to test the Signals wheel in action — grown in a home environment over 28 days to form a SCOBY leather, then dried for 3 additional days. The resulting material is flexible with lower tensile strength — opening the door for lemongrass as a secondary additive. Batch 2 is underway.</p>
-          <p style="font-size: 13px; color: var(--bio-blue); font-style: italic;">Tea brew → SCOBY mother culture → 2.5 weeks → drying → initial prototype</p>
-        </div>
-        <div class="img-block" style="height: 200px; background: transparent; overflow: hidden; padding: 0; position: relative;">
-          <img src="/kombucha.png" alt="Kombucha leather prototype — Kochi, 2024" style="width: 100%; height: 100%; object-fit: contain; object-position: center;" />
-          <span class="caption" style="position: absolute; bottom: -25px; left: 0; width: 100%; text-align: center;">Kombucha leather prototype — Kochi, 2024</span>
-        </div>
-      </div>
-    </div>
-
-    <!-- SOLUTION 2 -->
-    <div class="solution-feature">
-      <div>
-        <div class="solution-badge" style="background: var(--bio-amber-light); color: var(--bio-amber);">Solution 02 · Systemic Model</div>
-        <h3 class="solution-title">Circular Materials Collective</h3>
-        <p class="solution-desc">A Public-Private Partnership (PPP) model designed for the state of Kerala — and replicable across any Indian state with agricultural biomass. The CMC acts as a catalyst for the bio-based materials industry by physically bringing together manufacturers, startups, scientists, government bodies, institutions, think tanks, architects, designers, and farmers.</p>
-        <p class="solution-desc">The model is grounded in the "co-opetition" philosophy — individual players benefit by sharing knowledge and infrastructure, while competing in the market. Kerala, with 2% of India's bio-tech startups but enormous agricultural biodiversity, is the ideal starting node.</p>
-        <ul class="feature-list">
-          <li>Cradle-to-cradle material lifecycle as the ideological foundation</li>
-          <li>Connects Kerala's 6-7 existing bio-material startups with traditional manufacturers (eg. Cocotuft, 100 years old) lacking innovation</li>
-          <li>Banana fibre working scenario: Cocotuft has an international bulk order — CMC matches them with Ar. Anooja J's research on banana pseudostem fibre extraction</li>
-          <li>Three-phase growth: awareness collaboration → material management → full PPP formation</li>
-          <li>Scalable as a hub-and-spoke model across Indian states with high biomass production</li>
-          <li>Aligned with KSUM, KSIDC, KSBB, Life Science Park, Rebuild Kerala Initiative</li>
-        </ul>
-      </div>
-      <div style="display: flex; flex-direction: column; gap: 1rem;">
-        <div class="img-block amber" style="height: 300px; overflow: hidden; padding: 0; background: transparent; position: relative;">
-          <img src="/CMCmodel.png" alt="Circular Materials Collective — systems model for Kerala" style="width: 100%; height: 100%; object-fit: contain; object-position: center;" />
-          <span class="caption" style="position: absolute; bottom: -25px; left: 0; width: 100%; text-align: center;">Circular Materials Collective — systems model for Kerala</span>
-        </div>
-        <div class="img-block coral" style="height: 200px; overflow: hidden; padding: 0; background: transparent; position: relative;">
-          <img src="/CMC2.png" alt="Kerala biomass potential — Tapioca, Banana, Coconut as primary feedstocks" style="width: 100%; height: 100%; object-fit: contain; object-position: center;" />
-          <span class="caption" style="position: absolute; bottom: -25px; left: 0; width: 100%; text-align: center;">Kerala biomass potential — Tapioca, Banana, Coconut as primary feedstocks</span>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
 <!-- KERALA IN FOCUS -->
-<section class="section" style="background: var(--bio-gray-light);">
+<section class="section" style="background: var(--bio-gray-light);" id="kerala">
   <div class="container">
-    <p class="section-label">07 — Kerala in Limelight</p>
+    <p class="section-label">06 — Kerala in Limelight</p>
     <div class="two-col">
       <div>
         <h2 class="section-title">A tropical <em>goldmine</em> waiting to be activated</h2>
@@ -1509,14 +1511,114 @@
         </div>
       </div>
 
-      <div style="display: flex; flex-direction: column; gap: 1rem;">
-        <div class="img-block" style="height: 260px; overflow: hidden; padding: 0; background: transparent; position: relative;">
-          <img src="/participatory.png" alt="Water Hyacinth — parasitic weed being converted to paper, fiber, pigments" style="width: 100%; height: 100%; object-fit: contain; object-position: center;" />
-          <span class="caption" style="position: absolute; bottom: -25px; left: 0; width: 100%; text-align: center;">Water Hyacinth — parasitic weed being converted to paper, fiber, pigments</span>
+
+    </div>
+  </div>
+</section>
+
+<!-- SOLUTION 1: SIGNALS -->
+<section class="section" id="solutions">
+  <div class="container">
+    <p class="section-label">07 — Solution Set</p>
+    <h2 class="section-title" style="max-width: 700px; margin-bottom: 0.5rem;">A <em>multifaceted</em> response to the ever-growing bio-material industry</h2>
+    <p class="lead" style="margin-bottom: 2rem;">A 3-fold solution was proposed. The Innovation wheel looks at a micro scale, with a macro level compilation of global bio-material data, while the Circular Materials Collective is a rather macro scale approach to physically bring together stakeholders in a micro environment.</p>
+
+    <div style="margin-bottom: 5rem;">
+      <div style="width: 100%; max-width: 600px; padding: 0; position: relative; text-align: left;">
+        <img src="/3%20fold.png" alt="3-fold solution" style="width: 100%; height: auto; object-fit: contain; object-position: left;" />
+        <span class="caption" style="display: block; margin-top: 0.5rem; font-size: 13px; color: var(--text-muted); font-style: italic;">Source: nature</span>
+      </div>
+    </div>
+
+    <!-- SOLUTION 1 -->
+    <div class="solution-feature">
+      <div>
+        <div class="solution-badge" style="background: #e6f4ea; color: #137333;">Solution 01 · Community</div>
+        <h3 class="solution-title">Participatory Workshop Model</h3>
+        <p class="solution-desc">A proven format designed to bridge the gap between complex bio-material research and public awareness. This model operates at the micro-environment scale, physically bringing stakeholders together.</p>
+        <p class="solution-desc">By creating an interactive space for the community, it accelerates adoption and feedback for new materials.</p>
+        <ul class="feature-list">
+          <li>Tested format: stakeholder talk + material interaction + thought collection</li>
+          <li>Successful pilot "Home Tomorrow" held at SEED Kochi</li>
+          <li>Over 50+ participants interacting with physical prototypes</li>
+          <li>Invitation received from TKM College of Architecture, Kollam to conduct a follow-up workshop</li>
+        </ul>
+      </div>
+      <div style="display: flex; flex-direction: column; gap: 1rem; height: 100%;">
+        <div class="img-block" style="flex: 1; min-height: 200px; overflow: hidden; padding: 0; background: transparent; position: relative; display: flex; align-items: center; justify-content: center; border: none; box-shadow: none;">
+          <img src="/participatory.png" alt="Participatory Workshop Model" style="width: 100%; height: 100%; object-fit: contain; object-position: center;" />
         </div>
-        <div class="img-block gray" style="height: 260px; overflow: hidden; padding: 0; background: transparent; position: relative;">
-          <img src="/BMC.png" alt="Agricultural residue opportunity — 2022–23 data" style="width: 100%; height: 100%; object-fit: contain; object-position: center;" />
-          <span class="caption" style="position: absolute; bottom: -25px; left: 0; width: 100%; text-align: center;">Agricultural residue opportunity — 2022–23 data</span>
+        <div class="img-block" style="flex: 1; min-height: 200px; overflow: hidden; padding: 0; background: transparent; position: relative; display: flex; align-items: center; justify-content: center; border: none; box-shadow: none;">
+          <img src="/BMC.png" alt="Business Model Canvas" style="width: 100%; height: 100%; object-fit: contain; object-position: center;" />
+        </div>
+      </div>
+    </div>
+
+    <!-- SOLUTION 2 -->
+    <div class="solution-feature">
+      <div>
+        <div class="solution-badge">Solution 02 · Digital Platform</div>
+        <h3 class="solution-title">nature Signals</h3>
+        <p class="solution-desc">A living library to find, share, and innovate with bio-based, bio-inspired, and bio-mimetic materials. Signals is designed as a dynamic, growing repository — the world's largest of its kind for natural raw materials.</p>
+        <p class="solution-desc">Unlike static archives, Signals integrates End-Of-Life management as a core feature — requiring contributors to explain how their innovation degrades, composts, or re-enters the cycle. This makes circularity non-optional.</p>
+        <ul class="feature-list">
+          <li>80+ raw materials mapped in the Innovation Wheel with primary material, secondary additive, and outcome product layers</li>
+          <li>EOL (End-Of-Life) field required on every submission — shifting conversation from birth to full lifecycle</li>
+          <li>Searchable by material feel, outcome, innovator, industry sector, and phase of innovation</li>
+          <li>Collaboration portal connecting scientists, designers, architects, manufacturers, and researchers</li>
+          <li>Ownership and IP attribution visible — fostering open-source knowledge culture</li>
+          <li>Feedback loop (Reddit-style) enabling authentic community review of innovations</li>
+          <li>Tech partnership: NT Global. Validation: Mandag (Arto Sivonen, Helsinki)</li>
+        </ul>
+      </div>
+      <div style="display: flex; flex-direction: column; height: 100%;">
+        <div class="img-block" style="flex: 1; min-height: 500px; overflow: visible; padding: 0; background: transparent; position: relative; display: flex; align-items: center; justify-content: center; border: none; box-shadow: none;">
+          <img src="/Nature%20signal%201%201.png" alt="Signals platform prototype — Innovation Wheel" style="width: 100%; height: 100%; object-fit: contain; object-position: center;" />
+          <span class="caption" style="position: absolute; bottom: -25px; left: 0; width: 100%; text-align: center;">Signals platform prototype — Innovation Wheel</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- KOMBUCHA EXPERIMENT -->
+    <div style="background: var(--bio-blue-light); border-radius: 4px; padding: 2.5rem; margin-bottom: 4rem; border: 1px solid rgba(7,54,187,0.15);">
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 3rem; align-items: center;">
+        <div>
+          <div class="solution-badge" style="margin-bottom: 1rem;">Ongoing experiment — testing the wheel</div>
+          <h3 style="font-family: var(--serif); font-size: 1.6rem; font-weight: 300; color: var(--bio-blue-dark); margin-bottom: 0.75rem;">Kombucha leather</h3>
+          <p style="font-size: 14px; color: var(--bio-blue-dark); line-height: 1.8; font-weight: 300; margin-bottom: 1rem;">An experiment to test the Signals wheel in action — grown in a home environment over 28 days to form a SCOBY leather, then dried for 3 additional days. The resulting material is flexible with lower tensile strength — opening the door for lemongrass as a secondary additive. Batch 2 is underway.</p>
+          <p style="font-size: 13px; color: var(--bio-blue); font-style: italic;">Tea brew → SCOBY mother culture → 2.5 weeks → drying → initial prototype</p>
+        </div>
+        <div class="img-block" style="height: 200px; background: transparent; overflow: hidden; padding: 0; position: relative;">
+          <img src="/kombucha.png" alt="Kombucha leather prototype — Kochi, 2024" style="width: 100%; height: 100%; object-fit: contain; object-position: center;" />
+          <span class="caption" style="position: absolute; bottom: -25px; left: 0; width: 100%; text-align: center;">Kombucha leather prototype — Kochi, 2024</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- SOLUTION 3 -->
+    <div class="solution-feature">
+      <div>
+        <div class="solution-badge" style="background: var(--bio-amber-light); color: var(--bio-amber);">Solution 03 · Systemic Model</div>
+        <h3 class="solution-title">Circular Materials Collective</h3>
+        <p class="solution-desc">A Public-Private Partnership (PPP) model designed for the state of Kerala — and replicable across any Indian state with agricultural biomass. The CMC acts as a catalyst for the bio-based materials industry by physically bringing together manufacturers, startups, scientists, government bodies, institutions, think tanks, architects, designers, and farmers.</p>
+        <p class="solution-desc">The model is grounded in the "co-opetition" philosophy — individual players benefit by sharing knowledge and infrastructure, while competing in the market. Kerala, with 2% of India's bio-tech startups but enormous agricultural biodiversity, is the ideal starting node.</p>
+        <ul class="feature-list">
+          <li>Cradle-to-cradle material lifecycle as the ideological foundation</li>
+          <li>Connects Kerala's 6-7 existing bio-material startups with traditional manufacturers (eg. Cocotuft, 100 years old) lacking innovation</li>
+          <li>Banana fibre working scenario: Cocotuft has an international bulk order — CMC matches them with Ar. Anooja J's research on banana pseudostem fibre extraction</li>
+          <li>Three-phase growth: awareness collaboration → material management → full PPP formation</li>
+          <li>Scalable as a hub-and-spoke model across Indian states with high biomass production</li>
+          <li>Aligned with KSUM, KSIDC, KSBB, Life Science Park, Rebuild Kerala Initiative</li>
+        </ul>
+      </div>
+      <div style="display: flex; flex-direction: column; gap: 1rem;">
+        <div class="img-block amber" style="height: 300px; overflow: hidden; padding: 0; background: transparent; position: relative;">
+          <img src="/CMCmodel.png" alt="Circular Materials Collective — systems model for Kerala" style="width: 100%; height: 100%; object-fit: contain; object-position: center;" />
+          <span class="caption" style="position: absolute; bottom: -25px; left: 0; width: 100%; text-align: center;">Circular Materials Collective — systems model for Kerala</span>
+        </div>
+        <div class="img-block coral" style="height: 300px; overflow: hidden; padding: 0; background: transparent; position: relative;">
+          <img src="/CMC2.png" alt="Kerala biomass potential — Tapioca, Banana, Coconut as primary feedstocks" style="width: 100%; height: 100%; object-fit: contain; object-position: center;" />
+          <span class="caption" style="position: absolute; bottom: -25px; left: 0; width: 100%; text-align: center;">Kerala biomass potential — Tapioca, Banana, Coconut as primary feedstocks</span>
         </div>
       </div>
     </div>
@@ -1524,7 +1626,7 @@
 </section>
 
 <!-- OUTCOMES -->
-<section class="section">
+<section class="section" id="outcomes">
   <div class="container">
     <p class="section-label">08 — Outcomes & Impact</p>
     <h2 class="section-title" style="max-width: 600px;">What this project <em>set in motion</em></h2>
@@ -1566,7 +1668,7 @@
 </section>
 
 <!-- REFLECTION -->
-<section class="section" style="background: var(--bio-gray-light);">
+<section class="section" style="background: var(--bio-gray-light);" id="reflection">
   <div class="container">
     <p class="section-label">09 — Reflection</p>
     <div class="two-col">
@@ -1640,6 +1742,36 @@
     <div class="cf-copy">© 2026 Varsha Nambiar — Inspired by the Art of Listening</div>
   </div>
 </footer>
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const sections = document.querySelectorAll('section[id]');
+    const navItems = document.querySelectorAll('.project-nav-item');
+
+    const observerOptions = {
+      root: null,
+      rootMargin: '-30% 0px -70% 0px',
+      threshold: 0
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          const id = entry.target.getAttribute('id');
+          navItems.forEach(item => {
+            if (item.getAttribute('href') === `#${id}`) {
+              item.classList.add('active');
+            } else {
+              item.classList.remove('active');
+            }
+          });
+        }
+      });
+    }, observerOptions);
+
+    sections.forEach(section => observer.observe(section));
+  });
+</script>
 
 </body>
 </html>

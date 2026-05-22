@@ -217,7 +217,7 @@ const Work = () => {
       title: "Business strategy design",
       projects: [
         { number: "04", title: "GravityOne Story", category: "Agency", image: "/work-1.png", span: "md:col-span-2" },
-        { number: "05", title: "The Absolute Business strategy", category: "Strategy", image: "/work-3.png", span: "md:col-span-2" }
+        { number: "05", title: "The Absolute Business strategy", category: "Strategy", image: "/work-3.png", link: "/projects/absolute-business-strategy.html", span: "md:col-span-2" }
       ]
     },
     {

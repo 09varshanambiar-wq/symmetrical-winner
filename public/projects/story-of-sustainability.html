@@ -201,6 +201,157 @@ ul li::before { content: "→"; position: absolute; left: 0; color: var(--brand)
 .cf-links a:hover { color: var(--brand); }
 .cf-copy { font-size: 9px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5em; color: var(--ink-4); opacity: 0.5; }
 
+/* --- Project Skimming Navigation --- */
+:root {
+  --theme-accent: var(--brand);
+  --theme-text: var(--ink, var(--text-primary, #1a1d2e));
+  --theme-mono: var(--mono, monospace);
+  --theme-sans: var(--sans, system-ui);
+}
+
+/* Shift existing project section dot navigation leftward to avoid overlay */
+.project-nav {
+  right: 6rem !important;
+}
+
+.project-pager-nav {
+  position: fixed;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 500;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-decoration: none;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.project-pager-nav.prev { left: 2.5rem; }
+.project-pager-nav.next { right: 2.5rem; }
+
+.project-pager-btn {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.4);
+  backdrop-filter: blur(12px) saturate(180%);
+  -webkit-backdrop-filter: blur(12px) saturate(180%);
+  border: 1px solid rgba(255, 255, 255, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--theme-text);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05), inset 0 1px 1px rgba(255, 255, 255, 0.8);
+  position: relative;
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.project-pager-btn svg {
+  width: 20px;
+  height: 20px;
+  stroke: currentColor;
+  stroke-width: 2.5;
+  fill: none;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  transition: transform 0.3s ease;
+}
+
+.project-pager-nav.prev:hover .project-pager-btn {
+  transform: translateX(-6px);
+  background: rgba(255, 255, 255, 0.6);
+  border-color: rgba(255, 255, 255, 0.8);
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
+  color: var(--theme-accent);
+}
+
+.project-pager-nav.next:hover .project-pager-btn {
+  transform: translateX(6px);
+  background: rgba(255, 255, 255, 0.6);
+  border-color: rgba(255, 255, 255, 0.8);
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
+  color: var(--theme-accent);
+}
+
+.project-pager-nav.prev:hover svg { transform: translateX(-2px); }
+.project-pager-nav.next:hover svg { transform: translateX(2px); }
+
+.project-pager-badge {
+  position: absolute;
+  top: -4px;
+  width: 20px;
+  height: 20px;
+  background: var(--theme-accent);
+  color: #ffffff;
+  font-family: var(--theme-mono);
+  font-size: 10px;
+  font-weight: 700;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  border: 1.5px solid #ffffff;
+  transition: all 0.3s ease;
+}
+
+.project-pager-nav.prev .project-pager-badge { right: -4px; }
+.project-pager-nav.next .project-pager-badge { left: -4px; }
+
+.project-pager-tooltip {
+  position: absolute;
+  background: rgba(26, 29, 46, 0.95);
+  backdrop-filter: blur(4px);
+  color: #ffffff;
+  padding: 6px 12px;
+  border-radius: 8px;
+  font-family: var(--theme-sans);
+  font-size: 11px;
+  font-weight: 500;
+  white-space: nowrap;
+  opacity: 0;
+  visibility: hidden;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  pointer-events: none;
+}
+
+.project-pager-nav.prev .project-pager-tooltip {
+  left: 72px;
+  transform: translateX(-10px);
+}
+
+.project-pager-nav.next .project-pager-tooltip {
+  right: 72px;
+  transform: translateX(10px);
+}
+
+.project-pager-nav:hover .project-pager-tooltip {
+  opacity: 1;
+  visibility: visible;
+  transform: translateX(0);
+}
+
+@media (max-width: 900px) {
+  .project-pager-nav {
+    top: auto;
+    bottom: 2rem;
+    transform: none;
+  }
+  .project-pager-nav.prev { left: 2rem; }
+  .project-pager-nav.next { right: 2rem; }
+  .project-pager-nav.prev:hover .project-pager-btn,
+  .project-pager-nav.next:hover .project-pager-btn {
+    transform: translateY(-4px);
+  }
+  .project-pager-nav.prev:hover svg,
+  .project-pager-nav.next:hover svg {
+    transform: none;
+  }
+  .project-pager-tooltip {
+    display: none;
+  }
+}
 </style>
 </head>
 <body>
@@ -237,6 +388,10 @@ ul li::before { content: "→"; position: absolute; left: 0; color: var(--brand)
       <div class="hero-meta" style="max-width: 1000px; margin-bottom: 3rem;">
         <div class="meta-item"><span class="meta-k">Authors</span><span class="meta-v">Pramoddini Warale & Varsha Nambiar</span></div>
         <div class="meta-item"><span class="meta-k">Focus</span><span class="meta-v">Systems Thinking · Bioregionalism · Ecological Perception</span></div>
+      </div>
+
+      <div style="margin: 4rem 0; text-align: center;">
+        <img src="/SOS_horizontal.png" alt="Choreography of Sustainability Overview" style="width: 100%; height: auto; border-radius: 40px; box-shadow: 0 20px 80px rgba(0,0,0,0.08);">
       </div>
 
       <div style="margin: 4rem 0; padding-left: 2rem; border-left: 4px solid var(--brand);">
@@ -720,6 +875,11 @@ ul li::before { content: "→"; position: absolute; left: 0; color: var(--brand)
         <div class="mw-title">Choreography of Sustainability</div>
         <div class="mw-cat">Inquiry · Systems Thinking</div>
       </a>
+      <a href="/projects/absolute-business-strategy.html" class="mw-card">
+        <div class="mw-num">05</div>
+        <div class="mw-title">The Absolute Business strategy</div>
+        <div class="mw-cat">Strategy · Bio-Intelligence</div>
+      </a>
     </div>
   </div>
 </section>
@@ -737,6 +897,21 @@ ul li::before { content: "→"; position: absolute; left: 0; color: var(--brand)
     <div class="cf-copy">© 2026 Varsha Nambiar — Inspired by the Art of Listening</div>
   </div>
 </footer>
+
+<a href="/projects/joulebug.html" class="project-pager-nav prev" aria-label="Previous project">
+  <div class="project-pager-btn">
+    <svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"></polyline></svg>
+    <div class="project-pager-badge">3</div>
+  </div>
+  <div class="project-pager-tooltip">Joulebug</div>
+</a>
+<a href="/projects/absolute-business-strategy.html" class="project-pager-nav next" aria-label="Next project">
+  <div class="project-pager-btn">
+    <svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"></polyline></svg>
+    <div class="project-pager-badge">1</div>
+  </div>
+  <div class="project-pager-tooltip">The Absolute Business strategy</div>
+</a>
 
 </body>
 </html>

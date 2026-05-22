@@ -57,8 +57,10 @@ body {
   display: flex; align-items: center; gap: 10px; color: var(--ink);
   text-decoration: none;
 }
-.logo-dot { width: 8px; height: 8px; background: var(--brand); border-radius: 50%; }
+.header-logo-img { height: 20px; width: auto; object-fit: contain; }
 .header-links { display: flex; gap: 32px; list-style: none; }
+.header-links li { padding-left: 0; margin-bottom: 0; font-size: inherit; }
+.header-links li::before { content: none !important; }
 .header-links a {
   font-size: 10px; font-weight: 700; text-transform: uppercase;
   letter-spacing: 0.15em; color: var(--ink-3); text-decoration: none; transition: 0.3s;
@@ -95,12 +97,83 @@ p { margin-bottom: 1.5rem; color: var(--ink-2); font-size: 1.1rem; }
 .quote-author { font-family: var(--mono); font-size: 12px; color: var(--ink-3); margin-top: 1rem; text-transform: uppercase; letter-spacing: 0.1em; }
 
 /* ── HERO ── */
-.hero { min-height: 80vh; display: flex; align-items: center; padding-top: 100px; padding-bottom: 40px; }
-.hero-title { font-size: 5rem; font-weight: 700; line-height: 1; letter-spacing: -0.04em; margin-bottom: 2rem; font-family: var(--serif); }
-.hero-meta { margin-top: 3rem; display: flex; flex-direction: column; gap: 1rem; border-top: 1px solid var(--border); padding-top: 2rem; }
-.meta-item { display: flex; gap: 2rem; padding-bottom: 0.5rem; }
-.meta-k { font-family: var(--mono); font-size: 10px; text-transform: uppercase; color: var(--ink-4); width: 120px; }
-.meta-v { font-size: 14px; font-weight: 500; color: var(--ink-2); }
+.hero {
+  min-height: 100vh;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  position: relative;
+  overflow: hidden;
+  padding: 6rem 0;
+  border-top: 0.5px solid var(--border);
+}
+.hero-left {
+  background: #064e3b; /* Theme dark green color */
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: 6rem 4.5rem 4rem;
+  position: relative;
+}
+.hero-left::before {
+  content: '';
+  position: absolute; inset: 0;
+  background: repeating-linear-gradient(
+    45deg, transparent, transparent 40px,
+    rgba(255,255,255,0.02) 40px, rgba(255,255,255,0.02) 41px
+  );
+  pointer-events: none;
+  z-index: 1;
+}
+.hero-left > * {
+  position: relative;
+  z-index: 2;
+}
+.hero-right {
+  position: relative;
+  overflow: hidden;
+  background: #ffffff;
+}
+.hero-right img {
+  width: 100%; height: 100%; object-fit: cover;
+  position: absolute; inset: 0;
+}
+.hero-eyebrow {
+  font-family: var(--sans); font-size: 11px;
+  letter-spacing: 0.15em; text-transform: uppercase;
+  color: rgba(255,255,255,0.5); margin-bottom: 1.5rem;
+  position: relative;
+}
+.hero-title {
+  font-family: var(--serif);
+  font-size: clamp(2.8rem, 5vw, 5rem);
+  line-height: 1.06; font-weight: 300;
+  letter-spacing: -0.02em; color: #ffffff;
+  margin-bottom: 1.25rem; position: relative;
+}
+.hero-title em {
+  font-style: italic; color: #34d399; font-weight: 300;
+}
+.hero-subtitle {
+  font-family: var(--serif); font-size: 1.05rem; font-weight: 300;
+  color: rgba(255,255,255,0.65); margin-bottom: 2.5rem;
+  position: relative; line-height: 1.7; max-width: 440px;
+}
+.hero-meta {
+  display: flex; flex-direction: column; gap: 0.5rem;
+  position: relative;
+  border-top: 1px solid rgba(255,255,255,0.12);
+  padding-top: 1.5rem;
+}
+.hero-meta-row { display: flex; gap: 2rem; }
+.meta-item { display: flex; flex-direction: column; gap: 2px; }
+.meta-label { font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; color: rgba(255,255,255,0.35); }
+.meta-value { font-size: 13px; color: rgba(255,255,255,0.75); font-weight: 300; }
+
+@media (max-width: 900px) {
+  .hero { grid-template-columns: 1fr; min-height: auto; }
+  .hero-left { min-height: 80vh; padding: 3rem 2rem; }
+  .hero-right { min-height: 50vw; }
+}
 
 /* ── IMAGE PLACEHOLDERS ── */
 .glass-card {
@@ -214,142 +287,62 @@ ul li::before { content: "→"; position: absolute; left: 0; color: var(--brand)
   right: 6rem !important;
 }
 
-.project-pager-nav {
-  position: fixed;
-  top: 50%;
-  transform: translateY(-50%);
-  z-index: 500;
+body { position: relative; }
+
+:root {
+  --pager-text-color: rgba(255, 255, 255, 0.55);
+  --pager-hover-color: #ffffff;
+}
+
+/* ── TOP-CENTER PROJECT PAGER ── */
+.project-pager-container {
+  position: absolute;
+  top: 120px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 400;
   display: flex;
-  flex-direction: column;
   align-items: center;
+  gap: 40px;
+  font-family: var(--serif), 'Cormorant Garamond', Georgia, serif;
+}
+
+.project-pager-link {
+  display: flex;
+  align-items: center;
+  gap: 12px;
   text-decoration: none;
-  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-}
-
-.project-pager-nav.prev { left: 2.5rem; }
-.project-pager-nav.next { right: 2.5rem; }
-
-.project-pager-btn {
-  width: 56px;
-  height: 56px;
-  border-radius: 50%;
-  background: rgba(255, 255, 255, 0.4);
-  backdrop-filter: blur(12px) saturate(180%);
-  -webkit-backdrop-filter: blur(12px) saturate(180%);
-  border: 1px solid rgba(255, 255, 255, 0.6);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: var(--theme-text);
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05), inset 0 1px 1px rgba(255, 255, 255, 0.8);
-  position: relative;
-  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-}
-
-.project-pager-btn svg {
-  width: 20px;
-  height: 20px;
-  stroke: currentColor;
-  stroke-width: 2.5;
-  fill: none;
-  stroke-linecap: round;
-  stroke-linejoin: round;
-  transition: transform 0.3s ease;
-}
-
-.project-pager-nav.prev:hover .project-pager-btn {
-  transform: translateX(-6px);
-  background: rgba(255, 255, 255, 0.6);
-  border-color: rgba(255, 255, 255, 0.8);
-  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
-  color: var(--theme-accent);
-}
-
-.project-pager-nav.next:hover .project-pager-btn {
-  transform: translateX(6px);
-  background: rgba(255, 255, 255, 0.6);
-  border-color: rgba(255, 255, 255, 0.8);
-  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
-  color: var(--theme-accent);
-}
-
-.project-pager-nav.prev:hover svg { transform: translateX(-2px); }
-.project-pager-nav.next:hover svg { transform: translateX(2px); }
-
-.project-pager-badge {
-  position: absolute;
-  top: -4px;
-  width: 20px;
-  height: 20px;
-  background: var(--theme-accent);
-  color: #ffffff;
-  font-family: var(--theme-mono);
-  font-size: 10px;
-  font-weight: 700;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
-  border: 1.5px solid #ffffff;
+  font-size: 24px;
+  font-style: italic;
+  font-weight: 400;
   transition: all 0.3s ease;
+  color: var(--pager-text-color);
 }
 
-.project-pager-nav.prev .project-pager-badge { right: -4px; }
-.project-pager-nav.next .project-pager-badge { left: -4px; }
-
-.project-pager-tooltip {
-  position: absolute;
-  background: rgba(26, 29, 46, 0.95);
-  backdrop-filter: blur(4px);
-  color: #ffffff;
-  padding: 6px 12px;
-  border-radius: 8px;
-  font-family: var(--theme-sans);
-  font-size: 11px;
-  font-weight: 500;
-  white-space: nowrap;
-  opacity: 0;
-  visibility: hidden;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-  pointer-events: none;
+.project-pager-link:hover {
+  color: var(--pager-hover-color);
+  transform: scale(1.05);
 }
 
-.project-pager-nav.prev .project-pager-tooltip {
-  left: 72px;
-  transform: translateX(-10px);
-}
-
-.project-pager-nav.next .project-pager-tooltip {
-  right: 72px;
-  transform: translateX(10px);
-}
-
-.project-pager-nav:hover .project-pager-tooltip {
-  opacity: 1;
-  visibility: visible;
-  transform: translateX(0);
+.project-pager-link svg {
+  width: 12px;
+  height: 20px;
+  fill: currentColor;
+  display: block;
 }
 
 @media (max-width: 900px) {
-  .project-pager-nav {
-    top: auto;
-    bottom: 2rem;
-    transform: none;
+  .project-pager-container {
+    top: 100px;
+    gap: 24px;
   }
-  .project-pager-nav.prev { left: 2rem; }
-  .project-pager-nav.next { right: 2rem; }
-  .project-pager-nav.prev:hover .project-pager-btn,
-  .project-pager-nav.next:hover .project-pager-btn {
-    transform: translateY(-4px);
+  .project-pager-link {
+    font-size: 20px;
+    gap: 8px;
   }
-  .project-pager-nav.prev:hover svg,
-  .project-pager-nav.next:hover svg {
-    transform: none;
-  }
-  .project-pager-tooltip {
-    display: none;
+  .project-pager-link svg {
+    width: 10px;
+    height: 16px;
   }
 }
 </style>
@@ -358,7 +351,7 @@ ul li::before { content: "→"; position: absolute; left: 0; color: var(--brand)
 
 <header class="main-header">
   <a href="/index.html" class="header-logo">
-    <div class="logo-dot"></div>
+    <img src="/logo%20icon.PNG" alt="Logo" class="header-logo-img" />
     Varsha Nambiar
   </a>
   <nav>
@@ -372,6 +365,21 @@ ul li::before { content: "→"; position: absolute; left: 0; color: var(--brand)
   <button class="header-cta">Grab a coffee</button>
 </header>
 
+<div class="project-pager-container">
+  <a href="/projects/joulebug.html" class="project-pager-link prev" aria-label="Previous project">
+    <span>3</span>
+    <svg viewBox="0 0 3 5">
+      <rect x="2" y="0" width="1" height="1" /><rect x="1" y="1" width="1" height="1" /><rect x="0" y="2" width="1" height="1" /><rect x="1" y="3" width="1" height="1" /><rect x="2" y="4" width="1" height="1" />
+    </svg>
+  </a>
+  <a href="/projects/absolute-business-strategy.html" class="project-pager-link next" aria-label="Next project">
+    <svg viewBox="0 0 3 5">
+      <rect x="0" y="0" width="1" height="1" /><rect x="1" y="1" width="1" height="1" /><rect x="2" y="2" width="1" height="1" /><rect x="1" y="3" width="1" height="1" /><rect x="0" y="4" width="1" height="1" />
+    </svg>
+    <span>5</span>
+  </a>
+</div>
+
 <aside class="chapter-nav">
   <a href="#ch1" class="chapter-nav-item"><span class="chapter-nav-label">Ch 01</span><div class="chapter-nav-dot"></div></a>
   <a href="#ch2" class="chapter-nav-item"><span class="chapter-nav-label">Ch 02</span><div class="chapter-nav-dot"></div></a>
@@ -383,24 +391,30 @@ ul li::before { content: "→"; position: absolute; left: 0; color: var(--brand)
 
 <main>
   <section class="hero">
-    <div class="wrap">
+    <div class="hero-left">
+      <div class="hero-eyebrow">The Inquiry</div>
       <h1 class="hero-title">Choreography of <em>Sustainability</em></h1>
-      <div class="hero-meta" style="max-width: 1000px; margin-bottom: 3rem;">
-        <div class="meta-item"><span class="meta-k">Authors</span><span class="meta-v">Pramoddini Warale & Varsha Nambiar</span></div>
-        <div class="meta-item"><span class="meta-k">Focus</span><span class="meta-v">Systems Thinking · Bioregionalism · Ecological Perception</span></div>
-      </div>
-
-      <div style="margin: 4rem 0; text-align: center;">
-        <img src="/SOS_horizontal.png" alt="Choreography of Sustainability Overview" style="width: 100%; height: auto; border-radius: 40px; box-shadow: 0 20px 80px rgba(0,0,0,0.08);">
-      </div>
-
-      <div style="margin: 4rem 0; padding-left: 2rem; border-left: 4px solid var(--brand);">
-        <div style="font-family: var(--mono); font-size: 11px; text-transform: uppercase; color: var(--ink-4); letter-spacing: 0.1em; margin-bottom: 0.5rem;">The Inquiry</div>
-        <div style="font-family: var(--serif); font-size: 2.5rem; line-height: 1.2; color: var(--ink);">
-          Investigating the interdependence of manmade and natural systems through sustainability and ecology.
+      <p class="hero-subtitle">Investigating the interdependence of manmade and natural systems through sustainability and ecology.</p>
+      <div class="hero-meta">
+        <div class="hero-meta-row">
+          <div class="meta-item">
+            <span class="meta-label">Authors</span>
+            <span class="meta-value">Pramoddini Warale & Varsha Nambiar</span>
+          </div>
+          <div class="meta-item">
+            <span class="meta-label">Focus</span>
+            <span class="meta-value">Systems Thinking · Bioregionalism · Ecological Perception</span>
+          </div>
         </div>
       </div>
+    </div>
+    <div class="hero-right">
+      <img src="/choreography.png" alt="Choreography of Sustainability Overview" />
+    </div>
+  </section>
 
+  <section class="methodology-section-container">
+    <div class="wrap">
       <div class="methodology-section" style="margin-bottom: 5rem;">
         <div class="eyebrow" style="margin-bottom: 1.5rem;">Methodology</div>
         <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 2.5rem; border-top: 1px solid var(--border); padding-top: 2rem;">
@@ -889,29 +903,29 @@ ul li::before { content: "→"; position: absolute; left: 0; color: var(--brand)
   <div class="cf-inner">
     <div class="cf-logo"><div class="cf-logo-dot"></div>Varsha Nambiar</div>
     <div class="cf-role">Multidisciplinary Design Strategist</div>
-    <div class="cf-links">
-      <a href="#">LinkedIn</a>
-      <a href="#">Instagram</a>
-      <a href="#">Portfolio</a>
+    <div class="cf-links" style="align-items: center;">
+      <a href="https://www.behance.net/varsha09/projects" target="_blank" rel="noopener noreferrer" title="Behance" style="display: flex;">
+        <svg style="width: 24px; height: 24px; fill: currentColor;" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+          <path d="M22 13.5h-4.5c.1.7.6 1.1 1.4 1.1.6 0 1.1-.3 1.3-.8h1.7c-.3 1.3-1.4 2.2-3 2.2-2.3 0-3.1-1.7-3.1-3.5s.9-3.5 3-3.5c2 0 3 1.5 3 3.5 0 .4 0 .7-.1 1zm-4.4-1.2h2.7c-.1-.7-.5-1.1-1.3-1.1-.8 0-1.3.4-1.4 1.1zm-8.8 4.2H4.4V8.5H9c1.9 0 2.8.9 2.8 2.2 0 1.1-.6 1.7-1.4 1.9.9.2 1.6.9 1.6 2.2.1 1.2-.8 2.2-2.7 2.2zM6.1 10v2.2H8.5c.7 0 1.2-.3 1.2-1.1 0-.7-.5-1.1-1.2-1.1H6.1zm0 3.7v1.8H9c.7 0 1.3-.3 1.3-1s-.5-1-1.3-1H6.1zm11.4-6.4h4.5v1.1h-4.5V7.3z"/>
+        </svg>
+      </a>
+      <a href="mailto:09varsha.nambiar@gmail.com" title="Gmail" style="display: flex;">
+        <svg style="width: 24px; height: 24px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round;" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+          <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
+          <polyline points="22,6 12,13 2,6"/>
+        </svg>
+      </a>
+      <a href="https://www.linkedin.com/in/varsha-nambiar?utm_source=share_via&utm_content=profile&utm_medium=member_android" target="_blank" rel="noopener noreferrer" title="LinkedIn" style="display: flex;">
+        <svg style="width: 24px; height: 24px; fill: currentColor;" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+          <path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.779-1.75-1.75s.784-1.75 1.75-1.75 1.75.779 1.75 1.75-.784 1.75-1.75 1.75zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/>
+        </svg>
+      </a>
     </div>
     <div class="cf-copy">© 2026 Varsha Nambiar — Inspired by the Art of Listening</div>
   </div>
 </footer>
 
-<a href="/projects/joulebug.html" class="project-pager-nav prev" aria-label="Previous project">
-  <div class="project-pager-btn">
-    <svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"></polyline></svg>
-    <div class="project-pager-badge">3</div>
-  </div>
-  <div class="project-pager-tooltip">Joulebug</div>
-</a>
-<a href="/projects/absolute-business-strategy.html" class="project-pager-nav next" aria-label="Next project">
-  <div class="project-pager-btn">
-    <svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"></polyline></svg>
-    <div class="project-pager-badge">1</div>
-  </div>
-  <div class="project-pager-tooltip">The Absolute Business strategy</div>
-</a>
+
 
 </body>
 </html>

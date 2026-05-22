@@ -16,7 +16,7 @@ const Glow = ({ className }) => (
 const Navigation = () => (
   <nav className="fixed top-6 left-1/2 -translate-x-1/2 w-[90%] max-w-5xl h-14 glass-nav rounded-none z-50 flex items-center justify-between px-8">
     <div className="font-display font-bold text-lg tracking-tight flex items-center gap-2">
-      <div className="w-2 h-2 bg-primary rounded-none animate-pulse" />
+      <img src="/logo icon.PNG" alt="Logo" className="h-5 w-auto object-contain" />
       Varsha Nambiar
     </div>
     <div className="hidden md:flex space-x-8 text-[10px] font-bold uppercase tracking-widest text-text/60">
@@ -125,11 +125,11 @@ const Hero = () => {
                 </div>
                 {/* SOS */}
                 <div className="w-[200px] h-[110px] flex-shrink-0 overflow-hidden bg-neutral-100 shadow-sm border border-black/5 group cursor-pointer">
-                  <img src="/SOS1.png" alt="SOS" className="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-110" />
+                  <img src="/choreography.png" alt="SOS" className="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-110" />
                 </div>
                 {/* Joulebug */}
                 <div className="w-[200px] h-[110px] flex-shrink-0 overflow-hidden bg-neutral-100 shadow-sm border border-black/5 group cursor-pointer">
-                  <img src="/joulebug.jpg" alt="Joulebug" className="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-110" />
+                  <img src="/joulebughero.png" alt="Joulebug" className="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-110" />
                 </div>
                 {/* GravityOne */}
                 <div className="w-[200px] h-[110px] flex-shrink-0 overflow-hidden bg-neutral-100 shadow-sm border border-black/5 group cursor-pointer">
@@ -210,7 +210,7 @@ const Work = () => {
       projects: [
         { number: "01", title: "Intelligent Policy Platform", category: "Product", image: "/IPP cover.png", link: "/projects/intelligent-policy-platform.html", span: "md:col-span-2" },
         { number: "02", title: "Signals", category: "Thesis", image: "/leather signal .png", link: "/projects/signals.html", span: "md:col-span-1" },
-        { number: "03", title: "Story of Sustainability", category: "Inquiry", image: "/SOS1.png", link: "/projects/story-of-sustainability.html", span: "md:col-span-1" }
+        { number: "03", title: "Story of Sustainability", category: "Inquiry", image: "/choreography.png", link: "/projects/story-of-sustainability.html", span: "md:col-span-1" }
       ]
     },
     {
@@ -224,7 +224,7 @@ const Work = () => {
       title: "Behaviours & Research Design",
       projects: [
         { number: "06", title: "The Choice Paradox", category: "Research", image: "/work-6.png", span: "md:col-span-1" },
-        { number: "07", title: "Joulebug Case", category: "Behavioral", image: "/joulebug.jpg", link: "/projects/joulebug.html", span: "md:col-span-3" }
+        { number: "07", title: "Joulebug Case", category: "Behavioral", image: "/joulebughero.png", link: "/projects/joulebug.html", span: "md:col-span-3" }
       ]
     }
   ];
@@ -311,11 +311,13 @@ const SystemBreaker = () => (
   </section>
 );
 
-const WonderlandCard = ({ title, subtitle, bgClass, image, link }) => {
+const WonderlandCard = ({ title, subtitle, bgClass, image, link, external = false, objectFit = "cover", showGradient = true, darkText = false }) => {
   const CardWrapper = link ? motion.a : motion.div;
   return (
     <CardWrapper 
       href={link}
+      target={external ? "_blank" : undefined}
+      rel={external ? "noopener noreferrer" : undefined}
       whileHover={{ scale: 1.02 }}
       className={`relative aspect-[4/3] rounded-none overflow-hidden glass-card group cursor-pointer block ${bgClass}`}
     >
@@ -323,16 +325,18 @@ const WonderlandCard = ({ title, subtitle, bgClass, image, link }) => {
         <img 
           src={image} 
           alt={title} 
-          className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-110" 
+          className={`absolute inset-0 w-full h-full ${objectFit === "contain" ? "object-contain" : "object-cover"} transition-transform duration-700 ease-out group-hover:scale-110`} 
         />
       )}
-      <div className={`absolute inset-0 bg-gradient-to-t ${image ? 'from-black/80 via-black/20 to-transparent' : 'from-black/20 to-transparent opacity-0 group-hover:opacity-100'} transition-opacity`} />
+      {showGradient && (
+        <div className={`absolute inset-0 bg-gradient-to-t ${image ? 'from-black/80 via-black/20 to-transparent' : 'from-black/20 to-transparent opacity-0 group-hover:opacity-100'} transition-opacity`} />
+      )}
       <div className="absolute bottom-8 left-8 z-10">
-        <p className={`text-[10px] font-black uppercase tracking-widest mb-2 ${image ? 'text-white/80' : 'text-text/40'}`}>{subtitle}</p>
-        <h4 className={`text-xl font-bold transition-colors ${image ? 'text-white group-hover:text-white/80' : 'text-secondary group-hover:text-primary'}`}>{title}</h4>
+        <p className={`text-[10px] font-black uppercase tracking-widest mb-2 ${darkText ? 'text-secondary/60' : image ? 'text-white/80' : 'text-text/40'}`}>{subtitle}</p>
+        <h4 className={`text-xl font-bold transition-colors ${darkText ? 'text-secondary group-hover:text-primary' : image ? 'text-white group-hover:text-white/80' : 'text-secondary group-hover:text-primary'}`}>{title}</h4>
       </div>
       <div className="absolute top-8 right-8 w-10 h-10 glass-card rounded-none flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all z-10">
-        <Plus size={16} className={image ? "text-white" : "text-primary"} />
+        <Plus size={16} className={darkText ? "text-primary" : image ? "text-white" : "text-primary"} />
       </div>
     </CardWrapper>
   );
@@ -351,9 +355,13 @@ const Wonderlands = () => (
         <WonderlandCard 
           title="Human Gaze Aversion to Metacognition"
           subtitle="Metacognition Inquiry"
-          bgClass="bg-white/50"
+          bgClass="bg-white"
           image="/metacognition.avif"
           link="https://www.behance.net/gallery/147242677/Metacognition-in-gaze-aversion"
+          external={true}
+          objectFit="contain"
+          showGradient={false}
+          darkText={true}
         />
         <WonderlandCard 
           title="The leafling"
@@ -482,9 +490,22 @@ const Contact = () => (
         Would you like to dive into a conversation?
       </h2>
       <div className="flex justify-center items-center gap-8">
+        {/* Behance Button */}
+        <a 
+          href="https://www.behance.net/varsha09/projects" 
+          target="_blank" 
+          rel="noopener noreferrer"
+          title="Behance"
+          className="w-16 h-16 rounded-full bg-white/10 backdrop-blur-md border border-white/20 hover:bg-white hover:text-black hover:border-white text-white transition-all duration-300 flex items-center justify-center hover:scale-110 active:scale-95 shadow-lg group"
+        >
+          <svg className="w-6 h-6 fill-current group-hover:scale-110 transition-transform duration-300" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path d="M22 13.5h-4.5c.1.7.6 1.1 1.4 1.1.6 0 1.1-.3 1.3-.8h1.7c-.3 1.3-1.4 2.2-3 2.2-2.3 0-3.1-1.7-3.1-3.5s.9-3.5 3-3.5c2 0 3 1.5 3 3.5 0 .4 0 .7-.1 1zm-4.4-1.2h2.7c-.1-.7-.5-1.1-1.3-1.1-.8 0-1.3.4-1.4 1.1zm-8.8 4.2H4.4V8.5H9c1.9 0 2.8.9 2.8 2.2 0 1.1-.6 1.7-1.4 1.9.9.2 1.6.9 1.6 2.2.1 1.2-.8 2.2-2.7 2.2zM6.1 10v2.2H8.5c.7 0 1.2-.3 1.2-1.1 0-.7-.5-1.1-1.2-1.1H6.1zm0 3.7v1.8H9c.7 0 1.3-.3 1.3-1s-.5-1-1.3-1H6.1zm11.4-6.4h4.5v1.1h-4.5V7.3z"/>
+          </svg>
+        </a>
+
         {/* Gmail Button */}
         <a 
-          href="mailto:hello@varshanambiar.com" 
+          href="mailto:09varsha.nambiar@gmail.com" 
           title="Gmail"
           className="w-16 h-16 rounded-full bg-white/10 backdrop-blur-md border border-white/20 hover:bg-white hover:text-black hover:border-white text-white transition-all duration-300 flex items-center justify-center hover:scale-110 active:scale-95 shadow-lg group"
         >
@@ -493,7 +514,7 @@ const Contact = () => (
         
         {/* LinkedIn Button */}
         <a 
-          href="https://linkedin.com" 
+          href="https://www.linkedin.com/in/varsha-nambiar?utm_source=share_via&utm_content=profile&utm_medium=member_android" 
           target="_blank" 
           rel="noopener noreferrer"
           title="LinkedIn"
@@ -501,21 +522,6 @@ const Contact = () => (
         >
           <svg className="w-6 h-6 fill-current group-hover:scale-110 transition-transform duration-300" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
             <path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.779-1.75-1.75s.784-1.75 1.75-1.75 1.75.779 1.75 1.75-.784 1.75-1.75 1.75zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/>
-          </svg>
-        </a>
-
-        {/* Instagram Button */}
-        <a 
-          href="https://instagram.com" 
-          target="_blank" 
-          rel="noopener noreferrer"
-          title="Instagram"
-          className="w-16 h-16 rounded-full bg-white/10 backdrop-blur-md border border-white/20 hover:bg-white hover:text-black hover:border-white text-white transition-all duration-300 flex items-center justify-center hover:scale-110 active:scale-95 shadow-lg group"
-        >
-          <svg className="w-6 h-6 stroke-current fill-none group-hover:scale-110 transition-transform duration-300" viewBox="0 0 24 24" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" xmlns="http://www.w3.org/2000/svg">
-            <rect x="2" y="2" width="20" height="20" rx="5" ry="5"/>
-            <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/>
-            <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/>
           </svg>
         </a>
       </div>
@@ -540,10 +546,41 @@ const Footer = () => (
         Multidisciplinary design strategist
       </p>
       
-      <div className="flex justify-center space-x-12 text-[10px] font-black uppercase tracking-widest text-text/40 mb-12">
-        <a href="#" className="hover:text-primary transition-colors">LinkedIn</a>
-        <a href="#" className="hover:text-primary transition-colors">Instagram</a>
-        <a href="#" className="hover:text-primary transition-colors">Portfolio</a>
+      <div className="flex justify-center items-center space-x-12 text-text/40 mb-12">
+        {/* Behance Link */}
+        <a 
+          href="https://www.behance.net/varsha09/projects" 
+          target="_blank" 
+          rel="noopener noreferrer" 
+          title="Behance"
+          className="hover:text-primary hover:scale-110 transition-all duration-300 flex items-center justify-center p-2"
+        >
+          <svg className="w-6 h-6 fill-current" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path d="M22 13.5h-4.5c.1.7.6 1.1 1.4 1.1.6 0 1.1-.3 1.3-.8h1.7c-.3 1.3-1.4 2.2-3 2.2-2.3 0-3.1-1.7-3.1-3.5s.9-3.5 3-3.5c2 0 3 1.5 3 3.5 0 .4 0 .7-.1 1zm-4.4-1.2h2.7c-.1-.7-.5-1.1-1.3-1.1-.8 0-1.3.4-1.4 1.1zm-8.8 4.2H4.4V8.5H9c1.9 0 2.8.9 2.8 2.2 0 1.1-.6 1.7-1.4 1.9.9.2 1.6.9 1.6 2.2.1 1.2-.8 2.2-2.7 2.2zM6.1 10v2.2H8.5c.7 0 1.2-.3 1.2-1.1 0-.7-.5-1.1-1.2-1.1H6.1zm0 3.7v1.8H9c.7 0 1.3-.3 1.3-1s-.5-1-1.3-1H6.1zm11.4-6.4h4.5v1.1h-4.5V7.3z"/>
+          </svg>
+        </a>
+
+        {/* Gmail Link */}
+        <a 
+          href="mailto:09varsha.nambiar@gmail.com" 
+          title="Gmail"
+          className="hover:text-primary hover:scale-110 transition-all duration-300 flex items-center justify-center p-2"
+        >
+          <Mail size={24} />
+        </a>
+
+        {/* LinkedIn Link */}
+        <a 
+          href="https://www.linkedin.com/in/varsha-nambiar?utm_source=share_via&utm_content=profile&utm_medium=member_android" 
+          target="_blank" 
+          rel="noopener noreferrer" 
+          title="LinkedIn"
+          className="hover:text-primary hover:scale-110 transition-all duration-300 flex items-center justify-center p-2"
+        >
+          <svg className="w-6 h-6 fill-current" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.779-1.75-1.75s.784-1.75 1.75-1.75 1.75.779 1.75 1.75-.784 1.75-1.75 1.75zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/>
+          </svg>
+        </a>
       </div>
 
       <div className="text-[9px] font-bold opacity-20 uppercase tracking-[0.5em]">

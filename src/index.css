@@ -96,3 +96,49 @@
   animation-play-state: paused;
 }
 
+/* Season Animations */
+@keyframes fall {
+  0% { transform: translateY(-50px) rotate(0deg); opacity: 0; }
+  10% { opacity: 1; }
+  90% { opacity: 1; }
+  100% { transform: translateY(105vh) rotate(360deg); opacity: 0; }
+}
+@keyframes sway {
+  0%, 100% { transform: translateX(0); }
+  50% { transform: translateX(50px); }
+}
+@keyframes fly {
+  0% { left: -10%; }
+  100% { left: 110%; }
+}
+@keyframes flap {
+  0%, 100% { transform: scaleY(1); }
+  50% { transform: scaleY(0.3); }
+}
+@keyframes rain-fall {
+  0% { background-position: 0 0; }
+  100% { background-position: 40px 80px; }
+}
+
+.animate-fall {
+  animation-name: fall;
+}
+.animate-sway {
+  animation-name: sway;
+}
+.animate-flap {
+  animation: flap 0.3s ease-in-out infinite;
+}
+
+.rain-pattern {
+  background: repeating-linear-gradient(
+    105deg,
+    rgba(255, 255, 255, 0) 0px,
+    rgba(255, 255, 255, 0) 19px,
+    rgba(59, 130, 246, 0.12) 19px,
+    rgba(59, 130, 246, 0.12) 20px
+  );
+  background-size: 40px 80px;
+  animation: rain-fall 0.6s linear infinite;
+}
+

@@ -13,6 +13,124 @@ const Glow = ({ className }) => (
   />
 );
 
+const BirdSVG = () => (
+  <svg viewBox="0 0 64 64" className="w-full h-full fill-current">
+    <path d="M32,24 C38,12 50,12 60,26 C48,27 38,32 32,44 C26,32 16,27 4,26 C14,12 26,12 32,24 Z" />
+  </svg>
+);
+
+const SummerOverlay = () => {
+  return (
+    <div className="absolute inset-0 pointer-events-none z-[45] overflow-hidden">
+      {/* Real Bird */}
+      <div 
+        className="absolute w-8 h-8 text-primary/75"
+        style={{
+          top: '15%',
+          animation: 'fly 10s linear infinite',
+          animationDelay: '1.5s',
+        }}
+      >
+        <div className="animate-flap" style={{ animationDuration: '0.25s', animationIterationCount: 'infinite' }}>
+          <BirdSVG />
+        </div>
+      </div>
+      
+      {/* Reflection Bird */}
+      <div 
+        className="absolute w-8 h-8 text-primary/20 filter blur-[1px]"
+        style={{
+          top: '65%',
+          animation: 'fly 10s linear infinite',
+          animationDelay: '1.5s',
+          transform: 'scaleY(-1)',
+        }}
+      >
+        <div className="animate-flap opacity-50" style={{ animationDuration: '0.25s', animationIterationCount: 'infinite' }}>
+          <BirdSVG />
+        </div>
+      </div>
+    </div>
+  );
+};
+
+const ParticleOverlay = ({ type }) => {
+  const [particles, setParticles] = React.useState([]);
+
+  React.useEffect(() => {
+    const count = type === 'rainy' ? 60 : (type === 'spring' || type === 'autumn') ? 18 : 0;
+    const items = Array.from({ length: count }).map((_, i) => ({
+      id: i,
+      left: Math.random() * 100,
+      delay: Math.random() * 5,
+      duration: type === 'rainy' ? (1.2 + Math.random() * 0.8) : (6 + Math.random() * 8),
+      size: type === 'rainy' ? (1 + Math.random() * 2) : (12 + Math.random() * 14),
+      rotation: Math.random() * 360,
+      swayDelay: Math.random() * 2,
+    }));
+    setParticles(items);
+  }, [type]);
+
+  if (type === 'summer' || !type) return null;
+
+  return (
+    <div className="fixed inset-0 pointer-events-none z-[45] overflow-hidden">
+      {particles.map(p => {
+        let child = null;
+        if (type === 'spring') {
+          // Cherry blossom / pink flower petal
+          child = (
+            <svg viewBox="0 0 24 24" fill="#FFB7C5" className="opacity-70 w-full h-full">
+              <path d="M12,2 C10,5 6,5 6,8 C6,11 9,12 12,14 C15,12 18,11 18,8 C18,5 14,5 12,2 Z" />
+            </svg>
+          );
+        } else if (type === 'autumn') {
+          // Orange / brown leaf
+          child = (
+            <svg viewBox="0 0 24 24" fill="#D36B28" className="opacity-75 w-full h-full">
+              <path d="M17,3 C12,3 9,8 9,12 C9,14 10,15 12,17 C16,15 19,10 19,6 C19,4 18,3 17,3 Z M7,17 C5,17 3,19 3,21 C5,21 7,19 7,17 Z" />
+            </svg>
+          );
+        } else if (type === 'rainy') {
+          // Blue rain line
+          child = (
+            <div className="w-[1.5px] h-[35px] bg-blue-400/40 rounded-full rotate-[15deg]" />
+          );
+        }
+
+        return (
+          <div
+            key={p.id}
+            className="absolute top-[-50px] animate-fall"
+            style={{
+              left: `${p.left}%`,
+              width: `${p.size}px`,
+              height: `${p.size}px`,
+              animationDelay: `${p.delay}s`,
+              animationDuration: `${p.duration}s`,
+              animationIterationCount: 'infinite',
+              animationTimingFunction: 'linear',
+              transform: `rotate(${p.rotation}deg)`,
+            }}
+          >
+            <div 
+              className={type !== 'rainy' ? "animate-sway" : ""} 
+              style={{
+                animationDuration: '3s',
+                animationIterationCount: 'infinite',
+                animationTimingFunction: 'ease-in-out',
+                animationDelay: `${p.swayDelay}s`
+              }}
+            >
+              {child}
+            </div>
+          </div>
+        );
+      })}
+    </div>
+  );
+};
+
 const Navigation = () => (
   <nav className="fixed top-6 left-1/2 -translate-x-1/2 w-[90%] max-w-5xl h-14 glass-nav rounded-none z-50 flex items-center justify-between px-8">
     <div className="font-display font-bold text-lg tracking-tight flex items-center gap-2">
@@ -31,7 +149,50 @@ const Navigation = () => (
   </nav>
 );
 
-const Hero = () => {
+const Hero = ({ season, seasonsEnabled, setSeasonsEnabled }) => {
+  const marqueeProjects = [
+    {
+      title: "Intelligent Policy Platform",
+      link: "/projects/intelligent-policy-platform.html",
+      image: "/IPP cover.png"
+    },
+    {
+      title: "Signals",
+      link: "/projects/signals.html",
+      image: "/leather signal .png"
+    },
+    {
+      title: "Story of Sustainability",
+      link: "/projects/story-of-sustainability.html",
+      image: "/choreography.png"
+    },
+    {
+      title: "The Absolute Business strategy",
+      link: "/projects/absolute-business-strategy.html",
+      image: "/work-3.png"
+    },
+    {
+      title: "The Choice Paradox",
+      link: "/projects/choice-paradox.html",
+      image: "/work-6.png"
+    },
+    {
+      title: "Joulebug Case",
+      link: "/projects/joulebug.html",
+      image: "/Joulebugcoverfinal.jpg.avif"
+    },
+    {
+      title: "The leafling",
+      link: "/The Leafling.html",
+      image: "/Leafling.png"
+    },
+    {
+      title: "Permaculture Design",
+      link: "/projects/permaculture-design.html",
+      image: "/Permaculture.jpeg"
+    }
+  ];
+
   useEffect(() => {
     try {
       if (window.$ && window.$('.ripple-container').ripples) {
@@ -66,6 +227,60 @@ const Hero = () => {
     };
   }, []);
 
+  // Rainy ripples loop
+  useEffect(() => {
+    if (season !== 'rainy' || !seasonsEnabled) return;
+    
+    const interval = setInterval(() => {
+      const hero = document.querySelector('.ripple-container');
+      if (hero && window.$ && window.$(hero).ripples) {
+        const width = hero.clientWidth;
+        const height = hero.clientHeight;
+        const x = Math.random() * width;
+        const y = Math.random() * height;
+        window.$(hero).ripples('drop', x, y, 10 + Math.random() * 20, 0.01 + Math.random() * 0.02);
+      }
+    }, 180);
+
+    return () => clearInterval(interval);
+  }, [season, seasonsEnabled]);
+
+  // Summer birds ripples path
+  useEffect(() => {
+    if (season !== 'summer' || !seasonsEnabled) return;
+
+    let birdX = 0;
+    const flyBird = () => {
+      birdX = 0;
+      const interval = setInterval(() => {
+        const hero = document.querySelector('.ripple-container');
+        if (hero && window.$ && window.$(hero).ripples) {
+          const width = hero.clientWidth;
+          const height = hero.clientHeight;
+          const y = height * 0.65;
+          const x = (birdX / 100) * width;
+          
+          window.$(hero).ripples('drop', x, y, 22, 0.01);
+          
+          birdX += 2;
+          if (birdX > 100) {
+            clearInterval(interval);
+          }
+        } else {
+          clearInterval(interval);
+        }
+      }, 200); // sync with 10s fly animation
+    };
+
+    const initialTimeout = setTimeout(flyBird, 1500);
+    const mainInterval = setInterval(flyBird, 15000);
+
+    return () => {
+      clearTimeout(initialTimeout);
+      clearInterval(mainInterval);
+    };
+  }, [season, seasonsEnabled]);
+
   return (
     <section 
       className="relative min-h-screen flex items-center pt-20 px-6 overflow-hidden ripple-container"
@@ -73,6 +288,9 @@ const Hero = () => {
     >
       <Glow className="top-20 left-10 w-[500px] h-[500px] bg-primary" />
       <Glow className="bottom-20 right-10 w-[600px] h-[600px] bg-warning/30" />
+      
+      {/* Summer birds overlay */}
+      {(season === 'summer' && seasonsEnabled) && <SummerOverlay />}
       
       <div className="max-w-7xl mx-auto z-10 text-center pointer-events-none w-full">
         <motion.div
@@ -115,37 +333,60 @@ const Hero = () => {
           <div className="animate-marquee flex whitespace-nowrap gap-6">
             {[...Array(3)].map((_, i) => (
               <React.Fragment key={i}>
-                {/* IPP */}
-                <div className="w-[200px] h-[110px] flex-shrink-0 overflow-hidden bg-neutral-100 shadow-sm border border-black/5 group cursor-pointer">
-                  <img src="/IPP cover.png" alt="IPP" className="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-110" />
-                </div>
-                {/* Signals */}
-                <div className="w-[200px] h-[110px] flex-shrink-0 overflow-hidden bg-neutral-100 shadow-sm border border-black/5 group cursor-pointer">
-                  <img src="/leather signal .png" alt="Signals" className="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-110" />
-                </div>
-                {/* SOS */}
-                <div className="w-[200px] h-[110px] flex-shrink-0 overflow-hidden bg-neutral-100 shadow-sm border border-black/5 group cursor-pointer">
-                  <img src="/choreography.png" alt="SOS" className="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-110" />
-                </div>
-                {/* Joulebug */}
-                <div className="w-[200px] h-[110px] flex-shrink-0 overflow-hidden bg-neutral-100 shadow-sm border border-black/5 group cursor-pointer">
-                  <img src="/joulebughero.png" alt="Joulebug" className="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-110" />
-                </div>
-                {/* GravityOne */}
-                <div className="w-[200px] h-[110px] flex-shrink-0 overflow-hidden bg-neutral-100 shadow-sm border border-black/5 group cursor-pointer">
-                  <img src="/work-1.png" alt="GravityOne" className="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-110" />
-                </div>
-                {/* Absolute */}
-                <div className="w-[200px] h-[110px] flex-shrink-0 overflow-hidden bg-neutral-100 shadow-sm border border-black/5 group cursor-pointer">
-                  <img src="/work-3.png" alt="Absolute" className="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-110" />
-                </div>
-                {/* Choice Paradox */}
-                <div className="w-[200px] h-[110px] flex-shrink-0 overflow-hidden bg-neutral-100 shadow-sm border border-black/5 group cursor-pointer">
-                  <img src="/work-6.png" alt="Choice Paradox" className="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-110" />
-                </div>
+                {marqueeProjects.map((project, idx) => {
+                  const imageFilter = (season === 'rainy' && seasonsEnabled) ? 'brightness(0.7) contrast(1.1) saturate(0.8)' : 'none';
+                  
+                  if (project.link) {
+                    return (
+                      <a
+                        key={`${i}-${idx}`}
+                        href={project.link}
+                        target={project.external ? "_blank" : undefined}
+                        rel={project.external ? "noopener noreferrer" : undefined}
+                        className="w-[200px] h-[110px] flex-shrink-0 overflow-hidden bg-neutral-100 shadow-sm border border-black/5 group cursor-pointer relative block"
+                      >
+                        <img 
+                          src={project.image} 
+                          alt={project.title} 
+                          className="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-110" 
+                          style={{ filter: imageFilter }} 
+                        />
+                        {(season === 'rainy' && seasonsEnabled) && <div className="absolute inset-0 rain-pattern pointer-events-none" />}
+                      </a>
+                    );
+                  } else {
+                    return (
+                      <div
+                        key={`${i}-${idx}`}
+                        className="w-[200px] h-[110px] flex-shrink-0 overflow-hidden bg-neutral-100 shadow-sm border border-black/5 group relative block cursor-default"
+                      >
+                        <img 
+                          src={project.image} 
+                          alt={project.title} 
+                          className="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-110" 
+                          style={{ filter: imageFilter }} 
+                        />
+                        {(season === 'rainy' && seasonsEnabled) && <div className="absolute inset-0 rain-pattern pointer-events-none" />}
+                      </div>
+                    );
+                  }
+                })}
               </React.Fragment>
             ))}
           </div>
+        </div>
+
+        {/* Toggle Button */}
+        <div className="mt-16 flex justify-center pointer-events-auto">
+          <button 
+            onClick={() => setSeasonsEnabled(!seasonsEnabled)}
+            className="flex items-center gap-3 text-[10px] font-bold uppercase tracking-widest text-secondary hover:text-primary transition-all duration-300 cursor-pointer border-none bg-transparent"
+          >
+            <span>Enjoy seasons much?</span>
+            <div className={`w-8 h-4 rounded-full p-0.5 transition-colors duration-300 flex items-center ${seasonsEnabled ? 'bg-primary' : 'bg-neutral-300/40'}`}>
+              <div className={`w-3 h-3 bg-white rounded-full transition-transform duration-300 ${seasonsEnabled ? 'translate-x-4' : 'translate-x-0'}`} />
+            </div>
+          </button>
         </div>
       </div>
       
@@ -156,7 +397,7 @@ const Hero = () => {
   );
 };
 
-const ProjectCard = ({ number, title, category, image, link, span = "col-span-1" }) => (
+const ProjectCard = ({ number, title, category, image, video, link, span = "col-span-1" }) => (
   <motion.a 
     href={link}
     whileHover={{ y: -8 }}
@@ -174,9 +415,18 @@ const ProjectCard = ({ number, title, category, image, link, span = "col-span-1"
       </span>
     </div>
 
-    {/* Image Container */}
+    {/* Video/Image Container */}
     <div className="absolute inset-0 z-10">
-      {image ? (
+      {video ? (
+        <video 
+          src={video} 
+          autoPlay 
+          loop 
+          muted 
+          playsInline
+          className="w-full h-full object-cover opacity-60 group-hover:opacity-100 group-hover:scale-110 transition-all duration-1000 ease-out" 
+        />
+      ) : image ? (
         <img 
           src={image} 
           alt={title} 
@@ -216,15 +466,14 @@ const Work = () => {
     {
       title: "Business strategy design",
       projects: [
-        { number: "04", title: "GravityOne Story", category: "Agency", image: "/work-1.png", span: "md:col-span-2" },
-        { number: "05", title: "The Absolute Business strategy", category: "Strategy", image: "/work-3.png", link: "/projects/absolute-business-strategy.html", span: "md:col-span-2" }
+        { number: "04", title: "The Absolute Business strategy", category: "Strategy", video: "/Absolute planet.mov", link: "/projects/absolute-business-strategy.html", span: "md:col-span-4" }
       ]
     },
     {
       title: "Behaviours & Research Design",
       projects: [
-        { number: "06", title: "The Choice Paradox", category: "Research", image: "/work-6.png", span: "md:col-span-1" },
-        { number: "07", title: "Joulebug Case", category: "Behavioral", image: "/joulebughero.png", link: "/projects/joulebug.html", span: "md:col-span-3" }
+        { number: "05", title: "The Choice Paradox", category: "Research", image: "/work-6.png", link: "/projects/choice-paradox.html", span: "md:col-span-2" },
+        { number: "06", title: "Joulebug Case", category: "Behavioral", image: "/Joulebugcoverfinal.jpg.avif", link: "/projects/joulebug.html", span: "md:col-span-2" }
       ]
     }
   ];
@@ -265,52 +514,6 @@ const Work = () => {
   );
 };
 
-const SystemBreaker = () => (
-  <section className="relative h-[600px] overflow-hidden bg-white/30 border-y border-white/20">
-    {/* Grid Background */}
-    <div className="absolute inset-0 opacity-[0.03]" style={{ backgroundImage: 'linear-gradient(#000 1px, transparent 1px), linear-gradient(90deg, #000 1px, transparent 1px)', backgroundSize: '40px 40px' }} />
-    
-    <div className="max-w-7xl mx-auto h-full flex items-center justify-center relative">
-      {/* Decorative Circles */}
-      <div className="absolute top-1/4 left-1/4 w-64 h-64 border-[40px] border-primary/10 rounded-full" />
-      <div className="absolute bottom-1/4 right-1/4 w-96 h-96 border-[1px] border-primary/20 rounded-full" />
-      
-      {/* Main Glass Shape */}
-      <motion.div 
-        animate={{ 
-          rotate: [0, 360],
-          scale: [1, 1.05, 1]
-        }}
-        transition={{ duration: 40, repeat: Infinity, ease: "linear" }}
-        className="relative w-80 h-80 md:w-[500px] md:h-[500px]"
-      >
-        <div className="absolute inset-0 rounded-full bg-gradient-to-br from-primary/40 via-secondary/20 to-warning/40 blur-2xl opacity-40 animate-pulse" />
-        <div className="absolute inset-0 rounded-full backdrop-blur-3xl border border-white/40 shadow-2xl overflow-hidden" 
-             style={{ clipPath: 'polygon(0% 0%, 100% 0%, 100% 100%, 50% 100%, 50% 15%, 0% 15%)' }}>
-          <div className="absolute inset-0 bg-gradient-to-tr from-white/20 to-transparent" />
-        </div>
-      </motion.div>
-
-      {/* Technical Text Overlay */}
-      <div className="absolute right-10 top-20 text-[10px] font-mono text-primary/40 text-right leading-tight uppercase tracking-widest">
-        System_Identifier: R[98] <br />
-        Temporal_Index: 2026.05 <br />
-        Mode: Equilibrium
-      </div>
-      
-      <div className="absolute left-1/2 -translate-x-1/2 bottom-20 max-w-sm text-center">
-        <p className="text-[10px] font-mono text-secondary/40 leading-relaxed uppercase tracking-tighter">
-          "A pesar de los avances científicos en el campo de la neurociencia, todavía no se ha logrado comprender completamente cómo la actividad cerebral da lugar a la experiencia consciente."
-        </p>
-      </div>
-
-      {/* Plus marks */}
-      <div className="absolute top-1/3 left-1/3 text-primary/40 font-light text-2xl">+</div>
-      <div className="absolute bottom-1/3 right-1/3 text-primary/40 font-light text-2xl">+</div>
-    </div>
-  </section>
-);
-
 const WonderlandCard = ({ title, subtitle, bgClass, image, link, external = false, objectFit = "cover", showGradient = true, darkText = false }) => {
   const CardWrapper = link ? motion.a : motion.div;
   return (
@@ -329,26 +532,22 @@ const WonderlandCard = ({ title, subtitle, bgClass, image, link, external = fals
         />
       )}
       {showGradient && (
-        <div className={`absolute inset-0 bg-gradient-to-t ${image ? 'from-black/80 via-black/20 to-transparent' : 'from-black/20 to-transparent opacity-0 group-hover:opacity-100'} transition-opacity`} />
+        <div className={`absolute inset-0 bg-gradient-to-b ${image ? 'from-black/80 via-black/20 to-transparent' : 'from-black/20 to-transparent opacity-0 group-hover:opacity-100'} transition-opacity`} />
       )}
-      <div className="absolute bottom-8 left-8 z-10">
-        <p className={`text-[10px] font-black uppercase tracking-widest mb-2 ${darkText ? 'text-secondary/60' : image ? 'text-white/80' : 'text-text/40'}`}>{subtitle}</p>
-        <h4 className={`text-xl font-bold transition-colors ${darkText ? 'text-secondary group-hover:text-primary' : image ? 'text-white group-hover:text-white/80' : 'text-secondary group-hover:text-primary'}`}>{title}</h4>
-      </div>
-      <div className="absolute top-8 right-8 w-10 h-10 glass-card rounded-none flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all z-10">
-        <Plus size={16} className={darkText ? "text-primary" : image ? "text-white" : "text-primary"} />
+      <div className="absolute top-8 left-8 z-10">
+        <h4 className={`text-xl font-bold transition-colors group-hover:text-primary ${darkText ? 'text-secondary' : image ? 'text-white' : 'text-secondary'}`}>{title}</h4>
       </div>
     </CardWrapper>
   );
 };
 
 const Wonderlands = () => (
-  <section id="wonderlands" className="py-32 px-6 bg-[#FAF7F2]">
+  <section id="wonderlands" className="py-32 px-6 bg-[#F8FAFF]">
     <div className="max-w-7xl mx-auto">
       <div className="flex justify-end mb-16 text-right">
         <div>
           <span className="section-label">02. Speculative Spaces</span>
-          <h2 className="text-6xl md:text-8xl font-bold text-[#EAE2D5] leading-none">Parallel <br />wonderlands</h2>
+          <h2 className="text-6xl md:text-8xl font-bold text-[#E2E7F3] leading-none">Parallel <br />wonderlands</h2>
         </div>
       </div>
       <div className="grid md:grid-cols-3 gap-8">
@@ -369,11 +568,15 @@ const Wonderlands = () => (
           bgClass="bg-[#DBC6A7]/20"
           image="/Leafling.png"
           link="/The Leafling.html"
+          showGradient={false}
+          darkText={true}
         />
         <WonderlandCard 
-          title="Agriculture by 2050"
+          title="Permaculture Design"
           subtitle="Futures Design"
           bgClass="bg-[#A7C7DB]/20"
+          image="/Permaculture.jpeg"
+          link="/projects/permaculture-design.html"
         />
       </div>
     </div>
@@ -382,13 +585,15 @@ const Wonderlands = () => (
 
 const About = () => {
   const carouselImages = [
-    "/work-1.png",
-    "/work-2.png",
-    "/work-3.png",
-    "/work-4.png",
-    "/work-5.png",
-    "/work-6.png",
-    "/b7617e_c63877547b2e4a5c804d965fc7ff985a~mv2.jpg.avif"
+    "/About1.jpeg",
+    "/About2.jpeg",
+    "/About3.jpeg",
+    "/About4.jpeg",
+    "/About5.jpeg",
+    "/About6.jpeg",
+    "/About7.jpeg",
+    "/About8.jpeg",
+    "/About10.jpeg"
   ];
 
   return (
@@ -642,17 +847,30 @@ const CustomCursor = () => {
 };
 
 function App() {
+  const [season, setSeason] = React.useState('spring');
+  const [seasonsEnabled, setSeasonsEnabled] = React.useState(true);
+
+  React.useEffect(() => {
+    const SEASONS = ['spring', 'summer', 'autumn', 'rainy'];
+    const currentCount = parseInt(localStorage.getItem('visit_count') || '0', 10);
+    const nextCount = currentCount + 1;
+    localStorage.setItem('visit_count', nextCount.toString());
+    
+    const currentSeason = SEASONS[currentCount % SEASONS.length];
+    setSeason(currentSeason);
+  }, []);
+
   return (
     <div className="selection:bg-primary/20 selection:text-primary">
       <CustomCursor />
       <Navigation />
       <main>
-        <Hero />
+        <Hero season={season} seasonsEnabled={seasonsEnabled} setSeasonsEnabled={setSeasonsEnabled} />
         <Work />
-        <SystemBreaker />
         <Wonderlands />
         <About />
         <Contact />
+        <ParticleOverlay type={seasonsEnabled ? season : null} />
       </main>
       <Footer />
     </div>

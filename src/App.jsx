@@ -397,7 +397,7 @@ const Hero = ({ season, seasonsEnabled, setSeasonsEnabled }) => {
   );
 };
 
-const ProjectCard = ({ number, title, category, image, video, link, span = "col-span-1" }) => (
+const ProjectCard = ({ number, title, category, image, video, link, span = "col-span-1", season }) => (
   <motion.a 
     href={link}
     whileHover={{ y: -8 }}
@@ -445,8 +445,9 @@ const ProjectCard = ({ number, title, category, image, video, link, span = "col-
       </div>
     </div>
 
-    {/* Bottom Info */}
-    <div className="absolute bottom-0 left-0 right-0 z-30 p-8 bg-gradient-to-t from-black/90 via-black/40 to-transparent transform translate-y-4 group-hover:translate-y-0 opacity-0 group-hover:opacity-100 transition-all duration-500">
+    {/* Bottom Info - ALWAYS VISIBLE */}
+    <div className="absolute bottom-0 left-0 right-0 z-30 p-8 bg-gradient-to-t from-black/90 via-black/40 to-transparent transition-all duration-500">
+      <span className="text-[10px] font-bold uppercase tracking-widest text-primary block mb-2">{season}</span>
       <h3 className="text-xl font-bold text-white tracking-tight mb-1">{title}</h3>
       <div className="w-8 h-0.5 bg-primary transform origin-left scale-x-0 group-hover:scale-x-100 transition-transform duration-700 delay-100" />
     </div>
@@ -454,27 +455,87 @@ const ProjectCard = ({ number, title, category, image, video, link, span = "col-
 );
 
 const Work = () => {
+  const [viewMode, setViewMode] = React.useState('grid'); // 'grid' or 'timeline'
+
   const rows = [
     {
       title: "Systems Design",
       projects: [
-        { number: "01", title: "Intelligent Policy Platform", category: "Product", image: "/IPP cover.png", link: "/projects/intelligent-policy-platform.html", span: "md:col-span-2" },
-        { number: "02", title: "Signals", category: "Thesis", image: "/leather signal .png", link: "/projects/signals.html", span: "md:col-span-1" },
-        { number: "03", title: "Story of Sustainability", category: "Inquiry", image: "/choreography.png", link: "/projects/story-of-sustainability.html", span: "md:col-span-1" }
+        { number: "01", title: "Intelligent Policy Platform", category: "Product", image: "/IPP cover.png", link: "/projects/intelligent-policy-platform.html", span: "md:col-span-2", season: "Monsoon 2025 – Summer 2026" },
+        { number: "02", title: "Signals", category: "Thesis", image: "/leather signal .png", link: "/projects/signals.html", span: "md:col-span-1", season: "Summer 2024" },
+        { number: "03", title: "Story of Sustainability", category: "Inquiry", image: "/choreography.png", link: "/projects/story-of-sustainability.html", span: "md:col-span-1", season: "Spring 2023" }
       ]
     },
     {
       title: "Business strategy design",
       projects: [
-        { number: "04", title: "The Absolute Business strategy", category: "Strategy", video: "/Absolute planet.mov", link: "/projects/absolute-business-strategy.html", span: "md:col-span-4" }
+        { number: "04", title: "The Absolute Business strategy", category: "Strategy", video: "/Absolute planet.mov", link: "/projects/absolute-business-strategy.html", span: "md:col-span-4", season: "Monsoon 2023 – Winter 2024" }
       ]
     },
     {
       title: "Behaviours & Research Design",
       projects: [
-        { number: "05", title: "The Choice Paradox", category: "Research", image: "/work-6.png", link: "/projects/choice-paradox.html", span: "md:col-span-2" },
-        { number: "06", title: "Joulebug Case", category: "Behavioral", image: "/Joulebugcoverfinal.jpg.avif", link: "/projects/joulebug.html", span: "md:col-span-2" }
+        { number: "05", title: "The Choice Paradox", category: "Research", image: "/work-6.png", link: "/projects/choice-paradox.html", span: "md:col-span-2", season: "Summer 2022" },
+        { number: "06", title: "Joulebug Case", category: "Behavioral", image: "/Joulebugcoverfinal.jpg.avif", link: "/projects/joulebug.html", span: "md:col-span-2", season: "Fall 2022" }
       ]
+    }
+  ];
+
+  const timelineItems = [
+    {
+      year: "Before 2021",
+      title: "Architectural Design",
+      category: "Architecture",
+      description: "Academic & Professional Practice in architectural design, spatial planning, and physical form inquiry.",
+      isPointer: true
+    },
+    {
+      year: "Summer 2022",
+      date: "May 2022",
+      title: "The Choice Paradox",
+      category: "Research",
+      image: "/work-6.png",
+      link: "/projects/choice-paradox.html"
+    },
+    {
+      year: "Fall 2022",
+      date: "Oct 2022",
+      title: "Joulebug Case",
+      category: "Behavioral",
+      image: "/Joulebugcoverfinal.jpg.avif",
+      link: "/projects/joulebug.html"
+    },
+    {
+      year: "Spring 2023",
+      date: "Apr 2023",
+      title: "Story of Sustainability",
+      category: "Inquiry",
+      image: "/choreography.png",
+      link: "/projects/story-of-sustainability.html"
+    },
+    {
+      year: "Monsoon 2023 – Winter 2024",
+      date: "June 2023 – Jan 2024",
+      title: "The Absolute Business strategy",
+      category: "Strategy",
+      video: "/Absolute planet.mov",
+      link: "/projects/absolute-business-strategy.html"
+    },
+    {
+      year: "Summer 2024",
+      date: "2024",
+      title: "Signals",
+      category: "Thesis",
+      image: "/leather signal .png",
+      link: "/projects/signals.html"
+    },
+    {
+      year: "Monsoon 2025 – Summer 2026",
+      date: "Aug 2025 – May 2026",
+      title: "Intelligent Policy Platform",
+      category: "Product",
+      image: "/IPP cover.png",
+      link: "/projects/intelligent-policy-platform.html"
     }
   ];
 
@@ -485,30 +546,148 @@ const Work = () => {
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          className="mb-24 text-center"
+          className="mb-12 text-center"
         >
           <span className="section-label inline-block mb-4 text-primary">01. Selected Inquiry</span>
-          <h2 className="text-6xl md:text-8xl font-bold text-primary tracking-tighter leading-none">The Works.</h2>
+          <h2 className="text-6xl md:text-8xl font-bold text-primary tracking-tighter leading-none mb-8">The Works.</h2>
         </motion.div>
-        
-        <div className="space-y-32">
-          {rows.map((row, rowIndex) => (
-            <div key={rowIndex} className="space-y-8">
-              <div className="flex items-center gap-10">
-                <span className="font-serif italic text-white/80 text-xl md:text-2xl whitespace-nowrap">
-                  {row.title}
-                </span>
-                <div className="h-[1px] bg-white/20 flex-grow"></div>
-              </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-                {row.projects.map((project, index) => (
-                  <ProjectCard key={index} {...project} />
-                ))}
-              </div>
-            </div>
-          ))}
+        {/* Capsule View Toggle - Replaced with BENTO | TIMELINE Design */}
+        <div className="flex justify-center items-center gap-6 mb-24 pointer-events-auto select-none relative z-20">
+          <button 
+            type="button"
+            onClick={() => setViewMode('grid')}
+            className={`flex items-center gap-3 text-[11px] font-medium uppercase tracking-[0.45em] transition-all duration-300 cursor-pointer bg-transparent border-none pointer-events-auto ${viewMode === 'grid' ? 'text-[#004cff] scale-105' : 'text-white hover:text-white/80'}`}
+          >
+            <svg width="15" height="10" viewBox="0 0 15 10" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-[15px] h-[10px] transition-colors duration-300">
+              <rect x="0.25" y="0.25" width="9.5" height="4.5" fill={viewMode === 'grid' ? "#004cff" : "#7F7F7F"} stroke="black" strokeWidth="0.5"/>
+              <rect x="5.25" y="5.25" width="9.5" height="4.5" fill={viewMode === 'grid' ? "#004cff" : "#7F7F7F"} stroke="black" strokeWidth="0.5"/>
+              <rect x="0.25" y="5.25" width="4.5" height="4.5" fill={viewMode === 'grid' ? "#004cff" : "#7F7F7F"} stroke="black" strokeWidth="0.5"/>
+              <rect x="10.25" y="0.25" width="4.5" height="4.5" fill={viewMode === 'grid' ? "#004cff" : "#7F7F7F"} stroke="black" strokeWidth="0.5"/>
+            </svg>
+            <span className="ml-1">Bento</span>
+          </button>
+          
+          <span className="text-white/40 text-lg font-light select-none mx-2">|</span>
+          
+          <button 
+            type="button"
+            onClick={() => setViewMode('timeline')}
+            className={`flex items-center gap-3 text-[11px] font-medium uppercase tracking-[0.45em] transition-all duration-300 cursor-pointer bg-transparent border-none pointer-events-auto ${viewMode === 'timeline' ? 'text-[#004cff] scale-105' : 'text-white hover:text-white/80'}`}
+          >
+            <svg width="15" height="10" viewBox="0 0 15 10" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-[15px] h-[10px] transition-colors duration-300">
+              <rect x="0.25" y="0.842102" width="14.5" height="8.5" fill={viewMode === 'timeline' ? "#004cff" : "#7F7F7F"} stroke="black" strokeWidth="0.5"/>
+              <line y1="-0.5" x2="9.84886" y2="-0.5" transform="matrix(0.406138 -0.913812 0.805882 0.592076 3 9.5921)" stroke="black"/>
+              <line y1="-0.5" x2="9.84886" y2="-0.5" transform="matrix(0.406138 -0.913812 0.805882 0.592076 9 9.5921)" stroke="black"/>
+            </svg>
+            <span className="ml-1">Timeline</span>
+          </button>
         </div>
+        
+        {viewMode === 'grid' ? (
+          <div className="space-y-32">
+            {rows.map((row, rowIndex) => (
+              <div key={rowIndex} className="space-y-8">
+                <div className="flex items-center gap-10">
+                  <span className="font-serif italic text-white/80 text-xl md:text-2xl whitespace-nowrap">
+                    {row.title}
+                  </span>
+                  <div className="h-[1px] bg-white/20 flex-grow"></div>
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+                  {row.projects.map((project, index) => (
+                    <ProjectCard key={index} {...project} />
+                  ))}
+                </div>
+              </div>
+            ))}
+          </div>
+        ) : (
+          <div className="relative border-l border-white/10 ml-4 md:ml-32 pl-8 md:pl-16 space-y-20 py-8 max-w-4xl mx-auto">
+            {timelineItems.map((item, index) => (
+              <motion.div 
+                key={index}
+                initial={{ opacity: 0, x: -20 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.6, delay: index * 0.05 }}
+                className="relative group"
+              >
+                {/* Timeline node node */}
+                <div className="absolute left-[-40px] md:left-[-72px] top-1.5 w-4 h-4 rounded-full bg-black border-2 border-primary group-hover:bg-primary transition-all duration-300 shadow-[0_0_8px_rgba(232,160,32,0.4)] group-hover:shadow-[0_0_12px_rgba(232,160,32,0.8)]" />
+                
+                <div className="flex flex-col md:flex-row gap-4 md:gap-16 items-start">
+                  {/* Season column */}
+                  <div className="w-56 flex-shrink-0">
+                    <span className="text-[10px] font-bold uppercase tracking-widest text-primary block mb-1">
+                      {item.year}
+                    </span>
+                    {item.date && (
+                      <span className="text-xs text-white/40 block">
+                        {item.date}
+                      </span>
+                    )}
+                  </div>
+
+                  {/* Details Card */}
+                  <div className="flex-grow w-full">
+                    {item.isPointer ? (
+                      <div className="p-6 border border-white/5 bg-neutral-900/20">
+                        <h3 className="text-xl font-bold text-white tracking-tight mb-2">
+                          {item.title}
+                        </h3>
+                        <p className="text-sm text-white/50 font-light leading-relaxed">
+                          {item.description}
+                        </p>
+                      </div>
+                    ) : (
+                      <a href={item.link} className="block group/card">
+                        <div className="border border-white/10 bg-neutral-900/40 hover:bg-neutral-900/80 hover:border-primary/50 p-6 transition-all duration-300 relative overflow-hidden flex flex-col sm:flex-row gap-6">
+                          {item.image && (
+                            <div className="w-full sm:w-32 h-20 flex-shrink-0 overflow-hidden bg-neutral-800 border border-white/5">
+                              <img 
+                                src={item.image} 
+                                alt={item.title} 
+                                className="w-full h-full object-cover group-hover/card:scale-105 transition-transform duration-500" 
+                              />
+                            </div>
+                          )}
+                          {item.video && (
+                            <div className="w-full sm:w-32 h-20 flex-shrink-0 overflow-hidden bg-neutral-800 border border-white/5">
+                              <video 
+                                src={item.video} 
+                                autoPlay 
+                                loop 
+                                muted 
+                                playsInline
+                                className="w-full h-full object-cover group-hover/card:scale-105 transition-transform duration-500" 
+                              />
+                            </div>
+                          )}
+                          <div className="flex-grow flex flex-col justify-between">
+                            <div>
+                              <div className="flex items-center gap-3 mb-1">
+                                <span className="text-[8px] font-bold uppercase tracking-[0.2em] px-2 py-0.5 bg-white/5 border border-white/10 text-white/60">
+                                  {item.category}
+                                </span>
+                              </div>
+                              <h3 className="text-xl font-bold text-white group-hover/card:text-primary transition-colors duration-300 tracking-tight">
+                                {item.title}
+                              </h3>
+                            </div>
+                            <span className="text-xs text-primary/80 font-bold uppercase tracking-wider mt-4 inline-flex items-center gap-2 group-hover/card:translate-x-1 transition-transform duration-300">
+                              View Case Study <MoveRight size={12} />
+                            </span>
+                          </div>
+                        </div>
+                      </a>
+                    )}
+                  </div>
+                </div>
+              </motion.div>
+            ))}
+          </div>
+        )}
       </div>
     </section>
   );
@@ -811,9 +990,11 @@ const CustomCursor = () => {
         setIsDark(!!darkParent);
         
         setIsPointer(
-          window.getComputedStyle(target).cursor === 'pointer' ||
-          target.tagName === 'A' ||
-          target.tagName === 'BUTTON'
+          !!(target.closest('a') || 
+             target.closest('button') || 
+             target.closest('[role="button"]') || 
+             target.closest('.cursor-pointer') ||
+             window.getComputedStyle(target).cursor === 'pointer')
         );
       }
     };
@@ -837,7 +1018,7 @@ const CustomCursor = () => {
       <img 
         src="/cursor1.png" 
         alt="cursor" 
-        className="w-8 h-8 object-contain transition-all duration-300"
+        className="w-8 h-8 object-contain transition-all duration-300 pointer-events-none"
         style={{ 
           filter: isDark ? 'invert(1) brightness(2)' : blueFilter 
         }}

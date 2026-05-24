@@ -54,102 +54,70 @@ const SummerOverlay = () => {
   );
 };
 
-const ParticleOverlay = ({ type }) => {
-  const [particles, setParticles] = React.useState([]);
+
+
+const Navigation = () => {
+  const [isDarkBg, setIsDarkBg] = React.useState(false);
 
   React.useEffect(() => {
-    const count = type === 'rainy' ? 60 : (type === 'spring' || type === 'autumn') ? 18 : 0;
-    const items = Array.from({ length: count }).map((_, i) => ({
-      id: i,
-      left: Math.random() * 100,
-      delay: Math.random() * 5,
-      duration: type === 'rainy' ? (1.2 + Math.random() * 0.8) : (6 + Math.random() * 8),
-      size: type === 'rainy' ? (1 + Math.random() * 2) : (12 + Math.random() * 14),
-      rotation: Math.random() * 360,
-      swayDelay: Math.random() * 2,
-    }));
-    setParticles(items);
-  }, [type]);
+    const handleScroll = () => {
+      const navElement = document.querySelector('nav.fixed');
+      if (!navElement) return;
 
-  if (type === 'summer' || !type) return null;
+      const rect = navElement.getBoundingClientRect();
+      const centerY = rect.top + rect.height / 2;
+
+      // Check overlapping sections with dark background
+      const darkSections = document.querySelectorAll('#work, #about, #contact');
+      let overDark = false;
+      for (const section of darkSections) {
+        const secRect = section.getBoundingClientRect();
+        if (centerY >= secRect.top && centerY <= secRect.bottom) {
+          overDark = true;
+          break;
+        }
+      }
+      setIsDarkBg(overDark);
+    };
+
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    // Run once on load
+    handleScroll();
+
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
 
   return (
-    <div className="fixed inset-0 pointer-events-none z-[45] overflow-hidden">
-      {particles.map(p => {
-        let child = null;
-        if (type === 'spring') {
-          // Cherry blossom / pink flower petal
-          child = (
-            <svg viewBox="0 0 24 24" fill="#FFB7C5" className="opacity-70 w-full h-full">
-              <path d="M12,2 C10,5 6,5 6,8 C6,11 9,12 12,14 C15,12 18,11 18,8 C18,5 14,5 12,2 Z" />
-            </svg>
-          );
-        } else if (type === 'autumn') {
-          // Orange / brown leaf
-          child = (
-            <svg viewBox="0 0 24 24" fill="#D36B28" className="opacity-75 w-full h-full">
-              <path d="M17,3 C12,3 9,8 9,12 C9,14 10,15 12,17 C16,15 19,10 19,6 C19,4 18,3 17,3 Z M7,17 C5,17 3,19 3,21 C5,21 7,19 7,17 Z" />
-            </svg>
-          );
-        } else if (type === 'rainy') {
-          // Blue rain line
-          child = (
-            <div className="w-[1.5px] h-[35px] bg-blue-400/40 rounded-full rotate-[15deg]" />
-          );
-        }
-
-        return (
-          <div
-            key={p.id}
-            className="absolute top-[-50px] animate-fall"
-            style={{
-              left: `${p.left}%`,
-              width: `${p.size}px`,
-              height: `${p.size}px`,
-              animationDelay: `${p.delay}s`,
-              animationDuration: `${p.duration}s`,
-              animationIterationCount: 'infinite',
-              animationTimingFunction: 'linear',
-              transform: `rotate(${p.rotation}deg)`,
-            }}
-          >
-            <div 
-              className={type !== 'rainy' ? "animate-sway" : ""} 
-              style={{
-                animationDuration: '3s',
-                animationIterationCount: 'infinite',
-                animationTimingFunction: 'ease-in-out',
-                animationDelay: `${p.swayDelay}s`
-              }}
-            >
-              {child}
-            </div>
-          </div>
-        );
-      })}
-    </div>
+    <nav className={`fixed top-6 left-1/2 -translate-x-1/2 w-[90%] max-w-5xl h-14 rounded-none z-50 flex items-center justify-between px-8 transition-all duration-300 ${isDarkBg ? 'bg-black/35 border border-white/10 backdrop-blur-lg text-white' : 'glass-nav text-text'}`}>
+      <div className="font-display font-bold text-lg tracking-tight flex items-center gap-2">
+        <img 
+          src="/logo icon.PNG" 
+          alt="Logo" 
+          className="h-5 w-auto object-contain transition-all duration-300"
+          style={{ filter: isDarkBg ? 'brightness(0) invert(1)' : 'none' }}
+        />
+        Varsha Nambiar
+      </div>
+      <div className={`hidden md:flex space-x-8 text-[10px] font-bold uppercase tracking-widest transition-colors duration-300 ${isDarkBg ? 'text-white/60' : 'text-text/60'}`}>
+        <a href="#work" className={`transition-colors ${isDarkBg ? 'hover:text-white' : 'hover:text-primary'}`}>Works</a>
+        <a href="#wonderlands" className={`transition-colors ${isDarkBg ? 'hover:text-white' : 'hover:text-primary'}`}>Wonderlands</a>
+        <a href="#about" className={`transition-colors ${isDarkBg ? 'hover:text-white' : 'hover:text-primary'}`}>About</a>
+        <a href="#contact" className={`transition-colors ${isDarkBg ? 'hover:text-white' : 'hover:text-primary'}`}>Contact</a>
+      </div>
+      <a 
+        href="/Varsha Nambiar-Resume.pdf"
+        target="_blank"
+        rel="noopener noreferrer"
+        download="Varsha Nambiar-Resume.pdf"
+        className={`text-[10px] font-bold uppercase tracking-widest px-4 py-2 rounded-none transition-all no-underline inline-block text-center ${isDarkBg ? 'bg-white/15 text-white hover:bg-white hover:text-black border border-white/25' : 'bg-primary/10 text-primary hover:bg-primary hover:text-white'}`}
+      >
+        Download Resume
+      </a>
+    </nav>
   );
 };
 
-const Navigation = () => (
-  <nav className="fixed top-6 left-1/2 -translate-x-1/2 w-[90%] max-w-5xl h-14 glass-nav rounded-none z-50 flex items-center justify-between px-8">
-    <div className="font-display font-bold text-lg tracking-tight flex items-center gap-2">
-      <img src="/logo icon.PNG" alt="Logo" className="h-5 w-auto object-contain" />
-      Varsha Nambiar
-    </div>
-    <div className="hidden md:flex space-x-8 text-[10px] font-bold uppercase tracking-widest text-text/60">
-      <a href="#work" className="hover:text-primary transition-colors">Works</a>
-      <a href="#wonderlands" className="hover:text-primary transition-colors">Wonderlands</a>
-      <a href="#about" className="hover:text-primary transition-colors">About</a>
-      <a href="#contact" className="hover:text-primary transition-colors">Contact</a>
-    </div>
-    <button className="text-[10px] font-bold uppercase tracking-widest px-4 py-2 bg-primary/10 text-primary rounded-none hover:bg-primary hover:text-white transition-all">
-      Grab a coffee
-    </button>
-  </nav>
-);
-
-const Hero = ({ season, seasonsEnabled, setSeasonsEnabled }) => {
+const Hero = () => {
   const marqueeProjects = [
     {
       title: "Intelligent Policy Platform",
@@ -174,7 +142,7 @@ const Hero = ({ season, seasonsEnabled, setSeasonsEnabled }) => {
     {
       title: "The Choice Paradox",
       link: "/projects/choice-paradox.html",
-      image: "/work-6.png"
+      image: "/CHOICE PARADOX COVER.png"
     },
     {
       title: "Joulebug Case",
@@ -227,28 +195,8 @@ const Hero = ({ season, seasonsEnabled, setSeasonsEnabled }) => {
     };
   }, []);
 
-  // Rainy ripples loop
-  useEffect(() => {
-    if (season !== 'rainy' || !seasonsEnabled) return;
-    
-    const interval = setInterval(() => {
-      const hero = document.querySelector('.ripple-container');
-      if (hero && window.$ && window.$(hero).ripples) {
-        const width = hero.clientWidth;
-        const height = hero.clientHeight;
-        const x = Math.random() * width;
-        const y = Math.random() * height;
-        window.$(hero).ripples('drop', x, y, 10 + Math.random() * 20, 0.01 + Math.random() * 0.02);
-      }
-    }, 180);
-
-    return () => clearInterval(interval);
-  }, [season, seasonsEnabled]);
-
   // Summer birds ripples path
   useEffect(() => {
-    if (season !== 'summer' || !seasonsEnabled) return;
-
     let birdX = 0;
     const flyBird = () => {
       birdX = 0;
@@ -279,7 +227,7 @@ const Hero = ({ season, seasonsEnabled, setSeasonsEnabled }) => {
       clearTimeout(initialTimeout);
       clearInterval(mainInterval);
     };
-  }, [season, seasonsEnabled]);
+  }, []);
 
   return (
     <section 
@@ -290,42 +238,22 @@ const Hero = ({ season, seasonsEnabled, setSeasonsEnabled }) => {
       <Glow className="bottom-20 right-10 w-[600px] h-[600px] bg-warning/30" />
       
       {/* Summer birds overlay */}
-      {(season === 'summer' && seasonsEnabled) && <SummerOverlay />}
+      <SummerOverlay />
       
       <div className="max-w-7xl mx-auto z-10 text-center pointer-events-none w-full">
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 1.2, ease: "easeOut" }}
-          className="pointer-events-auto flex flex-col md:flex-row items-center justify-between gap-8 md:gap-12"
+          className="pointer-events-auto max-w-4xl mx-auto text-center flex flex-col items-center justify-center"
         >
-          {/* Left CTA: View the Inquiry */}
-          <div className="w-full md:w-auto flex justify-center md:justify-start order-2 md:order-1">
-            <a 
-              href="#work" 
-              className="px-8 py-3 border border-primary text-primary hover:bg-primary hover:text-white transition-all rounded-none font-semibold text-sm whitespace-nowrap"
-            >
-              View the Inquiry
-            </a>
-          </div>
-
-          {/* Center Text (Title and Subtitle) */}
-          <div className="flex-1 text-center order-1 md:order-2">
-            <h1 className="text-5xl md:text-7xl font-dmsans font-light leading-[0.95] mb-10 text-secondary tracking-tight">
-              Multidisciplinary <br /> 
-              <span className="text-primary italic">Design Strategist</span>
-            </h1>
-            <p className="text-lg md:text-2xl text-text/75 leading-relaxed mb-0 max-w-5xl mx-auto font-dmsans font-light">
-              creating systems, behaviours, research and solutions with design as a medium.
-            </p>
-          </div>
-
-          {/* Right CTA: The Philosophy */}
-          <div className="w-full md:w-auto flex justify-center md:justify-end order-3">
-            <button className="px-8 py-3 glass-card rounded-none font-semibold text-sm hover:bg-white/60 transition-all whitespace-nowrap">
-              The Philosophy
-            </button>
-          </div>
+          <h1 className="text-5xl md:text-7xl font-dmsans font-light leading-[0.95] mb-10 text-secondary tracking-tight">
+            Multidisciplinary <br /> 
+            <span className="text-primary italic">Design Strategist</span>
+          </h1>
+          <p className="text-lg md:text-2xl text-text/75 leading-relaxed mb-0 max-w-2xl mx-auto font-dmsans font-light">
+            creating systems, behaviours, research and solutions with design as a medium.
+          </p>
         </motion.div>
 
         {/* Thin Auto-Scrolling Photo Marquee (Edge-to-Edge) */}
@@ -334,24 +262,18 @@ const Hero = ({ season, seasonsEnabled, setSeasonsEnabled }) => {
             {[...Array(3)].map((_, i) => (
               <React.Fragment key={i}>
                 {marqueeProjects.map((project, idx) => {
-                  const imageFilter = (season === 'rainy' && seasonsEnabled) ? 'brightness(0.7) contrast(1.1) saturate(0.8)' : 'none';
-                  
                   if (project.link) {
                     return (
                       <a
-                        key={`${i}-${idx}`}
+                        key={`link-${i}-${idx}`}
                         href={project.link}
-                        target={project.external ? "_blank" : undefined}
-                        rel={project.external ? "noopener noreferrer" : undefined}
                         className="w-[200px] h-[110px] flex-shrink-0 overflow-hidden bg-neutral-100 shadow-sm border border-black/5 group cursor-pointer relative block"
                       >
                         <img 
                           src={project.image} 
                           alt={project.title} 
                           className="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-110" 
-                          style={{ filter: imageFilter }} 
                         />
-                        {(season === 'rainy' && seasonsEnabled) && <div className="absolute inset-0 rain-pattern pointer-events-none" />}
                       </a>
                     );
                   } else {
@@ -364,9 +286,7 @@ const Hero = ({ season, seasonsEnabled, setSeasonsEnabled }) => {
                           src={project.image} 
                           alt={project.title} 
                           className="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-110" 
-                          style={{ filter: imageFilter }} 
                         />
-                        {(season === 'rainy' && seasonsEnabled) && <div className="absolute inset-0 rain-pattern pointer-events-none" />}
                       </div>
                     );
                   }
@@ -376,17 +296,24 @@ const Hero = ({ season, seasonsEnabled, setSeasonsEnabled }) => {
           </div>
         </div>
 
-        {/* Toggle Button */}
-        <div className="mt-16 flex justify-center pointer-events-auto">
-          <button 
-            onClick={() => setSeasonsEnabled(!seasonsEnabled)}
-            className="flex items-center gap-3 text-[10px] font-bold uppercase tracking-widest text-secondary hover:text-primary transition-all duration-300 cursor-pointer border-none bg-transparent"
+        <div className="mt-10 flex justify-center pointer-events-auto">
+          <a 
+            href="#work" 
+            className="flex items-center gap-2 text-[12px] font-bold uppercase tracking-[0.25em] text-primary hover:text-primary/80 transition-colors duration-300 no-underline cursor-pointer"
           >
-            <span>Enjoy seasons much?</span>
-            <div className={`w-8 h-4 rounded-full p-0.5 transition-colors duration-300 flex items-center ${seasonsEnabled ? 'bg-primary' : 'bg-neutral-300/40'}`}>
-              <div className={`w-3 h-3 bg-white rounded-full transition-transform duration-300 ${seasonsEnabled ? 'translate-x-4' : 'translate-x-0'}`} />
-            </div>
-          </button>
+            <span>Dive deeper</span>
+            <svg 
+              viewBox="0 0 5 3" 
+              className="w-3.5 h-2 fill-current animate-bounce"
+              style={{ animationDuration: '1.5s' }}
+            >
+              <rect x="0" y="0" width="1" height="1" />
+              <rect x="4" y="0" width="1" height="1" />
+              <rect x="1" y="1" width="1" height="1" />
+              <rect x="3" y="1" width="1" height="1" />
+              <rect x="2" y="2" width="1" height="1" />
+            </svg>
+          </a>
         </div>
       </div>
       
@@ -397,9 +324,13 @@ const Hero = ({ season, seasonsEnabled, setSeasonsEnabled }) => {
   );
 };
 
-const ProjectCard = ({ number, title, category, image, video, link, span = "col-span-1", season }) => (
+const ProjectCard = ({ number, title, category, image, video, link, span, season, description }) => (
   <motion.a 
     href={link}
+    initial={{ opacity: 0, y: 40 }}
+    whileInView={{ opacity: 1, y: 0 }}
+    viewport={{ once: true }}
+    transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
     whileHover={{ y: -8 }}
     className={`group relative block h-[450px] bg-neutral-900 overflow-hidden rounded-none ${span}`}
   >
@@ -410,7 +341,7 @@ const ProjectCard = ({ number, title, category, image, video, link, span = "col-
     
     {/* Category Overlay */}
     <div className="absolute top-6 right-6 z-20">
-      <span className="px-3 py-1 bg-white/5 backdrop-blur-md border border-white/10 text-[8px] font-black uppercase tracking-[0.2em] text-white/70">
+      <span className="px-3 py-1 bg-white/5 backdrop-blur-md border border-white/10 text-[8px] font-black uppercase tracking-[0.2em] text-white">
         {category}
       </span>
     </div>
@@ -440,16 +371,19 @@ const ProjectCard = ({ number, title, category, image, video, link, span = "col-
 
     {/* Center Action */}
     <div className="absolute inset-0 z-30 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-500 translate-y-4 group-hover:translate-y-0">
-      <div className="bg-white text-black px-6 py-3 text-[10px] font-black uppercase tracking-[0.2em] flex items-center gap-3 shadow-2xl">
-        View Inquiry <MoveRight size={14} />
+      <div className="border border-white text-white px-6 py-3 text-[10px] font-black uppercase tracking-[0.2em] flex items-center gap-3 bg-black/40 backdrop-blur-sm hover:bg-white hover:text-black transition-colors duration-300 shadow-2xl">
+        Explore <MoveRight size={14} />
       </div>
     </div>
 
     {/* Bottom Info - ALWAYS VISIBLE */}
     <div className="absolute bottom-0 left-0 right-0 z-30 p-8 bg-gradient-to-t from-black/90 via-black/40 to-transparent transition-all duration-500">
-      <span className="text-[10px] font-bold uppercase tracking-widest text-primary block mb-2">{season}</span>
+      <span className="text-[10px] font-bold uppercase tracking-widest text-white/60 block mb-2">{season}</span>
       <h3 className="text-xl font-bold text-white tracking-tight mb-1">{title}</h3>
-      <div className="w-8 h-0.5 bg-primary transform origin-left scale-x-0 group-hover:scale-x-100 transition-transform duration-700 delay-100" />
+      {description && (
+        <p className="text-xs text-white/70 font-light leading-relaxed mt-2 line-clamp-1">{description}</p>
+      )}
+      <div className="w-8 h-0.5 bg-white/40 mt-3 transform origin-left scale-x-0 group-hover:scale-x-100 transition-transform duration-700 delay-100" />
     </div>
   </motion.a>
 );
@@ -461,22 +395,22 @@ const Work = () => {
     {
       title: "Systems Design",
       projects: [
-        { number: "01", title: "Intelligent Policy Platform", category: "Product", image: "/IPP cover.png", link: "/projects/intelligent-policy-platform.html", span: "md:col-span-2", season: "Monsoon 2025 – Summer 2026" },
-        { number: "02", title: "Signals", category: "Thesis", image: "/leather signal .png", link: "/projects/signals.html", span: "md:col-span-1", season: "Summer 2024" },
-        { number: "03", title: "Story of Sustainability", category: "Inquiry", image: "/choreography.png", link: "/projects/story-of-sustainability.html", span: "md:col-span-1", season: "Spring 2023" }
+        { number: "01", title: "Intelligent Policy Platform", category: "Product", image: "/IPP cover.png", link: "/projects/intelligent-policy-platform.html", span: "md:col-span-2", season: "Monsoon 2025 – Summer 2026", description: "Interactive health system mapping and simulation for Australian health policymakers." },
+        { number: "02", title: "Signals", category: "Thesis", image: "/leather signal .png", link: "/projects/signals.html", span: "md:col-span-1", season: "Summer 2024", description: "Speculative design research into biomaterials, future systems, and human-nature integration." },
+        { number: "03", title: "Story of Sustainability", category: "Inquiry", image: "/choreography.png", link: "/projects/story-of-sustainability.html", span: "md:col-span-1", season: "Spring 2023", description: "A system inquiry into the bioregions and theories of human-nature ecosystems." }
       ]
     },
     {
       title: "Business strategy design",
       projects: [
-        { number: "04", title: "The Absolute Business strategy", category: "Strategy", video: "/Absolute planet.mov", link: "/projects/absolute-business-strategy.html", span: "md:col-span-4", season: "Monsoon 2023 – Winter 2024" }
+        { number: "04", title: "The Absolute Business strategy", category: "Strategy", video: "/Absolute planet.mov", link: "/projects/absolute-business-strategy.html", span: "md:col-span-4", season: "Monsoon 2023 – Winter 2024", description: "Strategic positioning, brand architecture, and investor deck storytelling for climate sciences." }
       ]
     },
     {
       title: "Behaviours & Research Design",
       projects: [
-        { number: "05", title: "The Choice Paradox", category: "Research", image: "/work-6.png", link: "/projects/choice-paradox.html", span: "md:col-span-2", season: "Summer 2022" },
-        { number: "06", title: "Joulebug Case", category: "Behavioral", image: "/Joulebugcoverfinal.jpg.avif", link: "/projects/joulebug.html", span: "md:col-span-2", season: "Fall 2022" }
+        { number: "05", title: "The Choice Paradox", category: "Research", image: "/CHOICE PARADOX COVER.png", link: "/projects/choice-paradox.html", span: "md:col-span-2", season: "Summer 2022", description: "Understanding the subconscious filters and social forces shaping child adoption in India." },
+        { number: "06", title: "Joulebug Case", category: "Behavioral", image: "/Joulebugcoverfinal.jpg.avif", link: "/projects/joulebug.html", span: "md:col-span-2", season: "Fall 2022", description: "Behavioral deviances and social mechanics in carbon footprint tracking applications." }
       ]
     }
   ];
@@ -494,8 +428,9 @@ const Work = () => {
       date: "May 2022",
       title: "The Choice Paradox",
       category: "Research",
-      image: "/work-6.png",
-      link: "/projects/choice-paradox.html"
+      image: "/CHOICE PARADOX COVER.png",
+      link: "/projects/choice-paradox.html",
+      description: "Understanding the subconscious filters and social forces shaping child adoption in India."
     },
     {
       year: "Fall 2022",
@@ -503,7 +438,8 @@ const Work = () => {
       title: "Joulebug Case",
       category: "Behavioral",
       image: "/Joulebugcoverfinal.jpg.avif",
-      link: "/projects/joulebug.html"
+      link: "/projects/joulebug.html",
+      description: "Behavioral deviances and social mechanics in carbon footprint tracking applications."
     },
     {
       year: "Spring 2023",
@@ -511,7 +447,8 @@ const Work = () => {
       title: "Story of Sustainability",
       category: "Inquiry",
       image: "/choreography.png",
-      link: "/projects/story-of-sustainability.html"
+      link: "/projects/story-of-sustainability.html",
+      description: "A system inquiry into the bioregions and theories of human-nature ecosystems."
     },
     {
       year: "Monsoon 2023 – Winter 2024",
@@ -519,7 +456,8 @@ const Work = () => {
       title: "The Absolute Business strategy",
       category: "Strategy",
       video: "/Absolute planet.mov",
-      link: "/projects/absolute-business-strategy.html"
+      link: "/projects/absolute-business-strategy.html",
+      description: "Strategic positioning, brand architecture, and investor deck storytelling for climate sciences."
     },
     {
       year: "Summer 2024",
@@ -527,7 +465,8 @@ const Work = () => {
       title: "Signals",
       category: "Thesis",
       image: "/leather signal .png",
-      link: "/projects/signals.html"
+      link: "/projects/signals.html",
+      description: "Speculative design research into biomaterials, future systems, and human-nature integration."
     },
     {
       year: "Monsoon 2025 – Summer 2026",
@@ -535,7 +474,8 @@ const Work = () => {
       title: "Intelligent Policy Platform",
       category: "Product",
       image: "/IPP cover.png",
-      link: "/projects/intelligent-policy-platform.html"
+      link: "/projects/intelligent-policy-platform.html",
+      description: "Interactive health system mapping and simulation for Australian health policymakers."
     }
   ];
 
@@ -548,7 +488,6 @@ const Work = () => {
           viewport={{ once: true }}
           className="mb-12 text-center"
         >
-          <span className="section-label inline-block mb-4 text-primary">01. Selected Inquiry</span>
           <h2 className="text-6xl md:text-8xl font-bold text-primary tracking-tighter leading-none mb-8">The Works.</h2>
         </motion.div>
 
@@ -642,7 +581,7 @@ const Work = () => {
                       </div>
                     ) : (
                       <a href={item.link} className="block group/card">
-                        <div className="border border-white/10 bg-neutral-900/40 hover:bg-neutral-900/80 hover:border-primary/50 p-6 transition-all duration-300 relative overflow-hidden flex flex-col sm:flex-row gap-6">
+                        <div className="border border-white/10 bg-neutral-900/40 hover:bg-neutral-900/80 hover:border-white/30 p-6 transition-all duration-300 relative overflow-hidden flex flex-col sm:flex-row gap-6">
                           {item.image && (
                             <div className="w-full sm:w-32 h-20 flex-shrink-0 overflow-hidden bg-neutral-800 border border-white/5">
                               <img 
@@ -667,16 +606,21 @@ const Work = () => {
                           <div className="flex-grow flex flex-col justify-between">
                             <div>
                               <div className="flex items-center gap-3 mb-1">
-                                <span className="text-[8px] font-bold uppercase tracking-[0.2em] px-2 py-0.5 bg-white/5 border border-white/10 text-white/60">
+                                <span className="text-[8px] font-bold uppercase tracking-[0.2em] px-2 py-0.5 bg-white/5 border border-white/10 text-white">
                                   {item.category}
                                 </span>
                               </div>
-                              <h3 className="text-xl font-bold text-white group-hover/card:text-primary transition-colors duration-300 tracking-tight">
+                              <h3 className="text-xl font-bold text-white group-hover/card:text-white transition-colors duration-300 tracking-tight">
                                 {item.title}
                               </h3>
+                              {item.description && (
+                                <p className="text-xs text-white/60 font-light leading-relaxed mt-2 line-clamp-1">
+                                  {item.description}
+                                </p>
+                              )}
                             </div>
-                            <span className="text-xs text-primary/80 font-bold uppercase tracking-wider mt-4 inline-flex items-center gap-2 group-hover/card:translate-x-1 transition-transform duration-300">
-                              View Case Study <MoveRight size={12} />
+                            <span className="text-xs text-white/80 font-bold uppercase tracking-wider mt-4 inline-flex items-center gap-2 group-hover/card:translate-x-1 transition-transform duration-300">
+                              Explore <MoveRight size={12} />
                             </span>
                           </div>
                         </div>
@@ -711,7 +655,7 @@ const WonderlandCard = ({ title, subtitle, bgClass, image, link, external = fals
         />
       )}
       {showGradient && (
-        <div className={`absolute inset-0 bg-gradient-to-b ${image ? 'from-black/80 via-black/20 to-transparent' : 'from-black/20 to-transparent opacity-0 group-hover:opacity-100'} transition-opacity`} />
+        <div className={`absolute inset-0 bg-gradient-to-b ${image ? 'from-black/30 via-black/10 to-transparent' : 'from-black/10 to-transparent opacity-0 group-hover:opacity-100'} transition-opacity`} />
       )}
       <div className="absolute top-8 left-8 z-10">
         <h4 className={`text-xl font-bold transition-colors group-hover:text-primary ${darkText ? 'text-secondary' : image ? 'text-white' : 'text-secondary'}`}>{title}</h4>
@@ -725,11 +669,10 @@ const Wonderlands = () => (
     <div className="max-w-7xl mx-auto">
       <div className="flex justify-end mb-16 text-right">
         <div>
-          <span className="section-label">02. Speculative Spaces</span>
           <h2 className="text-6xl md:text-8xl font-bold text-[#E2E7F3] leading-none">Parallel <br />wonderlands</h2>
         </div>
       </div>
-      <div className="grid md:grid-cols-3 gap-8">
+      <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
         <WonderlandCard 
           title="Human Gaze Aversion to Metacognition"
           subtitle="Metacognition Inquiry"
@@ -756,6 +699,14 @@ const Wonderlands = () => (
           bgClass="bg-[#A7C7DB]/20"
           image="/Permaculture.jpeg"
           link="/projects/permaculture-design.html"
+        />
+        <WonderlandCard 
+          title="Architectural Design"
+          subtitle="Architecture Portfolio"
+          bgClass="bg-neutral-900"
+          image="/Archi.png"
+          link="https://www.behance.net/gallery/156986343/Architecture-Portfolio"
+          external={true}
         />
       </div>
     </div>
@@ -788,7 +739,7 @@ const About = () => {
           
           <h2 className="text-4xl md:text-5xl lg:text-6xl font-light text-white mb-10 leading-tight">
             Hello,<br />
-            I’m <span className="font-serif italic font-normal text-white">Varsha Nambiar</span>,
+            I’m <span className="font-dmsans italic font-normal text-white">Varsha Nambiar</span>,
           </h2>
           
           <div className="space-y-6 text-[16px] md:text-[17px] text-white/70 leading-relaxed font-light max-w-2xl">
@@ -867,13 +818,121 @@ const About = () => {
   );
 };
 
+const ContactForm = () => {
+  const [name, setName] = React.useState('');
+  const [message, setMessage] = React.useState('');
+  const [animState, setAnimState] = React.useState('idle'); // 'idle', 'folding', 'flying', 'resetting'
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    if (!name.trim() || !message.trim()) return;
+
+    // Trigger the email client
+    const subject = encodeURIComponent(`Message from ${name}`);
+    const body = encodeURIComponent(`Hi Varsha,\n\n${message}\n\nBest,\n${name}`);
+    const mailtoUrl = `mailto:09varsha.nambiar@gmail.com?subject=${subject}&body=${body}`;
+    window.location.href = mailtoUrl;
+
+    // Start folding animation
+    setAnimState('folding');
+    
+    // Morph/Fold duration is 600ms
+    setTimeout(() => {
+      setAnimState('flying');
+    }, 650);
+
+    // Flying animation takes 800ms
+    setTimeout(() => {
+      setAnimState('resetting');
+      setName('');
+      setMessage('');
+    }, 1450);
+
+    // Reset instantly and scale back to idle
+    setTimeout(() => {
+      setAnimState('idle');
+    }, 1550);
+  };
+
+  // Build the inline transition and morph shape
+  const containerStyle = {
+    transition: animState === 'resetting' 
+      ? 'none' 
+      : 'transform 0.8s cubic-bezier(0.25, 1, 0.5, 1), clip-path 0.7s cubic-bezier(0.25, 1, 0.5, 1), opacity 0.7s ease-in-out',
+    clipPath: animState === 'idle' || animState === 'resetting'
+      ? 'polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%)'
+      : 'polygon(50% 0%, 100% 85%, 50% 70%, 0% 85%)'
+  };
+
+  let animClass = "";
+  if (animState === 'idle') {
+    animClass = "scale-100 rotate-0 translate-x-0 opacity-100";
+  } else if (animState === 'folding') {
+    animClass = "scale-50 -rotate-12 opacity-90";
+  } else if (animState === 'flying') {
+    animClass = "scale-0 rotate-[35deg] translate-x-[90vw] -translate-y-[350px] opacity-0";
+  } else if (animState === 'resetting') {
+    animClass = "scale-0 translate-x-0 translateY-0 rotate-0 opacity-0";
+  }
+
+  return (
+    <div className="relative w-full max-w-xl mx-auto my-12 pointer-events-auto z-30">
+      <form 
+        onSubmit={handleSubmit}
+        className={`w-full p-8 rounded-2xl bg-white/5 backdrop-blur-xl border border-white/10 shadow-2xl relative overflow-hidden transition-all ${animClass}`}
+        style={containerStyle}
+      >
+        {/* We fade out form items during the folding sequence */}
+        <div className={`transition-opacity duration-300 ${animState !== 'idle' ? 'opacity-0' : 'opacity-100'}`}>
+          <div className="mb-6 text-left">
+            <label htmlFor="form-name" className="block text-[10px] font-bold uppercase tracking-widest text-white/50 mb-2">Name</label>
+            <input 
+              id="form-name"
+              type="text" 
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              placeholder="Your name"
+              required
+              disabled={animState !== 'idle'}
+              className="w-full bg-white/5 border border-white/10 focus:border-white/40 focus:bg-white/10 outline-none rounded-lg px-4 py-3 text-sm text-white placeholder-white/20 transition-all duration-300"
+            />
+          </div>
+          <div className="mb-8 text-left">
+            <label htmlFor="form-message" className="block text-[10px] font-bold uppercase tracking-widest text-white/50 mb-2">Message</label>
+            <textarea 
+              id="form-message"
+              rows={4}
+              value={message}
+              onChange={(e) => setMessage(e.target.value)}
+              placeholder="Write a message..."
+              required
+              disabled={animState !== 'idle'}
+              className="w-full bg-white/5 border border-white/10 focus:border-white/40 focus:bg-white/10 outline-none rounded-lg px-4 py-3 text-sm text-white placeholder-white/20 transition-all duration-300 resize-none"
+            />
+          </div>
+          <button 
+            type="submit" 
+            disabled={animState !== 'idle'}
+            className="w-full py-4 border border-white/20 hover:border-white hover:bg-white hover:text-black text-white font-bold text-[10px] uppercase tracking-[0.25em] transition-all duration-300 rounded-lg active:scale-95 shadow-md flex items-center justify-center gap-3 cursor-pointer disabled:opacity-50"
+          >
+            Send Message <MoveRight size={14} />
+          </button>
+        </div>
+      </form>
+    </div>
+  );
+};
+
 const Contact = () => (
   <section id="contact" className="py-32 px-6 bg-black text-white border-t border-white/10">
     <div className="max-w-7xl mx-auto text-center">
-      <h2 className="text-4xl md:text-5xl font-dmsans italic font-light text-white mb-12 leading-relaxed">
+      <h2 className="text-4xl md:text-5xl font-dmsans italic font-light text-white mb-8 leading-relaxed">
         Would you like to dive into a conversation?
       </h2>
-      <div className="flex justify-center items-center gap-8">
+      
+      <ContactForm />
+
+      <div className="flex justify-center items-center gap-8 mt-16">
         {/* Behance Button */}
         <a 
           href="https://www.behance.net/varsha09/projects" 
@@ -925,7 +984,10 @@ const Footer = () => (
     </div>
 
     <div className="py-20 px-6 max-w-7xl mx-auto text-center">
-      <div className="font-display font-bold text-2xl mb-4 text-secondary">Varsha Nambiar</div>
+      <div className="font-display font-bold text-2xl mb-4 text-secondary flex items-center justify-center gap-3">
+        <img src="/logo icon.PNG" alt="Logo" className="h-6 w-auto object-contain" />
+        Varsha Nambiar
+      </div>
       <p className="text-[10px] font-black uppercase tracking-[0.4em] text-primary mb-8">
         Multidisciplinary design strategist
       </p>
@@ -1028,30 +1090,16 @@ const CustomCursor = () => {
 };
 
 function App() {
-  const [season, setSeason] = React.useState('spring');
-  const [seasonsEnabled, setSeasonsEnabled] = React.useState(true);
-
-  React.useEffect(() => {
-    const SEASONS = ['spring', 'summer', 'autumn', 'rainy'];
-    const currentCount = parseInt(localStorage.getItem('visit_count') || '0', 10);
-    const nextCount = currentCount + 1;
-    localStorage.setItem('visit_count', nextCount.toString());
-    
-    const currentSeason = SEASONS[currentCount % SEASONS.length];
-    setSeason(currentSeason);
-  }, []);
-
   return (
     <div className="selection:bg-primary/20 selection:text-primary">
       <CustomCursor />
       <Navigation />
       <main>
-        <Hero season={season} seasonsEnabled={seasonsEnabled} setSeasonsEnabled={setSeasonsEnabled} />
+        <Hero />
         <Work />
         <Wonderlands />
         <About />
         <Contact />
-        <ParticleOverlay type={seasonsEnabled ? season : null} />
       </main>
       <Footer />
     </div>

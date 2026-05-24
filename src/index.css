@@ -42,7 +42,7 @@
 
 @layer components {
   .glass-card {
-    @apply bg-white/40 backdrop-blur-xl border border-white/40 shadow-[0_8px_32px_0_rgba(24,86,255,0.08)];
+    @apply bg-white/40 backdrop-blur-xl shadow-[0_8px_32px_0_rgba(24,86,255,0.08)];
   }
 
   .glass-nav {

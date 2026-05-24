@@ -69,6 +69,34 @@ body {
   border-radius: 12px; border: none;
 }
 
+/* Header Dark Mode Styles */
+.main-header.header-dark-mode {
+  background: rgba(8, 8, 8, 0.45) !important;
+  border-color: rgba(255, 255, 255, 0.08) !important;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3) !important;
+}
+.main-header.header-dark-mode .header-logo {
+  color: #ffffff !important;
+}
+.main-header.header-dark-mode .header-logo-img {
+  filter: brightness(0) invert(1) !important;
+}
+.main-header.header-dark-mode .header-links a {
+  color: rgba(255, 255, 255, 0.7) !important;
+}
+.main-header.header-dark-mode .header-links a:hover {
+  color: #ffffff !important;
+}
+.main-header.header-dark-mode .header-cta {
+  background: rgba(255, 255, 255, 0.1) !important;
+  color: #ffffff !important;
+  border: 1px solid rgba(255, 255, 255, 0.15) !important;
+}
+.main-header.header-dark-mode .header-cta:hover {
+  background: #ffffff !important;
+  color: #080808 !important;
+}
+
 /* ── PROJECT NAV ── */
 .project-nav {
   position: fixed; top: 50%; right: 2rem; transform: translateY(-50%);
@@ -329,7 +357,7 @@ h2 em { font-style: italic; color: var(--teal); font-weight: 400; }
 }
 .contact-footer .cf-inner { max-width: 1080px; margin: 0 auto; padding: 0 4.5rem; }
 .cf-logo { font-family: var(--sans); font-weight: 800; font-size: 22px; color: var(--ink); margin-bottom: 0.4rem; display: flex; align-items: center; justify-content: center; gap: 10px; }
-.cf-logo-dot { width: 8px; height: 8px; background: var(--teal); border-radius: 50%; }
+.cf-logo-img { height: 22px; width: auto; object-fit: contain; }
 .cf-role { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.3em; color: var(--teal); margin-bottom: 2rem; }
 .cf-links { display: flex; justify-content: center; gap: 3rem; margin-bottom: 3rem; }
 .cf-links a { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.15em; color: var(--ink-4); text-decoration: none; transition: color 0.3s; }
@@ -424,7 +452,7 @@ body { position: relative; }
       <li><a href="/index.html#contact">Contact</a></li>
     </ul>
   </nav>
-  <button class="header-cta">Grab a coffee</button>
+  <a href="/Varsha Nambiar-Resume.pdf" target="_blank" rel="noopener noreferrer" download="Varsha Nambiar-Resume.pdf" class="header-cta" style="display: inline-flex; align-items: center; text-decoration: none; white-space: nowrap;">Download Resume</a>
 </header>
 
 <div class="project-pager-container">
@@ -709,7 +737,7 @@ body { position: relative; }
 <!-- CONTACT FOOTER -->
 <footer class="contact-footer">
   <div class="cf-inner">
-    <div class="cf-logo"><div class="cf-logo-dot"></div>Varsha Nambiar</div>
+    <div class="cf-logo"><img src="/logo%20icon.PNG" alt="Logo" class="cf-logo-img" />Varsha Nambiar</div>
     <div class="cf-role">Multidisciplinary Design Strategist</div>
     <div class="cf-links" style="align-items: center;">
       <a href="https://www.behance.net/varsha09/projects" target="_blank" rel="noopener noreferrer" title="Behance" style="display: flex;">
@@ -734,6 +762,38 @@ body { position: relative; }
 </footer>
 
 
+
+<script>
+// Header Dark Mode Detection
+(function() {
+  const header = document.querySelector('.main-header');
+  if (!header) return;
+
+  function updateHeader() {
+    const headerRect = header.getBoundingClientRect();
+    const centerY = headerRect.top + headerRect.height / 2;
+
+    const darkElms = document.querySelectorAll('.hero-left, .more-works, section.bg-black, section#work, section#about, section#contact');
+    let overDark = false;
+    for (let i = 0; i < darkElms.length; i++) {
+      const rect = darkElms[i].getBoundingClientRect();
+      if (centerY >= rect.top && centerY <= rect.bottom) {
+        overDark = true;
+        break;
+      }
+    }
+
+    if (overDark) {
+      header.classList.add('header-dark-mode');
+    } else {
+      header.classList.remove('header-dark-mode');
+    }
+  }
+
+  window.addEventListener('scroll', updateHeader, { passive: true });
+  updateHeader();
+})();
+</script>
 
 </body>
 </html>

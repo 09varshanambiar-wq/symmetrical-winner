@@ -718,19 +718,19 @@
     display: flex; align-items: center; gap: 10px; color: var(--white);
     text-decoration: none;
   }
-  .header-logo-img { height: 20px; width: auto; object-fit: contain; }
+  .header-logo-img { height: 20px; width: auto; object-fit: contain; filter: brightness(0) invert(1); }
   .header-links { display: flex; gap: 32px; list-style: none; }
   .header-links a {
     font-size: 10px; font-weight: 700; text-transform: uppercase;
-    letter-spacing: 0.15em; color: var(--dim); text-decoration: none;
+    letter-spacing: 0.15em; color: rgba(255, 255, 255, 0.7); text-decoration: none;
     transition: color 0.3s;
   }
   .header-links a:hover { color: var(--white); }
   .header-cta {
     font-size: 10px; font-weight: 700; text-transform: uppercase;
-    letter-spacing: 0.1em; padding: 10px 20px;
-    background: rgba(255, 255, 255, 0.08); color: var(--white);
-    border-radius: 12px; border: 1px solid rgba(255,255,255,0.12); cursor: pointer;
+    letter-spacing: 0.15em; padding: 10px 20px;
+    background: rgba(255, 255, 255, 0.1); color: var(--white);
+    border-radius: 12px; border: 1px solid rgba(255,255,255,0.2); cursor: pointer;
     transition: all 0.3s;
   }
   .header-cta:hover { background: var(--white); color: var(--black); }
@@ -751,7 +751,7 @@
   }
   .contact-footer .cf-inner { max-width: 1080px; margin: 0 auto; padding: 0 48px; }
   .cf-logo { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 22px; color: var(--white); margin-bottom: 0.4rem; display: flex; align-items: center; justify-content: center; gap: 10px; }
-  .cf-logo-dot { width: 8px; height: 8px; background: #1856FF; border-radius: 50%; }
+  .cf-logo-img { height: 22px; width: auto; object-fit: contain; filter: brightness(0) invert(1); }
   .cf-role { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.3em; color: var(--accent); margin-bottom: 2rem; }
   .cf-links { display: flex; justify-content: center; gap: 3rem; margin-bottom: 3rem; }
   .cf-links a { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.15em; color: var(--dim); text-decoration: none; transition: color 0.3s; }
@@ -886,7 +886,7 @@
       <li><a href="/index.html#contact">Contact</a></li>
     </ul>
   </nav>
-  <button class="header-cta">Grab a coffee</button>
+  <a href="/Varsha Nambiar-Resume.pdf" target="_blank" rel="noopener noreferrer" download="Varsha Nambiar-Resume.pdf" class="header-cta" style="display: inline-flex; align-items: center; text-decoration: none; white-space: nowrap;">Download Resume</a>
 </header>
 
 <div class="project-pager-container">
@@ -1476,7 +1476,7 @@
 <!-- CONTACT FOOTER -->
 <footer class="contact-footer">
   <div class="cf-inner">
-    <div class="cf-logo"><div class="cf-logo-dot"></div>Varsha Nambiar</div>
+    <div class="cf-logo"><img src="/logo%20icon.PNG" alt="Logo" class="cf-logo-img" />Varsha Nambiar</div>
     <div class="cf-role">Multidisciplinary Design Strategist</div>
     <div class="cf-links" style="align-items: center;">
       <a href="https://www.behance.net/varsha09/projects" target="_blank" rel="noopener noreferrer" title="Behance" style="display: flex;">

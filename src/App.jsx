@@ -381,7 +381,7 @@ const ProjectCard = ({ number, title, category, image, video, link, span, season
       <span className="text-[10px] font-bold uppercase tracking-widest text-white/60 block mb-2">{season}</span>
       <h3 className="text-xl font-bold text-white tracking-tight mb-1">{title}</h3>
       {description && (
-        <p className="text-xs text-white/70 font-light leading-relaxed mt-2 line-clamp-1">{description}</p>
+        <p className="text-sm text-white/70 font-light leading-relaxed mt-2 line-clamp-2">{description}</p>
       )}
       <div className="w-8 h-0.5 bg-white/40 mt-3 transform origin-left scale-x-0 group-hover:scale-x-100 transition-transform duration-700 delay-100" />
     </div>
@@ -614,7 +614,7 @@ const Work = () => {
                                 {item.title}
                               </h3>
                               {item.description && (
-                                <p className="text-xs text-white/60 font-light leading-relaxed mt-2 line-clamp-1">
+                                <p className="text-sm text-white/60 font-light leading-relaxed mt-2 line-clamp-2">
                                   {item.description}
                                 </p>
                               )}

@@ -1,0 +1,1093 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Absolute Strategy</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Editorial+New:ital@0;1&family=Syne:wght@400;500;600;700;800&family=DM+Mono:wght@300;400&display=swap" rel="stylesheet">
+
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --black: #080808;
+    --white: #f5f4f0;
+    --dim: #888;
+    --green: #4a7c3f;
+    --green-bar: #5b9b4e;
+    --red-bar: #8b3a2e;
+    --purple-bar: #6b3fa0;
+    --accent: #c8b89a;
+    --border: rgba(255,255,255,0.08);
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--black);
+    color: var(--white);
+    font-family: 'Syne', sans-serif;
+    font-size: 16px;
+    line-height: 1.6;
+    overflow-x: hidden;
+  }
+
+  /* NOISE OVERLAY */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 9999;
+    opacity: 0.4;
+  }
+
+  /* LAYOUT */
+  .container {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 0 48px;
+  }
+
+  section {
+    padding: 96px 0;
+    border-bottom: 1px solid var(--border);
+  }
+
+  section:last-child { border-bottom: none; }
+
+  /* LABEL */
+  .label {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    font-weight: 300;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--dim);
+    margin-bottom: 32px;
+  }
+
+  .label span {
+    color: var(--accent);
+    margin-right: 8px;
+  }
+
+  /* HERO */
+  .hero {
+    padding: 140px 0 80px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .hero-eyebrow {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--dim);
+    margin-bottom: 28px;
+  }
+
+  .hero h1 {
+    font-family: 'Syne', sans-serif;
+    font-size: clamp(52px, 8vw, 96px);
+    font-weight: 800;
+    line-height: 0.92;
+    letter-spacing: -0.03em;
+    margin-bottom: 40px;
+  }
+
+  .hero h1 em {
+    font-style: italic;
+    font-weight: 400;
+    color: var(--accent);
+  }
+
+  .hero-meta {
+    display: flex;
+    gap: 64px;
+    flex-wrap: wrap;
+    margin-top: 56px;
+    padding-top: 40px;
+    border-top: 1px solid var(--border);
+  }
+
+  .meta-item .meta-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--dim);
+    margin-bottom: 6px;
+  }
+
+  .meta-item .meta-value {
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--white);
+  }
+
+  /* IMAGE PLACEHOLDER */
+  .img-placeholder {
+    width: 100%;
+    background: #111;
+    border: 1px solid var(--border);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    color: #444;
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .img-placeholder::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: repeating-linear-gradient(
+      -45deg,
+      transparent,
+      transparent 20px,
+      rgba(255,255,255,0.015) 20px,
+      rgba(255,255,255,0.015) 21px
+    );
+  }
+
+  .img-placeholder svg {
+    opacity: 0.25;
+  }
+
+  .img-placeholder-label {
+    position: relative;
+    z-index: 1;
+    text-align: center;
+  }
+
+  .hero-img { height: 520px; margin-top: 64px; }
+  .img-md { height: 360px; }
+  .img-sm { height: 240px; }
+  .img-xs { height: 180px; }
+
+  /* SECTORS */
+  .sectors {
+    display: flex;
+    gap: 48px;
+    margin-top: 40px;
+  }
+
+  .sector {
+    flex: 1;
+  }
+
+  .sector-name {
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    margin-bottom: 10px;
+  }
+
+  .sector-bar {
+    height: 3px;
+    width: 100%;
+    border-radius: 2px;
+  }
+
+  .bar-green { background: var(--green-bar); }
+  .bar-red   { background: var(--red-bar); }
+  .bar-purple{ background: var(--purple-bar); }
+
+  /* VISION BLOCK */
+  .vision-headline {
+    font-size: 13px;
+    font-weight: 400;
+    color: var(--dim);
+    margin-bottom: 8px;
+    font-family: 'DM Mono', monospace;
+    letter-spacing: 0.05em;
+  }
+
+  .vision-title {
+    font-family: 'Syne', sans-serif;
+    font-size: clamp(36px, 5vw, 60px);
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    line-height: 1;
+    margin-bottom: 24px;
+  }
+
+  .vision-tagline {
+    font-size: 15px;
+    color: var(--dim);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    font-family: 'DM Mono', monospace;
+    margin-bottom: 32px;
+  }
+
+  .vision-tagline span {
+    margin-right: 28px;
+  }
+
+  .vision-body {
+    font-size: 16px;
+    line-height: 1.75;
+    color: rgba(245,244,240,0.72);
+    max-width: 640px;
+  }
+
+  /* PROJECTS GRID */
+  .projects-grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 24px;
+    margin-top: 48px;
+  }
+
+  .project-card {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+
+  .project-card .img-placeholder {
+    height: 160px;
+    border-radius: 50%;
+    width: 160px;
+    margin: 0 auto;
+  }
+
+  .project-card-name {
+    text-align: center;
+    font-size: 13px;
+    font-weight: 600;
+    line-height: 1.3;
+  }
+
+  .project-card-desc {
+    font-size: 12px;
+    line-height: 1.6;
+    color: rgba(245,244,240,0.55);
+    text-align: center;
+  }
+
+  /* BRIEF */
+  .brief-text {
+    font-size: clamp(18px, 2.2vw, 26px);
+    line-height: 1.6;
+    font-weight: 400;
+    color: rgba(245,244,240,0.85);
+    max-width: 820px;
+    letter-spacing: -0.01em;
+  }
+
+  /* TEAM */
+  .team-list {
+    display: flex;
+    gap: 64px;
+    flex-wrap: wrap;
+    margin-top: 32px;
+  }
+
+  .team-member {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .team-member-name {
+    font-size: 17px;
+    font-weight: 600;
+  }
+
+  .team-member-role {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    color: var(--dim);
+    letter-spacing: 0.1em;
+  }
+
+  /* DESIGN PROCESS */
+  .process-diagram {
+    margin-top: 56px;
+    background: #0e0e0e;
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 64px;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 0;
+    align-items: center;
+  }
+
+  .process-col {
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
+    align-items: center;
+  }
+
+  .process-node {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    background: radial-gradient(circle at 40% 40%, #2a2a2a, #111);
+    border: 1px solid rgba(255,255,255,0.1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 13px;
+    font-weight: 600;
+    text-align: center;
+    padding: 16px;
+    line-height: 1.3;
+  }
+
+  .process-node.large {
+    width: 150px;
+    height: 150px;
+    background: radial-gradient(circle at 40% 40%, #1e1e1e, #0e0e0e);
+  }
+
+  .process-label {
+    font-size: 13px;
+    color: rgba(245,244,240,0.55);
+    text-align: center;
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.05em;
+  }
+
+  .process-arrow {
+    text-align: center;
+    color: var(--dim);
+    font-size: 20px;
+  }
+
+  /* FINAL OUTPUT */
+  .output-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin-top: 48px;
+  }
+
+  .output-card {
+    position: relative;
+    overflow: hidden;
+  }
+
+  .output-card .img-placeholder {
+    height: 280px;
+    border-radius: 4px;
+  }
+
+  .output-card-label {
+    margin-top: 12px;
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    color: var(--dim);
+    letter-spacing: 0.1em;
+  }
+
+  /* VIEW WEBSITE BUTTON */
+  .cta-wrapper {
+    display: flex;
+    justify-content: center;
+    padding: 56px 0;
+  }
+
+  .cta-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    font-family: 'Syne', sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    color: var(--white);
+    background: transparent;
+    border: 1px solid rgba(255,255,255,0.25);
+    padding: 16px 40px;
+    border-radius: 100px;
+    text-decoration: none;
+    transition: background 0.25s, border-color 0.25s, transform 0.2s;
+  }
+
+  .cta-btn:hover {
+    background: rgba(255,255,255,0.07);
+    border-color: rgba(255,255,255,0.5);
+    transform: translateY(-1px);
+  }
+
+  .cta-btn svg {
+    transition: transform 0.2s;
+  }
+
+  .cta-btn:hover svg {
+    transform: translate(2px, -2px);
+  }
+
+  /* TAKEAWAYS */
+  .takeaways-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 48px;
+    margin-top: 48px;
+  }
+
+  .takeaway h3 {
+    font-size: 15px;
+    font-weight: 700;
+    margin-bottom: 14px;
+    letter-spacing: 0.02em;
+  }
+
+  .takeaway p {
+    font-size: 14px;
+    line-height: 1.75;
+    color: rgba(245,244,240,0.6);
+  }
+
+  /* FADE IN ANIMATION */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(24px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  .fade-up {
+    animation: fadeUp 0.8s cubic-bezier(0.22, 1, 0.36, 1) both;
+  }
+
+  .hero h1    { animation-delay: 0.1s; }
+  .hero-meta  { animation-delay: 0.25s; }
+
+  /* SCROLLBAR */
+  ::-webkit-scrollbar { width: 4px; }
+  ::-webkit-scrollbar-track { background: var(--black); }
+  ::-webkit-scrollbar-thumb { background: #333; border-radius: 2px; }
+
+  /* PAGE HEADER */
+  .page-header {
+    padding: 72px 0 0;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .page-title {
+    font-family: 'Syne', sans-serif;
+    font-size: clamp(13px, 1.2vw, 15px);
+    font-weight: 400;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--dim);
+    font-family: 'DM Mono', monospace;
+    margin-bottom: 32px;
+  }
+
+  /* TABS */
+  .tabs-nav {
+    display: flex;
+    gap: 0;
+    margin-top: 0;
+  }
+
+  .tab-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-family: 'Syne', sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    color: var(--dim);
+    padding: 14px 28px 14px 0;
+    margin-right: 32px;
+    position: relative;
+    transition: color 0.2s;
+    white-space: nowrap;
+  }
+
+  .tab-btn::after {
+    content: '';
+    position: absolute;
+    bottom: -1px;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: var(--white);
+    opacity: 0;
+    transition: opacity 0.2s;
+  }
+
+  .tab-btn.active {
+    color: var(--white);
+  }
+
+  .tab-btn.active::after {
+    opacity: 1;
+  }
+
+  .tab-btn:hover {
+    color: rgba(245,244,240,0.75);
+  }
+
+  /* TAB PANELS */
+  .tab-panel { display: none; }
+  .tab-panel.active { display: block; }
+
+  /* BLANK STATE */
+  .blank-state {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 60vh;
+    gap: 16px;
+    color: var(--dim);
+    text-align: center;
+  }
+
+  .blank-state-icon {
+    width: 48px;
+    height: 48px;
+    border: 1px solid var(--border);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 8px;
+  }
+
+  .blank-state p {
+    font-family: 'DM Mono', monospace;
+    font-size: 12px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+
+  @media (max-width: 768px) {
+    .container { padding: 0 24px; }
+    section { padding: 64px 0; }
+    .projects-grid { grid-template-columns: repeat(2, 1fr); }
+    .takeaways-grid { grid-template-columns: 1fr; gap: 32px; }
+    .output-grid { grid-template-columns: 1fr; }
+    .sectors { flex-direction: column; gap: 24px; }
+    .process-diagram { padding: 32px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- PAGE HEADER -->
+<div class="page-header">
+  <div class="container">
+    <p class="page-title">The Absolute Strategy</p>
+    <nav class="tabs-nav">
+      <button class="tab-btn active" onclick="switchTab('planet2040', this)">Absolute Planet 2040</button>
+      <button class="tab-btn" onclick="switchTab('bizstrategy', this)">Business Strategy</button>
+    </nav>
+  </div>
+</div>
+
+<!-- TAB: ABSOLUTE PLANET 2040 -->
+<div id="tab-planet2040" class="tab-panel active">
+
+<!-- HERO -->
+<section class="hero">
+  <div class="container">
+    <p class="hero-eyebrow fade-up">Brand Identity & Web Design · 2023</p>
+    <h1 class="fade-up">
+      Absolute<br>
+      <em>Planet 2040</em>
+    </h1>
+
+    <!-- Hero image placeholder -->
+    <div class="img-placeholder hero-img fade-up" style="animation-delay:0.3s">
+      <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1">
+        <rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/>
+      </svg>
+      <span class="img-placeholder-label">Hero — Website landing screen<br>"Absolute Planet 2040" with underwater visual</span>
+    </div>
+
+    <div class="hero-meta fade-up">
+      <div class="meta-item">
+        <div class="meta-label">Client</div>
+        <div class="meta-value">Absolute Biosciences</div>
+      </div>
+      <div class="meta-item">
+        <div class="meta-label">Deliverable</div>
+        <div class="meta-value">Brand Mission + Web Experience</div>
+      </div>
+      <div class="meta-item">
+        <div class="meta-label">Domains</div>
+        <div class="meta-value">Agriculture · Materials · Care</div>
+      </div>
+      <div class="meta-item">
+        <div class="meta-label">Team size</div>
+        <div class="meta-value">3 designers</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section>
+  <div class="container">
+    <p class="label"><span>01</span>About</p>
+    <p style="font-size: clamp(17px, 2vw, 22px); line-height: 1.7; max-width: 700px; color: rgba(245,244,240,0.8); margin-bottom: 48px;">
+      Absolute is a bioscience company that harnesses nature's billions of years of evolutionary intelligence to develop novel solutions. Working at the intersection of biology and innovation, they apply their research across three core sectors.
+    </p>
+
+    <div class="sectors">
+      <div class="sector">
+        <div class="sector-name">Agriculture</div>
+        <div class="sector-bar bar-green"></div>
+      </div>
+      <div class="sector">
+        <div class="sector-name">Materials</div>
+        <div class="sector-bar bar-red"></div>
+      </div>
+      <div class="sector">
+        <div class="sector-name">Care</div>
+        <div class="sector-bar bar-purple"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- VISION -->
+<section>
+  <div class="container">
+    <p class="label"><span>02</span>Vision</p>
+    <p class="vision-headline">To create an</p>
+    <h2 class="vision-title">Absolute Planet 2040</h2>
+    <p class="vision-tagline">
+      <span>Clean Air.</span>
+      <span>Clean Water.</span>
+      <span>Clean Food.</span>
+    </p>
+    <p class="vision-body">
+      Absolute's vision is rooted in a belief that access to clean air, water, and food is a baseline human right — not an aspiration. To work toward this, they built the <strong>Nature's Intelligence Platform (NIP™)</strong> — the world's largest curated database of microorganisms, biomolecules, and enzymes found in nature. Every project Absolute undertakes is powered and informed by NIP™, translating evolutionary biology into applied solutions at scale.
+    </p>
+  </div>
+</section>
+
+<!-- PROJECTS -->
+<section>
+  <div class="container">
+    <p class="label"><span>03</span>NIP™-Powered Projects</p>
+    <p style="max-width: 560px; color: rgba(245,244,240,0.6); font-size: 15px; line-height: 1.7; margin-bottom: 16px;">
+      The following five initiatives represent Absolute's active field work — each scanned and powered by the NIP™ platform, each addressing a distinct ecological or biological challenge.
+    </p>
+
+    <div class="projects-grid">
+
+      <div class="project-card">
+        <div class="img-placeholder img-placeholder" style="height:160px; width:160px; border-radius:50%; margin:0 auto;">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+          <span class="img-placeholder-label" style="font-size:9px;">Ganga Basin</span>
+        </div>
+        <div class="project-card-name">Ganga Basin Project</div>
+        <div class="project-card-desc">Restoring the ecological balance of India's most sacred and vital river system — the Ganga River Basin.</div>
+      </div>
+
+      <div class="project-card">
+        <div class="img-placeholder" style="height:160px; width:160px; border-radius:50%; margin:0 auto;">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+          <span class="img-placeholder-label" style="font-size:9px;">Carbon</span>
+        </div>
+        <div class="project-card-name">Carbon Sequestration Project</div>
+        <div class="project-card-desc">Deploying bioscience-led carbon capture projects to fast-track global climate ambitions.</div>
+      </div>
+
+      <div class="project-card">
+        <div class="img-placeholder" style="height:160px; width:160px; border-radius:50%; margin:0 auto; border: 2px solid rgba(255,255,255,0.15);">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+          <span class="img-placeholder-label" style="font-size:9px;">Biodiversity</span>
+        </div>
+        <div class="project-card-name">World Biodiversity Project</div>
+        <div class="project-card-desc">Preserving genetic diversity across hotspots — forests, mangroves, deserts, volcanoes, and glaciers.</div>
+      </div>
+
+      <div class="project-card">
+        <div class="img-placeholder" style="height:160px; width:160px; border-radius:50%; margin:0 auto;">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+          <span class="img-placeholder-label" style="font-size:9px;">Himalaya</span>
+        </div>
+        <div class="project-card-name">Himalayan Genome Project</div>
+        <div class="project-card-desc">Tracking novel genomes across unexplored and extreme ecosystems in the Himalayan region.</div>
+      </div>
+
+      <div class="project-card">
+        <div class="img-placeholder" style="height:160px; width:160px; border-radius:50%; margin:0 auto;">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+          <span class="img-placeholder-label" style="font-size:9px;">Soil Health</span>
+        </div>
+        <div class="project-card-name">World Soil Health Project</div>
+        <div class="project-card-desc">Rejuvenating soil fertility and the microbiome at a global scale.</div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- BRIEF -->
+<section>
+  <div class="container">
+    <p class="label"><span>04</span>Brief</p>
+    <p class="brief-text">
+      The ask was to conceptualise and design a mission that would communicate what Absolute stands for — the vision of <em>Absolute Planet 2040</em>, where clean air, water, and food are a common minimum. The five projects above were positioned as concrete, active pathways toward that mission, not just aspirational ideas.
+    </p>
+  </div>
+</section>
+
+<!-- TEAM -->
+<section>
+  <div class="container">
+    <p class="label"><span>05</span>Team</p>
+    <div class="team-list">
+      <div class="team-member">
+        <div class="team-member-name">Prachi Sethi</div>
+        <div class="team-member-role">Designer</div>
+      </div>
+      <div class="team-member">
+        <div class="team-member-name">Kavya Narayanan</div>
+        <div class="team-member-role">Designer</div>
+      </div>
+      <div class="team-member">
+        <div class="team-member-name">Varsha Nambiar</div>
+        <div class="team-member-role">Designer</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- DESIGN PROCESS -->
+<section>
+  <div class="container">
+    <p class="label"><span>06</span>Design Process</p>
+    <p style="max-width: 560px; color: rgba(245,244,240,0.6); font-size: 15px; line-height: 1.7; margin-bottom: 0;">
+      The process began with secondary research to understand the category, the science, and the audience. From there, we distilled a narrative — a story — and used it to shape three parallel workstreams: brand identity, user experience, and user interface. Each fed back into the central brand identity through iterative feedback loops, and all three ultimately converged on the "Entity" — the final, unified expression of Absolute's mission.
+    </p>
+
+    <div class="process-diagram">
+      <!-- Left column: Research inputs -->
+      <div style="display:flex; flex-direction:column; gap:48px; align-items:flex-start;">
+        <div>
+          <div style="font-size:15px; font-weight:600; margin-bottom:6px;">Secondary Research</div>
+          <div style="font-size:13px; color:var(--dim); line-height:1.6; max-width:200px;">Understanding the science, category, and audience landscape</div>
+        </div>
+        <div style="width:1px; height:48px; background:var(--border); margin-left:12px;"></div>
+        <div>
+          <div style="font-size:15px; font-weight:600; margin-bottom:6px;">Impactful Communication</div>
+          <div style="font-size:13px; color:var(--dim); line-height:1.6; max-width:200px;">Translating complex science into emotionally resonant language</div>
+        </div>
+        <div style="margin-left:0;">
+          <div style="font-size:13px; color:var(--accent); font-family:'DM Mono',monospace; letter-spacing:0.08em; font-size:11px;">↓ Story</div>
+        </div>
+      </div>
+
+      <!-- Center column: Brand Identity hub -->
+      <div style="display:flex; flex-direction:column; align-items:center; gap:16px; padding: 0 16px;">
+        <div style="font-size:11px; font-family:'DM Mono',monospace; color:var(--dim); letter-spacing:0.1em; margin-bottom:4px;">USER EXPERIENCE</div>
+        <div class="process-node large" style="background: radial-gradient(circle at 35% 35%, #282828, #111);">User<br>Experience</div>
+        <div style="font-size:11px; font-family:'DM Mono',monospace; color:var(--dim); letter-spacing:0.08em;">↕ Feedback</div>
+        <div class="process-node large" style="width:170px; height:170px; background: radial-gradient(circle at 35% 35%, #222, #0e0e0e); border:1px solid rgba(255,255,255,0.15);">Brand<br>Identity</div>
+        <div style="font-size:11px; font-family:'DM Mono',monospace; color:var(--dim); letter-spacing:0.08em;">↕ Feedback</div>
+        <div class="process-node large" style="background: radial-gradient(circle at 35% 35%, #282828, #111);">User<br>Interface</div>
+        <div style="font-size:11px; font-family:'DM Mono',monospace; color:var(--dim); letter-spacing:0.1em; margin-top:4px;">USER INTERFACE</div>
+      </div>
+
+      <!-- Right column: Entity output -->
+      <div style="display:flex; flex-direction:column; align-items:flex-end; justify-content:center;">
+        <div style="text-align:right;">
+          <div style="font-family:'DM Mono',monospace; font-size:11px; color:var(--accent); letter-spacing:0.1em; margin-bottom:16px;">→ ENTITY</div>
+          <div class="process-node" style="width:140px; height:140px; margin-left:auto;">Entity</div>
+          <div style="font-size:13px; color:var(--dim); line-height:1.6; max-width:180px; margin-top:16px; text-align:right;">The unified, final expression of Absolute's mission and identity</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FINAL OUTPUT -->
+<section>
+  <div class="container">
+    <p class="label"><span>07</span>Final Output</p>
+    <p style="max-width: 560px; color: rgba(245,244,240,0.6); font-size: 15px; line-height: 1.7; margin-bottom: 0;">
+      The website translates Absolute's mission into three urgent, data-backed narratives — one for each resource at stake: air, water, and food. Each section opens with a stark statistic and builds toward the company's response. The result is a scrollable experience that converts awareness into conviction.
+    </p>
+
+    <div class="output-grid" style="margin-top: 48px;">
+      <div class="output-card">
+        <div class="img-placeholder img-md">
+          <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+          <span class="img-placeholder-label">Landing screen — "A Bold Mission:<br>ABSOLUTE PLANET 2040"<br>Underwater visual, teal tones</span>
+        </div>
+        <div class="output-card-label">01 — Hero / Landing</div>
+      </div>
+      <div class="output-card">
+        <div class="img-placeholder img-md">
+          <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+          <span class="img-placeholder-label">"THE AIR WE BREATHE"<br>Dark screen, concentric circle graphic<br>Stat: By 2050, air pollution will kill [X] people</span>
+        </div>
+        <div class="output-card-label">02 — The Air We Breathe</div>
+      </div>
+      <div class="output-card">
+        <div class="img-placeholder img-md">
+          <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+          <span class="img-placeholder-label">"THE WATER WE DRINK"<br>Blue water wave graphic, population data<br>Stat: Earth runs out of freshwater in 10 years</span>
+        </div>
+        <div class="output-card-label">03 — The Water We Drink</div>
+      </div>
+      <div class="output-card">
+        <div class="img-placeholder img-md">
+          <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+          <span class="img-placeholder-label">"THE FOOD WE EAT"<br>Green circle graphic, lime tones<br>Stat: By 2040, 700M people face hunger daily</span>
+        </div>
+        <div class="output-card-label">04 — The Food We Eat</div>
+      </div>
+    </div>
+
+    <div class="cta-wrapper">
+      <a href="#" class="cta-btn" target="_blank">
+        View Website
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M7 17L17 7M17 7H7M17 7v10"/>
+        </svg>
+      </a>
+    </div>
+
+  </div>
+</section>
+
+<!-- TAKEAWAYS -->
+<section>
+  <div class="container">
+    <p class="label"><span>08</span>Takeaways</p>
+    <div class="takeaways-grid">
+      <div class="takeaway">
+        <h3>Tone of Communication</h3>
+        <p>A brand's vision has to be grounded in the reality of its audience. For Absolute, we found that optimism paired with honesty was the register that worked — it acknowledged the urgency without weaponising fear. Fear-mongering, we found, created distance rather than conviction.</p>
+      </div>
+      <div class="takeaway">
+        <h3>Relatability</h3>
+        <p>Complex scientific narratives land better when broken into emotionally legible fragments. Instead of explaining the science as-is, we translated it into experiences and stakes the audience already understood. Relatability doesn't dilute — it activates recall and investment.</p>
+      </div>
+      <div class="takeaway">
+        <h3>Right Balance</h3>
+        <p>Designing an interface for a mission-driven brand means holding two competing forces in tension: engagement and overload. The flow needed to feel seamless while still challenging the user to sit with difficult realities — without burdening them with cognitive load that breaks the experience.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+</div><!-- /tab-planet2040 -->
+
+<!-- TAB: BUSINESS STRATEGY -->
+<div id="tab-bizstrategy" class="tab-panel">
+
+  <!-- ROLE INTRO -->
+  <section class="hero" style="padding-top: 80px; padding-bottom: 64px;">
+    <div class="container">
+      <p class="hero-eyebrow fade-up">Strategy & Positioning · Founders Office</p>
+      <h1 class="fade-up" style="font-size: clamp(44px, 7vw, 82px);">
+        Inside the<br>
+        <em>Founders Office</em>
+      </h1>
+      <p style="margin-top: 36px; font-size: clamp(16px, 1.8vw, 20px); line-height: 1.75; color: rgba(245,244,240,0.72); max-width: 680px;">
+        I was part of a six-member Founders Office team at Absolute Biosciences — a small, high-context unit working directly at the intersection of science, strategy, and storytelling. The work spanned investor positioning, brand architecture, and research-driven communication, across the full breadth of what Absolute does and intends to become.
+      </p>
+
+      <div class="hero-meta fade-up" style="margin-top: 48px;">
+        <div class="meta-item">
+          <div class="meta-label">Context</div>
+          <div class="meta-value">Founders Office</div>
+        </div>
+        <div class="meta-item">
+          <div class="meta-label">Team</div>
+          <div class="meta-value">6 members</div>
+        </div>
+        <div class="meta-item">
+          <div class="meta-label">Domains touched</div>
+          <div class="meta-value">Pharma · Agri · Materials · Climate</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- INVESTOR DECKS -->
+  <section>
+    <div class="container">
+      <p class="label"><span>01</span>Investor Narrative & Positioning</p>
+      <p class="brief-text" style="margin-bottom: 40px;">
+        A core part of the role was devising the narrative, content structure, and visualisations for investor decks — the documents that had to answer the hardest question Absolute faces: <em>how do you explain a company that is simultaneously a pharma company, an agri company, and a materials company, all driven by the same underlying biological intelligence?</em>
+      </p>
+      <p style="font-size: 16px; line-height: 1.8; color: rgba(245,244,240,0.65); max-width: 740px; margin-bottom: 40px;">
+        The challenge wasn't just communicating complexity — it was making that complexity feel like a feature, not a liability. Investors needed to understand that Absolute wasn't spread thin across three industries; it was operating with a single, proprietary scientific edge — the Nature's Intelligence Platform (NIP™) — that made it distinctively qualified to act across all three.
+      </p>
+
+      <div class="takeaways-grid" style="margin-top: 48px;">
+        <div class="takeaway">
+          <h3>Narrative Architecture</h3>
+          <p>Structuring the investor story from the macro — the planetary crisis — down to Absolute's specific scientific capability and commercial model. Every slide had to pull in one direction.</p>
+        </div>
+        <div class="takeaway">
+          <h3>Content Structure</h3>
+          <p>Mapping the logical sequence of claims: what the audience needs to believe first before they can believe the next thing. Building decks that don't just inform, but build conviction incrementally.</p>
+        </div>
+        <div class="takeaway">
+          <h3>Visualisation</h3>
+          <p>Translating dense scientific and commercial data into visual frameworks that could be absorbed in seconds — without dumbing down the underlying rigour.</p>
+        </div>
+      </div>
+
+      <!-- CTA -->
+      <div class="cta-wrapper" style="justify-content: flex-start; padding: 40px 0 0;">
+        <a href="https://www.absolute.ag/" target="_blank" class="cta-btn">
+          View Absolute Biosciences
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17L17 7M17 7H7M17 7v10"/></svg>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- BRAND POSITIONING -->
+  <section>
+    <div class="container">
+      <p class="label"><span>02</span>Brand Positioning Strategy</p>
+      <p class="brief-text" style="margin-bottom: 40px;">
+        The central strategic question — <em>how do we position a company that innovates across pharma, agriculture, and materials without sounding scattered?</em> — is what much of the Founders Office work orbited around.
+      </p>
+      <p style="font-size: 16px; line-height: 1.8; color: rgba(245,244,240,0.65); max-width: 740px; margin-bottom: 48px;">
+        The answer we worked toward: Absolute is not three businesses. It is one scientific philosophy — nature as the world's most proven innovator — applied across three urgent domains. The brand needed to lead with the platform, not the products. NIP™ was the thread that stitched pharma, agri, and materials together into a coherent, investable identity.
+      </p>
+
+      <!-- Positioning pillars -->
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1px; background: var(--border); border: 1px solid var(--border); margin-top: 0;">
+
+        <div style="background: var(--black); padding: 36px; border-right: 1px solid var(--border);">
+          <div style="font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: 0.18em; color: var(--dim); margin-bottom: 16px; text-transform: uppercase;">The question</div>
+          <p style="font-size: 15px; line-height: 1.7; color: rgba(245,244,240,0.75);">How do you stitch pharma, agri, and materials into a single, coherent brand story — without making it feel like three companies in a trench coat?</p>
+        </div>
+
+        <div style="background: var(--black); padding: 36px;">
+          <div style="font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: 0.18em; color: var(--dim); margin-bottom: 16px; text-transform: uppercase;">The answer</div>
+          <p style="font-size: 15px; line-height: 1.7; color: rgba(245,244,240,0.75);">Lead with the platform. NIP™ is the innovation engine. The sectors are applications of the same biological intelligence — not separate businesses, but one capability in three expressions.</p>
+        </div>
+
+        <div style="background: var(--black); padding: 36px; border-top: 1px solid var(--border); border-right: 1px solid var(--border);">
+          <div style="font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: 0.18em; color: var(--dim); margin-bottom: 16px; text-transform: uppercase;">Positioning frame</div>
+          <p style="font-size: 15px; line-height: 1.7; color: rgba(245,244,240,0.75);">Absolute as a <strong style="color: var(--white);">nature-powered innovation company</strong> — not a biotech, not a conglomerate. A company that uses evolutionary intelligence as its primary R&D advantage.</p>
+        </div>
+
+        <div style="background: var(--black); padding: 36px; border-top: 1px solid var(--border);">
+          <div style="font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: 0.18em; color: var(--dim); margin-bottom: 16px; text-transform: uppercase;">The connective tissue</div>
+          <p style="font-size: 15px; line-height: 1.7; color: rgba(245,244,240,0.75);">Every product, every project, every claim traces back to NIP™. The platform is the brand moat. Making that legible — across sectors, audiences, and formats — was the work.</p>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- XPRIZE -->
+  <section>
+    <div class="container">
+      <p class="label"><span>03</span>XPRIZE Competition — Shortlisted</p>
+      <p class="brief-text" style="margin-bottom: 40px;">
+        I was part of the team that entered Absolute into the XPRIZE competition — and we were shortlisted from the first round.
+      </p>
+      <p style="font-size: 16px; line-height: 1.8; color: rgba(245,244,240,0.65); max-width: 740px; margin-bottom: 40px;">
+        My specific involvement centred on the carbon lifecycle calculations — working through the numbers that underpin Absolute's carbon sequestration claims, and collaborating with the right scientific and technical partners to validate and communicate them with rigour. Alongside this, the work involved research synthesis and impact storytelling: taking complex environmental data and translating it into a narrative strong enough to compete on a global stage.
+      </p>
+
+      <div class="takeaways-grid" style="margin-top: 0;">
+        <div class="takeaway">
+          <h3>Carbon Lifecycle Calculations</h3>
+          <p>Working through the end-to-end carbon accounting — from biological capture to sequestration — and ensuring the numbers held up to scientific scrutiny at a competition level.</p>
+        </div>
+        <div class="takeaway">
+          <h3>Partner Collaboration</h3>
+          <p>Identifying and coordinating with the right external partners — scientific, technical, and institutional — to substantiate the submission and fill critical knowledge gaps.</p>
+        </div>
+        <div class="takeaway">
+          <h3>Impact Storytelling</h3>
+          <p>Translating raw research and environmental data into a compelling narrative — one that communicated both the rigour of the science and the scale of the potential impact.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- NIP + PLANET 2040 -->
+  <section>
+    <div class="container">
+      <p class="label"><span>04</span>NIP™ & Absolute Planet 2040</p>
+      <p class="brief-text" style="margin-bottom: 40px;">
+        At the heart of the day-to-day was a visionary long-term project: <em>Absolute Planet 2040</em> — and the research infrastructure powering it, the Nature's Intelligence Platform (NIP™).
+      </p>
+      <p style="font-size: 16px; line-height: 1.8; color: rgba(245,244,240,0.65); max-width: 740px; margin-bottom: 48px;">
+        NIP™ is Absolute's proprietary database of microorganisms, biomolecules, and enzymes — built to be the largest of its kind in nature. The day-to-day research work involved mapping key projects against this platform: understanding what the science said, what the stories were, and how to communicate impact at both a technical and a public-facing level.
+      </p>
+
+      <!-- Project highlights -->
+      <div style="display: flex; flex-direction: column; gap: 0; border: 1px solid var(--border);">
+
+        <div style="display: grid; grid-template-columns: 200px 1fr; border-bottom: 1px solid var(--border);">
+          <div style="padding: 28px 32px; border-right: 1px solid var(--border); display: flex; align-items: center;">
+            <span style="font-family: 'DM Mono', monospace; font-size: 11px; color: var(--dim); letter-spacing: 0.1em; text-transform: uppercase;">Himalayan Genome Project</span>
+          </div>
+          <div style="padding: 28px 32px;">
+            <p style="font-size: 14px; line-height: 1.7; color: rgba(245,244,240,0.65);">Tracking genetic diversity and novel genomes across unexplored and extreme ecosystems in the Himalayan region — pushing the boundaries of what the NIP™ database holds and what biological intelligence we can learn from.</p>
+          </div>
+        </div>
+
+        <div style="display: grid; grid-template-columns: 200px 1fr; border-bottom: 1px solid var(--border);">
+          <div style="padding: 28px 32px; border-right: 1px solid var(--border); display: flex; align-items: center;">
+            <span style="font-family: 'DM Mono', monospace; font-size: 11px; color: var(--dim); letter-spacing: 0.1em; text-transform: uppercase;">Revitalising the Ganga</span>
+          </div>
+          <div style="padding: 28px 32px;">
+            <p style="font-size: 14px; line-height: 1.7; color: rgba(245,244,240,0.65);">Research and impact storytelling around restoring the ecological health of the Ganga River Basin — one of India's most vital and most pressured water systems. Communicating both the science of intervention and the human stakes of restoration.</p>
+          </div>
+        </div>
+
+        <div style="display: grid; grid-template-columns: 200px 1fr;">
+          <div style="padding: 28px 32px; border-right: 1px solid var(--border); display: flex; align-items: center;">
+            <span style="font-family: 'DM Mono', monospace; font-size: 11px; color: var(--dim); letter-spacing: 0.1em; text-transform: uppercase;">Research & Impact Work</span>
+          </div>
+          <div style="padding: 28px 32px;">
+            <p style="font-size: 14px; line-height: 1.7; color: rgba(245,244,240,0.65);">Ongoing synthesis of research materials across all active NIP™-powered projects — translating findings into impact narratives for internal strategy, external communication, and scientific credibility-building.</p>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- CTA -->
+      <div class="cta-wrapper" style="justify-content: flex-start; padding: 40px 0 0;">
+        <a href="https://www.absolute.ag/planet" target="_blank" class="cta-btn">
+          Explore Absolute Planet 2040
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17L17 7M17 7H7M17 7v10"/></svg>
+        </a>
+      </div>
+    </div>
+  </section>
+
+</div><!-- /tab-bizstrategy -->
+
+<script>
+  function switchTab(id, btn) {
+    document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    document.getElementById('tab-' + id).classList.add('active');
+    btn.classList.add('active');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+</script>
+
+</body>
+</html>

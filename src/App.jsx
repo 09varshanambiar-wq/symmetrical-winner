@@ -164,11 +164,11 @@ const Hero = () => {
   useEffect(() => {
     try {
       if (window.$ && window.$('.ripple-container').ripples) {
-        // Initialize ripples with interactive: false to prevent click ripples
+        // Initialize ripples — higher perturbance ensures visibility against light backgrounds
         window.$('.ripple-container').ripples({
           resolution: 512,
-          dropRadius: 40,
-          perturbance: 0.08,
+          dropRadius: 60,
+          perturbance: 0.28,
           interactive: false,
           crossOrigin: ''
         });
@@ -178,7 +178,7 @@ const Hero = () => {
           var $el = window.$(this);
           var x = e.pageX - $el.offset().left;
           var y = e.pageY - $el.offset().top;
-          $el.ripples('drop', x, y, 40, 0.08);
+          $el.ripples('drop', x, y, 60, 0.28);
         });
       }
     } catch (e) {
@@ -208,7 +208,7 @@ const Hero = () => {
           const y = height * 0.65;
           const x = (birdX / 100) * width;
           
-          window.$(hero).ripples('drop', x, y, 22, 0.01);
+          window.$(hero).ripples('drop', x, y, 28, 0.06);
           
           birdX += 2;
           if (birdX > 100) {
@@ -232,7 +232,7 @@ const Hero = () => {
   return (
     <section 
       className="relative min-h-screen flex items-center pt-20 px-6 overflow-hidden ripple-container"
-      style={{ backgroundImage: 'radial-gradient(circle at center, #ffffff 0%, #F8FAFF 100%)' }}
+      style={{ backgroundImage: 'radial-gradient(at 0% 0%, hsla(220, 100%, 97%, 1) 0%, transparent 55%), radial-gradient(at 100% 0%, hsla(225, 100%, 93%, 1) 0%, transparent 55%), radial-gradient(at 50% 100%, hsla(230, 100%, 96%, 1) 0%, transparent 55%), radial-gradient(at 50% 50%, hsla(220, 80%, 98%, 1) 0%, transparent 80%), linear-gradient(160deg, #dce8ff 0%, #f0f5ff 40%, #e8f0fe 70%, #d8e8ff 100%)' }}
     >
       <Glow className="top-20 left-10 w-[500px] h-[500px] bg-primary" />
       <Glow className="bottom-20 right-10 w-[600px] h-[600px] bg-warning/30" />

@@ -13,48 +13,6 @@ const Glow = ({ className }) => (
   />
 );
 
-const BirdSVG = () => (
-  <svg viewBox="0 0 64 64" className="w-full h-full fill-current">
-    <path d="M32,24 C38,12 50,12 60,26 C48,27 38,32 32,44 C26,32 16,27 4,26 C14,12 26,12 32,24 Z" />
-  </svg>
-);
-
-const SummerOverlay = () => {
-  return (
-    <div className="absolute inset-0 pointer-events-none z-[45] overflow-hidden">
-      {/* Real Bird */}
-      <div 
-        className="absolute w-8 h-8 text-primary/75"
-        style={{
-          top: '15%',
-          animation: 'fly 10s linear infinite',
-          animationDelay: '1.5s',
-        }}
-      >
-        <div className="animate-flap" style={{ animationDuration: '0.25s', animationIterationCount: 'infinite' }}>
-          <BirdSVG />
-        </div>
-      </div>
-      
-      {/* Reflection Bird */}
-      <div 
-        className="absolute w-8 h-8 text-primary/20 filter blur-[1px]"
-        style={{
-          top: '65%',
-          animation: 'fly 10s linear infinite',
-          animationDelay: '1.5s',
-          transform: 'scaleY(-1)',
-        }}
-      >
-        <div className="animate-flap opacity-50" style={{ animationDuration: '0.25s', animationIterationCount: 'infinite' }}>
-          <BirdSVG />
-        </div>
-      </div>
-    </div>
-  );
-};
-
-
 
 const Navigation = () => {
   const [isDarkBg, setIsDarkBg] = React.useState(false);
@@ -137,7 +95,7 @@ const Hero = () => {
     {
       title: "The Absolute Business strategy",
       link: "/projects/absolute-business-strategy.html",
-      image: "/work-3.png"
+      image: "/just for carousel.png"
     },
     {
       title: "The Choice Paradox",
@@ -164,11 +122,11 @@ const Hero = () => {
   useEffect(() => {
     try {
       if (window.$ && window.$('.ripple-container').ripples) {
-        // Initialize ripples — higher perturbance ensures visibility against light backgrounds
+        // Initialize ripples with interactive: false to prevent click ripples
         window.$('.ripple-container').ripples({
           resolution: 512,
-          dropRadius: 60,
-          perturbance: 0.28,
+          dropRadius: 40,
+          perturbance: 0.08,
           interactive: false,
           crossOrigin: ''
         });
@@ -178,7 +136,7 @@ const Hero = () => {
           var $el = window.$(this);
           var x = e.pageX - $el.offset().left;
           var y = e.pageY - $el.offset().top;
-          $el.ripples('drop', x, y, 60, 0.28);
+          $el.ripples('drop', x, y, 40, 0.08);
         });
       }
     } catch (e) {
@@ -195,39 +153,6 @@ const Hero = () => {
     };
   }, []);
 
-  // Summer birds ripples path
-  useEffect(() => {
-    let birdX = 0;
-    const flyBird = () => {
-      birdX = 0;
-      const interval = setInterval(() => {
-        const hero = document.querySelector('.ripple-container');
-        if (hero && window.$ && window.$(hero).ripples) {
-          const width = hero.clientWidth;
-          const height = hero.clientHeight;
-          const y = height * 0.65;
-          const x = (birdX / 100) * width;
-          
-          window.$(hero).ripples('drop', x, y, 28, 0.06);
-          
-          birdX += 2;
-          if (birdX > 100) {
-            clearInterval(interval);
-          }
-        } else {
-          clearInterval(interval);
-        }
-      }, 200); // sync with 10s fly animation
-    };
-
-    const initialTimeout = setTimeout(flyBird, 1500);
-    const mainInterval = setInterval(flyBird, 15000);
-
-    return () => {
-      clearTimeout(initialTimeout);
-      clearInterval(mainInterval);
-    };
-  }, []);
 
   return (
     <section 
@@ -236,9 +161,7 @@ const Hero = () => {
     >
       <Glow className="top-20 left-10 w-[500px] h-[500px] bg-primary" />
       <Glow className="bottom-20 right-10 w-[600px] h-[600px] bg-warning/30" />
-      
-      {/* Summer birds overlay */}
-      <SummerOverlay />
+
       
       <div className="max-w-7xl mx-auto z-10 text-center pointer-events-none w-full">
         <motion.div
@@ -395,7 +318,7 @@ const Work = () => {
     {
       title: "Systems Design",
       projects: [
-        { number: "01", title: "Intelligent Policy Platform", category: "Product", image: "/IPP cover.png", link: "/projects/intelligent-policy-platform.html", span: "md:col-span-2", season: "Monsoon 2025 – Summer 2026", description: "Interactive health system mapping and simulation for Australian health policymakers." },
+        { number: "01", title: "Intelligent Policy Platform", category: "Product", image: "/IPP cover.png", link: "/projects/intelligent-policy-platform.html", span: "md:col-span-2", season: "Monsoon 2025 – Summer 2026", description: "Interactive health system mapping and simulation for an international government's Health department." },
         { number: "02", title: "Signals", category: "Thesis", image: "/leather signal .png", link: "/projects/signals.html", span: "md:col-span-1", season: "Summer 2024", description: "Speculative design research into biomaterials, future systems, and human-nature integration." },
         { number: "03", title: "Story of Sustainability", category: "Inquiry", image: "/choreography.png", link: "/projects/story-of-sustainability.html", span: "md:col-span-1", season: "Spring 2023", description: "A system inquiry into the bioregions and theories of human-nature ecosystems." }
       ]
@@ -475,7 +398,7 @@ const Work = () => {
       category: "Product",
       image: "/IPP cover.png",
       link: "/projects/intelligent-policy-platform.html",
-      description: "Interactive health system mapping and simulation for Australian health policymakers."
+      description: "Interactive health system mapping and simulation for an international government's Health department."
     }
   ];
 

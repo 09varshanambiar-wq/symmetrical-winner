@@ -153,8 +153,10 @@ body{font-family:var(--sans);background:var(--off);color:var(--ink);overflow-x:h
   transition: all 0.4s;
 }
 .chapter-nav-item:hover .chapter-nav-label { opacity: 1; transform: translateX(0); }
+.chapter-nav-item.active .chapter-nav-label { opacity: 1; transform: translateX(0); color: var(--sky); }
 .chapter-nav-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--i40); transition: all 0.3s; }
 .chapter-nav-item:hover .chapter-nav-dot { background: var(--sky); transform: scale(1.5); }
+.chapter-nav-item.active .chapter-nav-dot { background: var(--sky); transform: scale(1.5); }
 
 /* ── STANDARD HERO ── */
 .hero {
@@ -163,15 +165,13 @@ body{font-family:var(--sans);background:var(--off);color:var(--ink);overflow-x:h
   grid-template-columns: 1fr 1fr;
   position: relative;
   overflow: hidden;
-  padding: 6rem 0;
-  border-top: 0.5px solid var(--off3);
 }
 .hero-left {
-  background: #000000; /* dark navy matching Symmetrical Winner */
+  background: #266B86;
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
-  padding: 6rem 4.5rem 4rem;
+  padding: 4rem;
   position: relative;
 }
 .hero-left::before {
@@ -867,6 +867,7 @@ body{font-family:var(--sans);background:var(--off);color:var(--ink);overflow-x:h
 .d2{transition-delay:.1s}.d3{transition-delay:.2s}.d4{transition-delay:.3s}
 
 @media(max-width:960px){
+  .chapter-nav { display: none; }
   .funnel-layout,.rq-grid,.tools-hdr,.dbt-block,.myos-block,.game-block,.impact-layout,.ins-mosaic,.ref-grid{grid-template-columns:1fr}
   .dbt-l,.myos-l,.game-l{border-right:none;border-bottom:1px solid var(--off3)}
   .myos-l,.game-l{border-color:var(--off3)}
@@ -1017,6 +1018,45 @@ body{font-family:var(--sans);background:var(--off);color:var(--ink);overflow-x:h
   </a>
 </div>
 
+<aside class="chapter-nav">
+  <a href="#context" class="chapter-nav-item">
+    <span class="chapter-nav-label">Context</span>
+    <div class="chapter-nav-dot"></div>
+  </a>
+  <a href="#rq" class="chapter-nav-item">
+    <span class="chapter-nav-label">Research Frame</span>
+    <div class="chapter-nav-dot"></div>
+  </a>
+  <a href="#choice-map" class="chapter-nav-item">
+    <span class="chapter-nav-label">Choice Map</span>
+    <div class="chapter-nav-dot"></div>
+  </a>
+  <a href="#methodology" class="chapter-nav-item">
+    <span class="chapter-nav-label">Methodology</span>
+    <div class="chapter-nav-dot"></div>
+  </a>
+  <a href="#human-library" class="chapter-nav-item">
+    <span class="chapter-nav-label">Human Library</span>
+    <div class="chapter-nav-dot"></div>
+  </a>
+  <a href="#tools" class="chapter-nav-item">
+    <span class="chapter-nav-label">Research Tools</span>
+    <div class="chapter-nav-dot"></div>
+  </a>
+  <a href="#insights" class="chapter-nav-item">
+    <span class="chapter-nav-label">Key Insights</span>
+    <div class="chapter-nav-dot"></div>
+  </a>
+  <a href="#impact" class="chapter-nav-item">
+    <span class="chapter-nav-label">Impact</span>
+    <div class="chapter-nav-dot"></div>
+  </a>
+  <a href="#reflection" class="chapter-nav-item">
+    <span class="chapter-nav-label">Reflection</span>
+    <div class="chapter-nav-dot"></div>
+  </a>
+</aside>
+
 
 
 <main>
@@ -1148,7 +1188,7 @@ body{font-family:var(--sans);background:var(--off);color:var(--ink);overflow-x:h
   </section>
 
   <!-- CHOICE MAP -->
-  <section class="cmap-sec reveal">
+  <section id="choice-map" class="cmap-sec reveal">
     <div class="container">
       <div class="ew"><svg viewBox="0 0 24 24"><path d="M20.5 3l-.16.03L15 5.1 9 3 3.36 4.9c-.21.07-.36.25-.36.48V20.5c0 .28.22.5.5.5l.16-.03L9 18.9l6 2.1 5.64-1.9c.21-.07.36-.25.36-.48V3.5c0-.28-.22-.5-.5-.5zM15 19l-6-2.11V5l6 2.11V19z"/></svg>Systems Mapping</div>
       <h2 class="st">Every <em>fork in the road</em></h2>
@@ -1200,7 +1240,7 @@ body{font-family:var(--sans);background:var(--off);color:var(--ink);overflow-x:h
   </section>
 
   <!-- HUMAN LIBRARY -->
-  <section class="hl-sec reveal">
+  <section id="human-library" class="hl-sec reveal">
     <div class="container">
       <div class="ew"><svg viewBox="0 0 24 24"><path d="M21 5c-1.11-.35-2.33-.5-3.5-.5-1.95 0-4.05.4-5.5 1.5-1.45-1.1-3.55-1.5-5.5-1.5S2.45 4.9 1 6v14.65c0 .25.25.5.5.5.1 0 .15-.05.25-.05C3.1 20.45 5.05 20 6.5 20c1.95 0 4.05.4 5.5 1.5 1.35-.85 3.8-1.5 5.5-1.5 1.65 0 3.35.3 4.75 1.05.1.05.15.05.25.05.25 0 .5-.25.5-.5V6c-.6-.45-1.25-.75-2-1z"/></svg>Human Library</div>
       <h2 class="st">Inside the <em>system</em></h2>
@@ -1488,6 +1528,34 @@ body{font-family:var(--sans);background:var(--off);color:var(--ink);overflow-x:h
 
 
 <script>
+document.addEventListener('DOMContentLoaded', () => {
+  const sections = document.querySelectorAll('section[id]');
+  const navItems = document.querySelectorAll('.chapter-nav-item');
+
+  const observerOptions = {
+    root: null,
+    rootMargin: '-30% 0px -70% 0px',
+    threshold: 0
+  };
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        const id = entry.target.getAttribute('id');
+        navItems.forEach(item => {
+          if (item.getAttribute('href') === `#${id}`) {
+            item.classList.add('active');
+          } else {
+            item.classList.remove('active');
+          }
+        });
+      }
+    });
+  }, observerOptions);
+
+  sections.forEach(section => observer.observe(section));
+});
+
 const io = new IntersectionObserver(e => e.forEach(x => { if(x.isIntersecting) x.target.classList.add('vis') }), {threshold:.07});
 document.querySelectorAll('.reveal').forEach(el => io.observe(el));
 

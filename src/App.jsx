@@ -80,7 +80,7 @@ const Hero = () => {
     {
       title: "Intelligent Policy Platform",
       link: "/projects/intelligent-policy-platform.html",
-      image: "/IPP cover.png"
+      image: "/IPP.png"
     },
     {
       title: "Signals",
@@ -318,7 +318,7 @@ const Work = () => {
     {
       title: "Systems Design",
       projects: [
-        { number: "01", title: "Intelligent Policy Platform", category: "Product", image: "/IPP cover.png", link: "/projects/intelligent-policy-platform.html", span: "md:col-span-2", season: "Monsoon 2025 – Summer 2026", description: "Interactive health system mapping and simulation for an international government's Health department." },
+        { number: "01", title: "Intelligent Policy Platform", category: "Product", image: "/IPP.png", link: "/projects/intelligent-policy-platform.html", span: "md:col-span-2", season: "Monsoon 2025 – Summer 2026", description: "Helping health leaders navigate complex systems through interactive mapping and actionable insights." },
         { number: "02", title: "Signals", category: "Thesis", image: "/leather signal .png", link: "/projects/signals.html", span: "md:col-span-1", season: "Summer 2024", description: "Speculative design research into biomaterials, future systems, and human-nature integration." },
         { number: "03", title: "Story of Sustainability", category: "Inquiry", image: "/choreography.png", link: "/projects/story-of-sustainability.html", span: "md:col-span-1", season: "Spring 2023", description: "A system inquiry into the bioregions and theories of human-nature ecosystems." }
       ]
@@ -396,9 +396,9 @@ const Work = () => {
       date: "Aug 2025 – May 2026",
       title: "Intelligent Policy Platform",
       category: "Product",
-      image: "/IPP cover.png",
+      image: "/IPP.png",
       link: "/projects/intelligent-policy-platform.html",
-      description: "Interactive health system mapping and simulation for an international government's Health department."
+      description: "Helping health leaders navigate complex systems through interactive mapping and actionable insights."
     }
   ];
 

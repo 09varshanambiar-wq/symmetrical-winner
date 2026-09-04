@@ -1,6 +1,6 @@
-import React, { useEffect } from 'react';
-import { motion, useScroll, useTransform } from 'framer-motion';
-import { ArrowUpRight, Globe, Layers, Zap, Sparkles, MoveRight, Heart, Wind, Mail, MessageSquare, Plus } from 'lucide-react';
+import React, { useEffect, useState } from 'react';
+import { motion, useScroll, useTransform, AnimatePresence } from 'framer-motion';
+import { ArrowUpRight, Globe, Layers, Zap, Sparkles, MoveRight, Heart, Wind, Mail, MessageSquare, Plus, Menu, X } from 'lucide-react';
 
 const Glow = ({ className }) => (
   <motion.div 
@@ -16,6 +16,7 @@ const Glow = ({ className }) => (
 
 const Navigation = () => {
   const [isDarkBg, setIsDarkBg] = React.useState(false);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = React.useState(false);
 
   React.useEffect(() => {
     const handleScroll = () => {
@@ -45,33 +46,73 @@ const Navigation = () => {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
+  const toggleMenu = () => setIsMobileMenuOpen(!isMobileMenuOpen);
+
   return (
-    <nav className={`fixed top-6 left-1/2 -translate-x-1/2 w-[90%] max-w-5xl h-14 rounded-none z-50 flex items-center justify-between px-8 transition-all duration-300 ${isDarkBg ? 'bg-black/35 border border-white/10 backdrop-blur-lg text-white' : 'glass-nav text-text'}`}>
-      <div className="font-display font-bold text-lg tracking-tight flex items-center gap-2">
-        <img 
-          src="/logo icon.PNG" 
-          alt="Logo" 
-          className="h-5 w-auto object-contain transition-all duration-300"
-          style={{ filter: isDarkBg ? 'brightness(0) invert(1)' : 'none' }}
-        />
-        Varsha Nambiar
-      </div>
-      <div className={`hidden md:flex space-x-8 text-[10px] font-bold uppercase tracking-widest transition-colors duration-300 ${isDarkBg ? 'text-white/60' : 'text-text/60'}`}>
-        <a href="#work" className={`transition-colors ${isDarkBg ? 'hover:text-white' : 'hover:text-primary'}`}>Works</a>
-        <a href="#wonderlands" className={`transition-colors ${isDarkBg ? 'hover:text-white' : 'hover:text-primary'}`}>Wonderlands</a>
-        <a href="#about" className={`transition-colors ${isDarkBg ? 'hover:text-white' : 'hover:text-primary'}`}>About</a>
-        <a href="#contact" className={`transition-colors ${isDarkBg ? 'hover:text-white' : 'hover:text-primary'}`}>Contact</a>
-      </div>
-      <a 
-        href="/Varsha Nambiar-Resume.pdf"
-        target="_blank"
-        rel="noopener noreferrer"
-        download="Varsha Nambiar-Resume.pdf"
-        className={`text-[10px] font-bold uppercase tracking-widest px-4 py-2 rounded-none transition-all no-underline inline-block text-center ${isDarkBg ? 'bg-white/15 text-white hover:bg-white hover:text-black border border-white/25' : 'bg-primary/10 text-primary hover:bg-primary hover:text-white'}`}
-      >
-        Download Resume
-      </a>
-    </nav>
+    <>
+      <nav className={`fixed top-6 left-1/2 -translate-x-1/2 w-[90%] max-w-5xl h-14 rounded-none z-[60] flex items-center justify-between px-4 md:px-8 transition-all duration-300 ${isDarkBg ? 'bg-black/35 border border-white/10 backdrop-blur-lg text-white' : 'glass-nav text-text'}`}>
+        <div className="font-display font-bold text-lg tracking-tight flex items-center gap-2">
+          <img 
+            src="/logo icon.PNG" 
+            alt="Logo" 
+            className="h-5 w-auto object-contain transition-all duration-300"
+            style={{ filter: isDarkBg ? 'brightness(0) invert(1)' : 'none' }}
+          />
+          <span className="hidden sm:inline">Varsha Nambiar</span>
+          <span className="sm:hidden">Varsha</span>
+        </div>
+        <div className={`hidden md:flex space-x-8 text-[10px] font-bold uppercase tracking-widest transition-colors duration-300 ${isDarkBg ? 'text-white/60' : 'text-text/60'}`}>
+          <a href="#work" className={`transition-colors ${isDarkBg ? 'hover:text-white' : 'hover:text-primary'}`}>Works</a>
+          <a href="#wonderlands" className={`transition-colors ${isDarkBg ? 'hover:text-white' : 'hover:text-primary'}`}>Wonderlands</a>
+          <a href="#about" className={`transition-colors ${isDarkBg ? 'hover:text-white' : 'hover:text-primary'}`}>About</a>
+          <a href="#contact" className={`transition-colors ${isDarkBg ? 'hover:text-white' : 'hover:text-primary'}`}>Contact</a>
+        </div>
+        <div className="flex items-center gap-4">
+          <a 
+            href="/Varsha Nambiar-Resume.pdf"
+            target="_blank"
+            rel="noopener noreferrer"
+            download="Varsha Nambiar-Resume.pdf"
+            className={`hidden md:inline-block text-[10px] font-bold uppercase tracking-widest px-4 py-2 rounded-none transition-all no-underline text-center ${isDarkBg ? 'bg-white/15 text-white hover:bg-white hover:text-black border border-white/25' : 'bg-primary/10 text-primary hover:bg-primary hover:text-white'}`}
+          >
+            Download Resume
+          </a>
+          <button onClick={toggleMenu} className="md:hidden p-2">
+            {isMobileMenuOpen ? <X size={20} /> : <Menu size={20} />}
+          </button>
+        </div>
+      </nav>
+
+      {/* Mobile Menu Overlay */}
+      <AnimatePresence>
+        {isMobileMenuOpen && (
+          <motion.div 
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -20 }}
+            transition={{ duration: 0.2 }}
+            className={`fixed inset-0 z-[55] pt-24 px-6 ${isDarkBg ? 'bg-black/95 text-white' : 'bg-white/95 text-text'} backdrop-blur-xl flex flex-col items-center gap-8`}
+          >
+            <div className="flex flex-col items-center gap-8 text-sm font-bold uppercase tracking-widest w-full">
+              <a href="#work" onClick={toggleMenu} className="w-full text-center py-4 border-b border-primary/10">Works</a>
+              <a href="#wonderlands" onClick={toggleMenu} className="w-full text-center py-4 border-b border-primary/10">Wonderlands</a>
+              <a href="#about" onClick={toggleMenu} className="w-full text-center py-4 border-b border-primary/10">About</a>
+              <a href="#contact" onClick={toggleMenu} className="w-full text-center py-4 border-b border-primary/10">Contact</a>
+              <a 
+                href="/Varsha Nambiar-Resume.pdf"
+                target="_blank"
+                rel="noopener noreferrer"
+                download="Varsha Nambiar-Resume.pdf"
+                onClick={toggleMenu}
+                className={`mt-4 text-[10px] w-full max-w-xs font-bold uppercase tracking-widest px-4 py-4 rounded-none transition-all no-underline text-center ${isDarkBg ? 'bg-white/15 text-white border border-white/25' : 'bg-primary/10 text-primary'}`}
+              >
+                Download Resume
+              </a>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </>
   );
 };
 
@@ -159,8 +200,8 @@ const Hero = () => {
       className="relative min-h-screen flex items-center pt-20 px-6 overflow-hidden ripple-container"
       style={{ backgroundImage: 'radial-gradient(at 0% 0%, hsla(220, 100%, 97%, 1) 0%, transparent 55%), radial-gradient(at 100% 0%, hsla(225, 100%, 93%, 1) 0%, transparent 55%), radial-gradient(at 50% 100%, hsla(230, 100%, 96%, 1) 0%, transparent 55%), radial-gradient(at 50% 50%, hsla(220, 80%, 98%, 1) 0%, transparent 80%), linear-gradient(160deg, #dce8ff 0%, #f0f5ff 40%, #e8f0fe 70%, #d8e8ff 100%)' }}
     >
-      <Glow className="top-20 left-10 w-[500px] h-[500px] bg-primary" />
-      <Glow className="bottom-20 right-10 w-[600px] h-[600px] bg-warning/30" />
+      <Glow className="top-20 left-10 w-[300px] h-[300px] md:w-[500px] md:h-[500px] bg-primary" />
+      <Glow className="bottom-20 right-10 w-[350px] h-[350px] md:w-[600px] md:h-[600px] bg-warning/30" />
 
       
       <div className="max-w-7xl mx-auto z-10 text-center pointer-events-none w-full">
@@ -170,11 +211,11 @@ const Hero = () => {
           transition={{ duration: 1.2, ease: "easeOut" }}
           className="pointer-events-auto max-w-4xl mx-auto text-center flex flex-col items-center justify-center"
         >
-          <h1 className="text-5xl md:text-7xl font-dmsans font-light leading-[0.95] mb-10 text-secondary tracking-tight">
+          <h1 className="text-4xl sm:text-5xl md:text-7xl font-dmsans font-light leading-[0.95] mb-10 text-secondary tracking-tight">
             Multidisciplinary <br /> 
             <span className="text-primary italic">Design Strategist</span>
           </h1>
-          <p className="text-lg md:text-2xl text-text/75 leading-relaxed mb-0 max-w-2xl mx-auto font-dmsans font-light">
+          <p className="text-base sm:text-lg md:text-2xl text-text/75 leading-relaxed mb-0 max-w-2xl mx-auto font-dmsans font-light">
             creating systems, behaviours, research and solutions with design as a medium.
           </p>
         </motion.div>
@@ -255,7 +296,7 @@ const ProjectCard = ({ number, title, category, image, video, link, span, season
     viewport={{ once: true }}
     transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
     whileHover={{ y: -8 }}
-    className={`group relative block h-[450px] bg-neutral-900 overflow-hidden rounded-none ${span}`}
+    className={`group relative block h-[350px] md:h-[450px] bg-neutral-900 overflow-hidden rounded-none ${span}`}
   >
     {/* Number Overlay */}
     <div className="absolute top-4 left-4 z-20">
@@ -320,7 +361,7 @@ const Work = () => {
       projects: [
         { number: "01", title: "Intelligent Policy Platform", category: "Product", image: "/IPP.png", link: "/projects/intelligent-policy-platform.html", span: "md:col-span-2", season: "Monsoon 2025 – Summer 2026", description: "Helping health leaders navigate complex systems through interactive mapping and actionable insights." },
         { number: "02", title: "Signals", category: "Thesis", image: "/leather signal .png", link: "/projects/signals.html", span: "md:col-span-1", season: "Summer 2024", description: "Speculative design research into biomaterials, future systems, and human-nature integration." },
-        { number: "03", title: "Story of Sustainability", category: "Inquiry", image: "/choreography.png", link: "/projects/story-of-sustainability.html", span: "md:col-span-1", season: "Spring 2023", description: "A system inquiry into the bioregions and theories of human-nature ecosystems." }
+        { number: "03", title: "Choreography of Sustainability", category: "Inquiry", image: "/choreography.png", link: "/projects/choreography-of-sustainability.html", span: "md:col-span-1", season: "Spring 2023", description: "A system inquiry into the bioregions and theories of human-nature ecosystems." }
       ]
     },
     {
@@ -367,10 +408,10 @@ const Work = () => {
     {
       year: "Spring 2023",
       date: "Apr 2023",
-      title: "Story of Sustainability",
+      title: "Choreography of Sustainability",
       category: "Inquiry",
       image: "/choreography.png",
-      link: "/projects/story-of-sustainability.html",
+      link: "/projects/choreography-of-sustainability.html",
       description: "A system inquiry into the bioregions and theories of human-nature ecosystems."
     },
     {
@@ -411,7 +452,7 @@ const Work = () => {
           viewport={{ once: true }}
           className="mb-12 text-center"
         >
-          <h2 className="text-6xl md:text-8xl font-bold text-primary tracking-tighter leading-none mb-8">The Works.</h2>
+          <h2 className="text-5xl md:text-8xl font-bold text-primary tracking-tighter leading-none mb-8">The Works.</h2>
         </motion.div>
 
         {/* Capsule View Toggle - Replaced with BENTO | TIMELINE Design */}
@@ -592,7 +633,7 @@ const Wonderlands = () => (
     <div className="max-w-7xl mx-auto">
       <div className="flex justify-end mb-16 text-right">
         <div>
-          <h2 className="text-6xl md:text-8xl font-bold text-[#E2E7F3] leading-none">Parallel <br />wonderlands</h2>
+          <h2 className="text-4xl md:text-8xl font-bold text-[#E2E7F3] leading-none">Parallel <br />wonderlands</h2>
         </div>
       </div>
       <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
@@ -686,7 +727,7 @@ const About = () => {
         </div>
 
         {/* Right column: Image with vertical divider border */}
-        <div className="col-span-1 md:col-span-5 lg:col-span-4 relative border-t-[4px] md:border-t-0 md:border-l-[4px] border-primary bg-black overflow-hidden h-[500px] md:h-auto min-h-[500px]">
+        <div className="col-span-1 md:col-span-5 lg:col-span-4 relative border-t-[4px] md:border-t-0 md:border-l-[4px] border-primary bg-black overflow-hidden h-[350px] min-h-[350px] md:h-auto md:min-h-[500px]">
           <div className="relative w-full h-full group cursor-pointer">
             {/* Black and White image */}
             <img 
@@ -746,18 +787,26 @@ const ContactForm = () => {
   const [message, setMessage] = React.useState('');
   const [animState, setAnimState] = React.useState('idle'); // 'idle', 'folding', 'flying', 'resetting'
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (!name.trim() || !message.trim()) return;
 
-    // Trigger the email client
-    const subject = encodeURIComponent(`Message from ${name}`);
-    const body = encodeURIComponent(`Hi Varsha,\n\n${message}\n\nBest,\n${name}`);
-    const mailtoUrl = `mailto:09varsha.nambiar@gmail.com?subject=${subject}&body=${body}`;
-    window.location.href = mailtoUrl;
-
     // Start folding animation
     setAnimState('folding');
+
+    try {
+      const formData = new FormData();
+      formData.append("access_key", "619a9a73-af7c-4018-82eb-0a2c6a88fbd1");
+      formData.append("name", name);
+      formData.append("message", message);
+      
+      await fetch("https://api.web3forms.com/submit", {
+        method: "POST",
+        body: formData
+      });
+    } catch (error) {
+      console.error("Error submitting form:", error);
+    }
     
     // Morph/Fold duration is 600ms
     setTimeout(() => {
@@ -898,7 +947,7 @@ const Contact = () => (
 const Footer = () => (
   <footer className="border-t border-white/20 bg-white/10 overflow-hidden">
     {/* Artwork Banner - Edge to Edge */}
-    <div className="w-full h-[400px] md:h-[600px] overflow-hidden shadow-2xl">
+    <div className="w-full h-[250px] md:h-[600px] overflow-hidden shadow-2xl">
       <img 
         src="/b7617e_c63877547b2e4a5c804d965fc7ff985a~mv2.jpg.avif" 
         alt="Featured Artwork" 
@@ -993,7 +1042,7 @@ const CustomCursor = () => {
 
   return (
     <div 
-      className="fixed pointer-events-none z-[9999] transition-transform duration-75 ease-out"
+      className="hidden md:block fixed pointer-events-none z-[9999] transition-transform duration-75 ease-out"
       style={{ 
         left: position.x, 
         top: position.y,
